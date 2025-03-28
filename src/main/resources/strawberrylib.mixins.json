@@ -1,0 +1,48 @@
+{
+  "required": true,
+  "package": "moriyashiine.strawberrylib.impl.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+	"event.eatfood.FoodComponentMixin",
+	"event.modifyblockbreakingspeed.AbstractBlockMixin",
+	"event.modifycriticalstatus.PlayerEntityMixin",
+	"event.modifydamagetaken.LivingEntityMixin",
+	"event.modifyjumpvelocity.LivingEntityMixin",
+	"event.modifymovementspeed.LivingEntityMixin",
+	"event.modifystackdamage.EnchantmentHelperMixin",
+	"event.preventequipmentusage.ArmorSlotMixin",
+	"event.preventequipmentusage.EquippableComponentMixin",
+	"event.preventequipmentusage.LivingEntityMixin",
+	"event.preventfalldamage.PreventFallDamageMixin",
+	"event.preventhostiletargeting.LivingEntityMixin",
+	"event.preventhostiletargeting.WardenEntityMixin",
+	"modelreplacement.DisableAttackMixin",
+	"modelreplacement.PlayerEntityMixin",
+	"modelreplacement.ServerPlayerEntityMixin",
+	"modelreplacement.ServerWorldMixin"
+  ],
+  "client": [
+	"client.WorldRendererMixin",
+	"event.client.modifynightvisionstrength.GameRendererMixin",
+	"event.client.modifynightvisionstrength.LivingEntityMixin",
+	"event.client.outlineentity.EntityMixin",
+	"event.client.outlineentity.MinecraftClientMixin",
+	"event.client.replacehearttextures.InGameHudMixin",
+	"modelreplacement.client.DisableTickMixin",
+	"modelreplacement.client.EntityRenderDispatcherMixin",
+	"modelreplacement.client.EntityRendererMixin",
+	"modelreplacement.client.InventoryScreenMixin",
+	"supporter.client.GameOptionsMixin",
+	"supporter.client.OptionsScreenMixin",
+	"supporter.glint.client.ArmedEntityRenderStateMixin",
+	"supporter.glint.client.BufferedBuilderStorageMixin",
+	"supporter.glint.client.DrawContextMixin",
+	"supporter.glint.client.HeldItemFeatureRendererMixin",
+	"supporter.glint.client.ItemRendererMixin",
+	"supporter.glint.client.LivingEntityRendererMixin",
+	"supporter.glint.client.WorldRendererMixin"
+  ],
+  "injectors": {
+	"defaultRequire": 1
+  }
+}

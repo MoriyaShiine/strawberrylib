@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "strawberrylib",
+  "version": "${version}",
+  "name": "Strawberry Lib",
+  "description": "A silly common code library for my mods",
+  "authors": [
+	"MoriyaShiine"
+  ],
+  "contact": {
+	"homepage": "https://modrinth.com/mod/strawberrylib",
+	"sources": "https://github.com/MoriyaShiine/strawberrylib",
+	"issues": "https://github.com/MoriyaShiine/strawberrylib/issues"
+  },
+  "license": "All Rights Reserved",
+  "icon": "assets/strawberrylib/icon.png",
+  "environment": "*",
+  "entrypoints": {
+	"main": [
+	  "moriyashiine.strawberrylib.impl.common.StrawberryLib"
+	],
+	"client": [
+	  "moriyashiine.strawberrylib.impl.client.StrawberrylibClient"
+	],
+	"cardinal-components": [
+	  "moriyashiine.strawberrylib.impl.common.init.ModEntityComponents"
+	]
+  },
+  "mixins": [
+	"strawberrylib.mixins.json"
+  ],
+  "accessWidener": "strawberrylib.accesswidener",
+  "depends": {
+	"fabricloader": "*",
+	"minecraft": "~1.21.5",
+	"java": ">=21",
+	"fabric-api": "*"
+  },
+  "custom": {
+	"cardinal-components": [
+	  "strawberrylib:supporter",
+	  "strawberrylib:model_replacement"
+	]
+  }
+}
