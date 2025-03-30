@@ -19,7 +19,8 @@
 	"modelreplacement.DisableAttackMixin",
 	"modelreplacement.PlayerEntityMixin",
 	"modelreplacement.ServerPlayerEntityMixin",
-	"modelreplacement.ServerWorldMixin"
+	"modelreplacement.ServerWorldMixin",
+	"registries.ItemSettingsMixin"
   ],
   "client": [
 	"client.WorldRendererMixin",

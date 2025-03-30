@@ -4,6 +4,7 @@
 package moriyashiine.strawberrylib.api.module;
 
 import com.mojang.serialization.MapCodec;
+import moriyashiine.strawberrylib.api.objects.records.ModifierTrio;
 import moriyashiine.strawberrylib.impl.common.StrawberryLib;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -43,6 +44,8 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 public final class SLibRegistries {
+	// register helpers
+
 	public static Block registerBlock(String name, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {
 		return Blocks.register(RegistryKey.of(RegistryKeys.BLOCK, StrawberryLib.cid(name)), factory, settings);
 	}
@@ -138,5 +141,12 @@ public final class SLibRegistries {
 
 	public static RegistryEntry<StatusEffect> registerStatusEffect(String name, StatusEffect statusEffect) {
 		return Registry.registerReference(Registries.STATUS_EFFECT, StrawberryLib.cid(name), statusEffect);
+	}
+
+	// misc
+
+	public static Item.Settings editModifiers(Item.Settings settings, ModifierTrio... modifiers) {
+		ModifierTrio.current = modifiers;
+		return settings;
 	}
 }
