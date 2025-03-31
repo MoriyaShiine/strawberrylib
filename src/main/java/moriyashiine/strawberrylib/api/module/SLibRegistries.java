@@ -41,6 +41,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 public final class SLibRegistries {
@@ -145,8 +146,8 @@ public final class SLibRegistries {
 
 	// misc
 
-	public static Item.Settings editModifiers(Item.Settings settings, ModifierTrio... modifiers) {
+	public static Item.Settings editModifiers(Supplier<Item.Settings> settings, ModifierTrio... modifiers) {
 		ModifierTrio.current = modifiers;
-		return settings;
+		return settings.get();
 	}
 }
