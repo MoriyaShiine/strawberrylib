@@ -25,7 +25,10 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
+import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.condition.LootConditionType;
+import net.minecraft.loot.function.LootFunction;
+import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.potion.Potion;
 import net.minecraft.recipe.Recipe;
@@ -110,8 +113,12 @@ public final class SLibRegistries {
 		return registerItemGroup(StrawberryLib.currentModId, itemGroup);
 	}
 
-	public static LootConditionType registerLootConditionType(String name, LootConditionType lootConditionType) {
-		return Registry.register(Registries.LOOT_CONDITION_TYPE, StrawberryLib.cid(name), lootConditionType);
+	public static LootConditionType registerLootConditionType(String name, MapCodec<? extends LootCondition> codec) {
+		return Registry.register(Registries.LOOT_CONDITION_TYPE, StrawberryLib.cid(name), new LootConditionType(codec));
+	}
+
+	public static <T extends LootFunction> LootFunctionType<T> registerLootFunctionType(String name, MapCodec<T> codec) {
+		return Registry.register(Registries.LOOT_FUNCTION_TYPE, StrawberryLib.cid(name), new LootFunctionType<>(codec));
 	}
 
 	public static <T extends ParticleType<?>> T registerParticleType(String name, T particleType) {
