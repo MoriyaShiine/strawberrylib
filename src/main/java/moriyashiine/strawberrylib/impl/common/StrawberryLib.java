@@ -4,10 +4,7 @@
 package moriyashiine.strawberrylib.impl.common;
 
 import moriyashiine.strawberrylib.api.event.TickEntityEvent;
-import moriyashiine.strawberrylib.impl.client.payload.AddEmitterParticlePayload;
-import moriyashiine.strawberrylib.impl.client.payload.AddParticlesPayload;
-import moriyashiine.strawberrylib.impl.client.payload.PlayAnchoredSoundPayload;
-import moriyashiine.strawberrylib.impl.client.payload.SendModelReplacementStatusPayload;
+import moriyashiine.strawberrylib.impl.client.payload.*;
 import moriyashiine.strawberrylib.impl.common.event.ModelReplacementEvent;
 import moriyashiine.strawberrylib.impl.common.event.PreventsEquipmentUsageEvent;
 import moriyashiine.strawberrylib.impl.common.event.TickEntitiesEvent;
@@ -43,6 +40,7 @@ public class StrawberryLib implements ModInitializer {
 
 	private void initPayloads() {
 		// client payloads
+		PayloadTypeRegistry.playS2C().register(AddAnchoredParticlePayload.ID, AddAnchoredParticlePayload.CODEC);
 		PayloadTypeRegistry.playS2C().register(AddEmitterParticlePayload.ID, AddEmitterParticlePayload.CODEC);
 		PayloadTypeRegistry.playS2C().register(AddParticlesPayload.ID, AddParticlesPayload.CODEC);
 		PayloadTypeRegistry.playS2C().register(PlayAnchoredSoundPayload.ID, PlayAnchoredSoundPayload.CODEC);

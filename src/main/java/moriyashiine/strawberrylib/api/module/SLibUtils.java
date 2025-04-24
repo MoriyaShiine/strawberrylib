@@ -7,6 +7,7 @@ import moriyashiine.strawberrylib.api.objects.enums.PacketTarget;
 import moriyashiine.strawberrylib.api.objects.enums.ParticleAnchor;
 import moriyashiine.strawberrylib.api.objects.enums.SubmersionGate;
 import moriyashiine.strawberrylib.api.objects.records.ParticleVelocity;
+import moriyashiine.strawberrylib.impl.client.payload.AddAnchoredParticlePayload;
 import moriyashiine.strawberrylib.impl.client.payload.AddEmitterParticlePayload;
 import moriyashiine.strawberrylib.impl.client.payload.AddParticlesPayload;
 import moriyashiine.strawberrylib.impl.client.payload.PlayAnchoredSoundPayload;
@@ -141,6 +142,19 @@ public final class SLibUtils {
 			return attackingPlayer.shouldDamagePlayer(targetPlayer);
 		}
 		return true;
+	}
+
+	public static void addAnchoredParticle(Entity entity, ParticleType<?> particleType, double yOffset, double speed, double intensity, PacketTarget packetTarget) {
+		if (packetTarget.sendsToOthers()) {
+			PlayerLookup.tracking(entity).forEach(receiver -> AddAnchoredParticlePayload.send(receiver, entity, particleType, yOffset, speed, intensity));
+		}
+		if (packetTarget.sendsToSelf() && entity instanceof ServerPlayerEntity player) {
+			AddAnchoredParticlePayload.send(player, player, particleType, yOffset, speed, intensity);
+		}
+	}
+
+	public static void addAnchoredParticle(Entity entity, ParticleType<?> particleType, double yOffset, double speed, double intensity) {
+		addAnchoredParticle(entity, particleType, yOffset, speed, intensity, PacketTarget.ALL);
 	}
 
 	public static void addEmitterParticle(Entity entity, ParticleType<?> particleType, PacketTarget packetTarget) {

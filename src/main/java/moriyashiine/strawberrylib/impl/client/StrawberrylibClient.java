@@ -3,10 +3,7 @@
  */
 package moriyashiine.strawberrylib.impl.client;
 
-import moriyashiine.strawberrylib.impl.client.payload.AddEmitterParticlePayload;
-import moriyashiine.strawberrylib.impl.client.payload.AddParticlesPayload;
-import moriyashiine.strawberrylib.impl.client.payload.PlayAnchoredSoundPayload;
-import moriyashiine.strawberrylib.impl.client.payload.SendModelReplacementStatusPayload;
+import moriyashiine.strawberrylib.impl.client.payload.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
@@ -17,6 +14,7 @@ public class StrawberrylibClient implements ClientModInitializer {
 	}
 
 	private void initPayloads() {
+		ClientPlayNetworking.registerGlobalReceiver(AddAnchoredParticlePayload.ID, new AddAnchoredParticlePayload.Receiver());
 		ClientPlayNetworking.registerGlobalReceiver(AddEmitterParticlePayload.ID, new AddEmitterParticlePayload.Receiver());
 		ClientPlayNetworking.registerGlobalReceiver(AddParticlesPayload.ID, new AddParticlesPayload.Receiver());
 		ClientPlayNetworking.registerGlobalReceiver(PlayAnchoredSoundPayload.ID, new PlayAnchoredSoundPayload.Receiver());
