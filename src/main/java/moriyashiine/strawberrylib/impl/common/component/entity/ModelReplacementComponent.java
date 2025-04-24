@@ -79,6 +79,9 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 	}
 
 	public void setReplacementType(@Nullable EntityType<?> replacementType) {
+		if (replacementType == EntityType.PLAYER) {
+			replacementType = null;
+		}
 		this.replacementType = replacementType;
 	}
 
