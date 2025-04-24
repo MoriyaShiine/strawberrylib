@@ -41,8 +41,13 @@ public class GameOptionsMixin {
 	@Inject(method = "write", at = @At(value = "INVOKE", target = "Ljava/io/PrintWriter;close()V"))
 	private void slib$supporterGlint(CallbackInfo ci, @Local PrintWriter printWriter) {
 		if (SupporterInit.isSupporter(client.getGameProfile().getId())) {
-			printWriter.println(EQUIPPABLE_GLINT_COLOR_KEY + ":" + SupporterOptions.EQUIPPABLE_GLINT_COLOR.getValue().name());
-			printWriter.println(GLINT_COLOR_KEY + ":" + SupporterOptions.GLINT_COLOR.getValue().name());
+			write(printWriter, EQUIPPABLE_GLINT_COLOR_KEY, SupporterOptions.EQUIPPABLE_GLINT_COLOR.getValue().name());
+			write(printWriter, GLINT_COLOR_KEY, SupporterOptions.GLINT_COLOR.getValue().name());
 		}
+	}
+
+	@Unique
+	private static void write(PrintWriter printWriter, String key, Object value) {
+		printWriter.println(key + ":" + value);
 	}
 }
