@@ -17,9 +17,12 @@ import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.util.Identifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StrawberryLib implements ModInitializer {
 	public static final String MOD_ID = "strawberrylib";
+	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	public static String currentModId = "";
 

@@ -3,6 +3,7 @@
  */
 package moriyashiine.strawberrylib.impl.common.component.entity;
 
+import moriyashiine.strawberrylib.impl.common.StrawberryLib;
 import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -51,8 +52,13 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 	@Override
 	public void tick() {
 		if (replacement == null && replacementType != null) {
-			replacement = (LivingEntity) replacementType.create(obj.getWorld(), SpawnReason.LOAD);
-			obj.calculateDimensions();
+			if (replacementType.create(obj.getWorld(), SpawnReason.LOAD) instanceof LivingEntity living) {
+				replacement = living;
+				obj.calculateDimensions();
+			} else {
+				StrawberryLib.LOGGER.error("Entity Type '{}' is not a living entity, cannot replace player model.", replacementType);
+				replacementType = null;
+			}
 		}
 		if (replacementType == null || (replacement != null && (obj.getWorld() != replacement.getWorld() || replacement.getType() != replacementType))) {
 			replacement = null;
