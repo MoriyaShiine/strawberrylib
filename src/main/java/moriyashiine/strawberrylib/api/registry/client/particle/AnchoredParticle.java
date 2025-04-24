@@ -13,8 +13,8 @@ import org.jetbrains.annotations.Nullable;
 public class AnchoredParticle extends SpriteBillboardParticle {
 	public static boolean shouldForce = false;
 
-	private final Entity entity;
-	private final double yOffset, speed, intensity;
+	protected final Entity entity;
+	protected final double yOffset, speed, intensity;
 
 	public AnchoredParticle(ClientWorld world, double x, double z, int entityId, double yOffset, double speed, double intensity) {
 		super(world, x, Integer.MIN_VALUE, z, 0, 0, 0);
@@ -53,8 +53,8 @@ public class AnchoredParticle extends SpriteBillboardParticle {
 
 		@Nullable
 		@Override
-		public Particle createParticle(SimpleParticleType parameters, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
-			AnchoredParticle particle = new AnchoredParticle(world, x, y, MathHelper.floor(z), velocityX, velocityY, velocityZ);
+		public Particle createParticle(SimpleParticleType parameters, ClientWorld world, double x, double z, double entityId, double yOffset, double speed, double intensity) {
+			AnchoredParticle particle = new AnchoredParticle(world, x, z, MathHelper.floor(entityId), yOffset, speed, intensity);
 			particle.setSprite(spriteProvider);
 			return particle;
 		}
