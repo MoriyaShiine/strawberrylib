@@ -25,10 +25,13 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
+import net.minecraft.item.consume.ConsumeEffect;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.condition.LootConditionType;
 import net.minecraft.loot.function.LootFunction;
 import net.minecraft.loot.function.LootFunctionType;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.potion.Potion;
 import net.minecraft.recipe.Recipe;
@@ -64,6 +67,10 @@ public final class SLibRegistries {
 
 	public static <T> ComponentType<T> registerComponentType(String name, ComponentType.Builder<T> builder) {
 		return Registry.register(Registries.DATA_COMPONENT_TYPE, StrawberryLib.cid(name), builder.build());
+	}
+
+	public static <T extends ConsumeEffect> ConsumeEffect.Type<T> registerConsumeEffectType(String name, MapCodec<T> codec, PacketCodec<RegistryByteBuf, T> packetCodec) {
+		return Registry.register(Registries.CONSUME_EFFECT_TYPE, StrawberryLib.cid(name), new ConsumeEffect.Type<>(codec, packetCodec));
 	}
 
 	public static <T extends Criterion<?>> T registerCriterion(String name, T criterion) {
