@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "strawberrylib",
   "version": "${version}",
-  "name": "Strawberry Lib",
+  "name": "StrawberryLib",
   "description": "A silly common code library for my mods",
   "authors": [
 	"MoriyaShiine"
