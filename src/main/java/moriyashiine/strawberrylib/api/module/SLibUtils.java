@@ -26,9 +26,12 @@ import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.MathHelper;
@@ -142,6 +145,26 @@ public final class SLibUtils {
 			return attackingPlayer.shouldDamagePlayer(targetPlayer);
 		}
 		return true;
+	}
+
+	public static boolean insertOrDrop(ServerWorld world, Entity entity, ItemStack stack) {
+		if (entity instanceof PlayerEntity player) {
+			int emptySlot = findEmptySlot(player.getInventory());
+			if (emptySlot != -1 && player.getInventory().insertStack(emptySlot, stack)) {
+				return true;
+			}
+		}
+		entity.dropStack(world, stack);
+		return false;
+	}
+
+	public static int findEmptySlot(PlayerInventory inventory) {
+		for (int i = 9; i < inventory.getMainStacks().size(); i++) {
+			if (inventory.getMainStacks().get(i).isEmpty()) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	public static void addAnchoredParticle(Entity entity, ParticleType<?> particleType, double yOffset, double speed, double intensity, PacketTarget packetTarget) {

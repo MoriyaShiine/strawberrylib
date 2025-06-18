@@ -3,10 +3,8 @@
  */
 package moriyashiine.strawberrylib.impl.common;
 
-import moriyashiine.strawberrylib.api.event.TickEntityEvent;
 import moriyashiine.strawberrylib.impl.client.payload.*;
 import moriyashiine.strawberrylib.impl.common.event.ModelReplacementEvent;
-import moriyashiine.strawberrylib.impl.common.event.PreventsEquipmentUsageEvent;
 import moriyashiine.strawberrylib.impl.common.event.TickEntitiesEvent;
 import moriyashiine.strawberrylib.impl.common.supporter.SupporterInit;
 import net.fabricmc.api.ModInitializer;
@@ -49,7 +47,6 @@ public class StrawberryLib implements ModInitializer {
 
 	private void initEvents() {
 		EntitySleepEvents.ALLOW_SLEEPING.register(new ModelReplacementEvent());
-		TickEntityEvent.EVENT.register(new PreventsEquipmentUsageEvent());
 		ServerTickEvents.END_WORLD_TICK.register(new TickEntitiesEvent());
 	}
 }
