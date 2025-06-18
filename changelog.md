@@ -1,4 +1,11 @@
 ------------------------------------------------------
+Version 1.21.6-r1
+------------------------------------------------------
+- update to 1.21.6
+- optimize prevent equipment usage event (if it needs to be activated immediately, there's a trigger method now)
+- replace heart textures event now has a priority
+
+------------------------------------------------------
 Version 1.21.5-r5
 ------------------------------------------------------
 - add consume effect type registry helper
