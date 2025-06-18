@@ -8,7 +8,6 @@ import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.TriState;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +43,7 @@ public record GlintLayers(RenderLayer glintTranslucent, RenderLayer glint, Rende
 				1536,
 				RenderPipelines.GLINT,
 				RenderLayer.MultiPhaseParameters.builder()
-						.texture(new RenderPhase.Texture(itemName, TriState.DEFAULT, false))
+						.texture(new RenderPhase.Texture(itemName, false))
 						.texturing(GLINT_TEXTURING)
 						.target(ITEM_ENTITY_TARGET)
 						.build(false)
@@ -54,7 +53,7 @@ public record GlintLayers(RenderLayer glintTranslucent, RenderLayer glint, Rende
 				1536,
 				RenderPipelines.GLINT,
 				RenderLayer.MultiPhaseParameters.builder()
-						.texture(new RenderPhase.Texture(itemName, TriState.DEFAULT, false))
+						.texture(new RenderPhase.Texture(itemName, false))
 						.texturing(GLINT_TEXTURING)
 						.build(false)
 		);
@@ -63,7 +62,7 @@ public record GlintLayers(RenderLayer glintTranslucent, RenderLayer glint, Rende
 				1536,
 				RenderPipelines.GLINT,
 				RenderLayer.MultiPhaseParameters.builder()
-						.texture(new RenderPhase.Texture(itemName, TriState.DEFAULT, false))
+						.texture(new RenderPhase.Texture(itemName, false))
 						.texturing(ENTITY_GLINT_TEXTURING)
 						.build(false)
 		);
@@ -72,7 +71,7 @@ public record GlintLayers(RenderLayer glintTranslucent, RenderLayer glint, Rende
 				1536,
 				RenderPipelines.GLINT,
 				RenderLayer.MultiPhaseParameters.builder()
-						.texture(new RenderPhase.Texture(entityName, TriState.DEFAULT, false))
+						.texture(new RenderPhase.Texture(entityName, false))
 						.texturing(ARMOR_ENTITY_GLINT_TEXTURING)
 						.layering(VIEW_OFFSET_Z_LAYERING)
 						.build(false)

@@ -10,8 +10,8 @@ import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
 import moriyashiine.strawberrylib.impl.common.supporter.SupporterInit;
 import moriyashiine.strawberrylib.impl.common.supporter.payload.SyncGlintColorPayload;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
 
@@ -24,15 +24,15 @@ public class SupporterComponent implements AutoSyncedComponent, ClientTickingCom
 	}
 
 	@Override
-	public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup wrapperLookup) {
-		equippableGlintColor = GlintColor.valueOf(tag.getString("EquippableGlintColor", GlintColor.PURPLE.name()));
-		glintColor = GlintColor.valueOf(tag.getString("GlintColor", GlintColor.PURPLE.name()));
+	public void readData(ReadView readView) {
+		equippableGlintColor = GlintColor.valueOf(readView.getString("EquippableGlintColor", GlintColor.PURPLE.name()));
+		glintColor = GlintColor.valueOf(readView.getString("GlintColor", GlintColor.PURPLE.name()));
 	}
 
 	@Override
-	public void writeToNbt(NbtCompound tag, RegistryWrapper.WrapperLookup wrapperLookup) {
-		tag.putString("EquippableGlintColor", equippableGlintColor.name());
-		tag.putString("GlintColor", glintColor.name());
+	public void writeData(WriteView writeView) {
+		writeView.putString("EquippableGlintColor", equippableGlintColor.name());
+		writeView.putString("GlintColor", glintColor.name());
 	}
 
 	@Override

@@ -11,7 +11,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,10 +22,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 	@Shadow
-	public abstract ServerWorld getServerWorld();
+	public abstract ServerWorld getWorld();
 
-	public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
-		super(world, pos, yaw, gameProfile);
+	public ServerPlayerEntityMixin(World world, GameProfile profile) {
+		super(world, profile);
 	}
 
 	@Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;attack(Lnet/minecraft/entity/Entity;)V"))
@@ -34,7 +33,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 		@Nullable LivingEntity modelReplacement = SLibUtils.getModelReplacement(this);
 		if (modelReplacement != null) {
 			ModelReplacementComponent.disableAttack = true;
-			modelReplacement.tryAttack(getServerWorld(), target);
+			modelReplacement.tryAttack(getWorld(), target);
 			ModelReplacementComponent.disableAttack = false;
 		}
 	}

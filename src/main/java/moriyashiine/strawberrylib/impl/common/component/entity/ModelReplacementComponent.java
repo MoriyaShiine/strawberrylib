@@ -10,9 +10,9 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -34,14 +34,14 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 	}
 
 	@Override
-	public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
-		tag.getString("ReplacementType").ifPresentOrElse(string -> replacementType = Registries.ENTITY_TYPE.get(Identifier.of(string)), () -> replacementType = null);
+	public void readData(ReadView readView) {
+		readView.getOptionalString("ReplacementType").ifPresentOrElse(string -> replacementType = Registries.ENTITY_TYPE.get(Identifier.of(string)), () -> replacementType = null);
 	}
 
 	@Override
-	public void writeToNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
+	public void writeData(WriteView writeView) {
 		if (replacementType != null) {
-			tag.putString("ReplacementType", Registries.ENTITY_TYPE.getId(replacementType).toString());
+			writeView.putString("ReplacementType", Registries.ENTITY_TYPE.getId(replacementType).toString());
 		}
 	}
 
