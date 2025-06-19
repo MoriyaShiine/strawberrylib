@@ -19,15 +19,15 @@ public class ItemRenderStateMixin implements ItemRenderStateAddition {
 	@Unique
 	private GlintLayers glintLayers = null;
 
+	@Override
+	public void slib$setGlintLayers(GlintLayers layers) {
+		glintLayers = layers;
+	}
+
 	@Inject(method = "render", at = @At("HEAD"))
 	private void slib$supporterGlint(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci) {
 		if (glintLayers != null) {
 			GlintLayers.currentLayer = glintLayers;
 		}
-	}
-
-	@Override
-	public void slib$setGlintLayers(GlintLayers layers) {
-		glintLayers = layers;
 	}
 }
