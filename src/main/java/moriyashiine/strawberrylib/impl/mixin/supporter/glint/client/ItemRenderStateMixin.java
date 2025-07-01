@@ -30,4 +30,9 @@ public class ItemRenderStateMixin implements ItemRenderStateAddition {
 			GlintLayers.currentLayer = glintLayers;
 		}
 	}
+
+	@Inject(method = "render", at = @At("TAIL"))
+	private void slib$supporterGlintTail(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci) {
+		GlintLayers.currentLayer = null;
+	}
 }
