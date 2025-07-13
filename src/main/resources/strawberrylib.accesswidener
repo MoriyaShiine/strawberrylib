@@ -5,4 +5,5 @@ accessible field net/minecraft/entity/LivingEntity jumping Z
 accessible field net/minecraft/entity/LivingEntity leaningPitch F
 accessible field net/minecraft/entity/LivingEntity lastLeaningPitch F
 mutable field net/minecraft/entity/LivingEntity limbAnimator Lnet/minecraft/entity/LimbAnimator;
+accessible class net/minecraft/client/gui/hud/InGameHud$BarType
 accessible class net/minecraft/client/gui/hud/InGameHud$HeartType
