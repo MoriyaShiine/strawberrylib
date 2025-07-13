@@ -24,6 +24,7 @@
   ],
   "client": [
 	"client.WorldRendererMixin",
+	"event.client.disablehudbar.InGameHudMixin",
 	"event.client.modifynightvisionstrength.GameRendererMixin",
 	"event.client.modifynightvisionstrength.LivingEntityMixin",
 	"event.client.outlineentity.EntityMixin",
