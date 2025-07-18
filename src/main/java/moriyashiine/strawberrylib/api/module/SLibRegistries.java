@@ -132,8 +132,8 @@ public final class SLibRegistries {
 		return Registry.register(Registries.PARTICLE_TYPE, StrawberryLib.cid(name), particleType);
 	}
 
-	public static <T extends Potion> T registerPotion(String name, T potion) {
-		return Registry.register(Registries.POTION, StrawberryLib.cid(name), potion);
+	public static RegistryEntry<Potion> registerPotion(String name, Potion potion) {
+		return Registry.registerReference(Registries.POTION, StrawberryLib.cid(name), potion);
 	}
 
 	public static <T extends Recipe<?>> RecipeSerializer<T> registerRecipeSerializer(String name, RecipeSerializer<T> recipeSerializer) {
