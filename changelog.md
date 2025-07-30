@@ -1,4 +1,10 @@
 ------------------------------------------------------
+Version 1.21.7-r4
+------------------------------------------------------
+- add untrimmable_armor item tag
+- add more item registry helpers
+
+------------------------------------------------------
 Version 1.21.7-r3
 ------------------------------------------------------
 - potion registry helper now returns a registry entry instead of the value
