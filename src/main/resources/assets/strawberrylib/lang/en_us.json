@@ -3,5 +3,6 @@
   "options.strawberrylib": "StrawberryLib...",
   "options.strawberrylibTitle": "StrawberryLib",
   "options.strawberrylib.equippableGlintColor": "Equippable Glint Color",
-  "options.strawberrylib.glintColor": "Glint Color"
+  "options.strawberrylib.glintColor": "Glint Color",
+  "tag.item.strawberrylib.untrimmable_armor": "Untrimmable Armor"
 }
