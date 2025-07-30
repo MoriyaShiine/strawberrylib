@@ -104,6 +104,14 @@ public final class SLibRegistries {
 		return registerItem(name, factory, new Item.Settings());
 	}
 
+	public static Item registerItem(String name, Item.Settings settings) {
+		return registerItem(name, Item::new, settings);
+	}
+
+	public static Item registerItem(String name) {
+		return registerItem(name, Item::new);
+	}
+
 	public static Item registerBlockItem(String name, Block block, Item.Settings settings) {
 		return registerItem(name, s -> new BlockItem(block, s), settings.useBlockPrefixedTranslationKey());
 	}
