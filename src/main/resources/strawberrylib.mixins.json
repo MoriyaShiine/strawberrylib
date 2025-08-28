@@ -21,7 +21,8 @@
 	"modelreplacement.ServerPlayerEntityMixin",
 	"modelreplacement.ServerWorldMixin",
 	"registries.ItemSettingsMixin",
-	"tag.SmithingTrimRecipeMixin"
+	"tag.SmithingTrimRecipeMixin",
+	"utils.PlayerEntityMixin"
   ],
   "client": [
 	"client.WorldRendererMixin",

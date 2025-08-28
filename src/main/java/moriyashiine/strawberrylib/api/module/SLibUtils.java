@@ -39,6 +39,8 @@ import net.minecraft.world.RaycastContext;
 import org.jetbrains.annotations.Nullable;
 
 public final class SLibUtils {
+	public static float currentAttackCooldown = -1;
+
 	@Nullable
 	public static LivingEntity getModelReplacement(PlayerEntity player) {
 		return ModEntityComponents.MODEL_REPLACEMENT.get(player).getReplacement();
