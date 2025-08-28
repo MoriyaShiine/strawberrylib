@@ -1,4 +1,11 @@
 ------------------------------------------------------
+Version 1.21.7-r5
+------------------------------------------------------
+- add currentAttackCooldown to utils class
+- condense setModelReplacement overloads
+- fix rotation jitteryness with model replacements
+
+------------------------------------------------------
 Version 1.21.7-r4
 ------------------------------------------------------
 - add untrimmable_armor item tag
