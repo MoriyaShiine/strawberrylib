@@ -46,16 +46,12 @@ public final class SLibUtils {
 		return ModEntityComponents.MODEL_REPLACEMENT.get(player).getReplacement();
 	}
 
-	public static void setModelReplacement(PlayerEntity player, @Nullable EntityType<?> entityType, boolean sync) {
+	public static void setModelReplacement(PlayerEntity player, @Nullable EntityType<?> entityType) {
 		ModelReplacementComponent modelReplacementComponent = ModEntityComponents.MODEL_REPLACEMENT.get(player);
 		modelReplacementComponent.setReplacementType(entityType);
-		if (sync) {
+		if (!player.getWorld().isClient) {
 			modelReplacementComponent.sync();
 		}
-	}
-
-	public static void setModelReplacement(PlayerEntity player, @Nullable EntityType<?> entityType) {
-		setModelReplacement(player, entityType, true);
 	}
 
 	public static boolean conditionallyApplyAttributeModifier(LivingEntity entity, RegistryEntry<EntityAttribute> attribute, EntityAttributeModifier modifier, boolean shouldHave) {
