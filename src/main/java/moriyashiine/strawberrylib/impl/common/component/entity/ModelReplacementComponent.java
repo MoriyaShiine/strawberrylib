@@ -21,7 +21,7 @@ import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.CommonTickingComponent;
 
 public class ModelReplacementComponent implements AutoSyncedComponent, CommonTickingComponent {
-	public static boolean disableAttack = false, disableTick = false, enableRenderCheck = false;
+	public static boolean disableAttack = false, disableTick = false;
 
 	private final PlayerEntity obj;
 	@Nullable

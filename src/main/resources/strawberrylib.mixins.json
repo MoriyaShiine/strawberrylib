@@ -34,7 +34,6 @@
 	"event.client.replacehearttextures.InGameHudMixin",
 	"modelreplacement.client.DisableTickMixin",
 	"modelreplacement.client.EntityRenderDispatcherMixin",
-	"modelreplacement.client.EntityRendererMixin",
 	"modelreplacement.client.InventoryScreenMixin",
 	"supporter.client.GameOptionsMixin",
 	"supporter.client.OptionsScreenMixin",
