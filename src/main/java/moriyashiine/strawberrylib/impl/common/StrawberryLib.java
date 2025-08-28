@@ -21,6 +21,8 @@ public class StrawberryLib implements ModInitializer {
 
 	public static String currentModId = "";
 
+	public static float currentAttackCooldown = -1;
+
 	@Override
 	public void onInitialize() {
 		SupporterInit.init();

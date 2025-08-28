@@ -11,6 +11,7 @@ import moriyashiine.strawberrylib.impl.client.payload.AddAnchoredParticlePayload
 import moriyashiine.strawberrylib.impl.client.payload.AddEmitterParticlePayload;
 import moriyashiine.strawberrylib.impl.client.payload.AddParticlesPayload;
 import moriyashiine.strawberrylib.impl.client.payload.PlayAnchoredSoundPayload;
+import moriyashiine.strawberrylib.impl.common.StrawberryLib;
 import moriyashiine.strawberrylib.impl.common.component.entity.ModelReplacementComponent;
 import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -39,8 +40,6 @@ import net.minecraft.world.RaycastContext;
 import org.jetbrains.annotations.Nullable;
 
 public final class SLibUtils {
-	public static float currentAttackCooldown = -1;
-
 	@Nullable
 	public static LivingEntity getModelReplacement(PlayerEntity player) {
 		return ModEntityComponents.MODEL_REPLACEMENT.get(player).getReplacement();
@@ -81,6 +80,10 @@ public final class SLibUtils {
 			}
 		}
 		return false;
+	}
+
+	public static boolean isAttackingPlayerCooldownWithinThreshold(float threshold) {
+		return StrawberryLib.currentAttackCooldown == -1 || StrawberryLib.currentAttackCooldown >= threshold;
 	}
 
 	public static boolean isGroundedOrAirborne(LivingEntity living, boolean allowWater) {
