@@ -23,7 +23,7 @@ public class LivingEntityMixin {
 		return original && !PreventEquipmentUsageEvent.EVENT.invoker().preventsUsage((LivingEntity) (Object) this, stack);
 	}
 
-	@Inject(method = "sendEquipmentChanges(Ljava/util/Map;)V", at = @At("HEAD"))
+	@Inject(method = "sendEquipmentChanges(Ljava/util/Map;)V", at = @At("TAIL"))
 	private void slib$preventEquipmentUsage(Map<EquipmentSlot, ItemStack> equipmentChanges, CallbackInfo ci) {
 		PreventEquipmentUsageEvent.triggerEquipmentCheck((LivingEntity) (Object) this);
 	}
