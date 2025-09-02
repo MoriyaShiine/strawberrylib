@@ -1,4 +1,11 @@
 ------------------------------------------------------
+Version 1.21.7-r6
+------------------------------------------------------
+- cleaner current attack cooldown api
+- modify critical status event now has a priority
+- fix prevent equipment usage checks not updating held item attributes properly
+
+------------------------------------------------------
 Version 1.21.7-r5
 ------------------------------------------------------
 - add currentAttackCooldown to utils class
