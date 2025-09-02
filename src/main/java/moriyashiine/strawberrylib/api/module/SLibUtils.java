@@ -95,7 +95,7 @@ public final class SLibUtils {
 				return false;
 			}
 		}
-		return !living.isGliding() && !living.hasVehicle() && !living.isClimbing();
+		return !living.hasVehicle() && !living.isUsingRiptide() && !living.isGliding() && !living.isClimbing();
 	}
 
 	public static boolean isGroundedOrAirborne(LivingEntity living) {
