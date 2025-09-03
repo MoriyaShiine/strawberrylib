@@ -8,7 +8,6 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.util.math.MathHelper;
-import org.jetbrains.annotations.Nullable;
 
 public class AnchoredParticle extends SpriteBillboardParticle {
 	public static boolean shouldForce = false;
@@ -44,14 +43,7 @@ public class AnchoredParticle extends SpriteBillboardParticle {
 		z = entity.getZ();
 	}
 
-	public static class Factory implements ParticleFactory<SimpleParticleType> {
-		private final SpriteProvider spriteProvider;
-
-		public Factory(SpriteProvider spriteProvider) {
-			this.spriteProvider = spriteProvider;
-		}
-
-		@Nullable
+	public record Factory(SpriteProvider spriteProvider) implements ParticleFactory<SimpleParticleType> {
 		@Override
 		public Particle createParticle(SimpleParticleType parameters, ClientWorld world, double x, double z, double entityId, double yOffset, double speed, double intensity) {
 			AnchoredParticle particle = new AnchoredParticle(world, x, z, MathHelper.floor(entityId), yOffset, speed, intensity);
