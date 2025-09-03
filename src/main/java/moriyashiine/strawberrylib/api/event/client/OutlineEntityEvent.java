@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+@FunctionalInterface
 public interface OutlineEntityEvent {
 	Event<OutlineEntityEvent> EVENT = EventFactory.createArrayBacked(OutlineEntityEvent.class, events -> entity -> {
 		List<OutlineEntityEvent> sortedEvents = new ArrayList<>(Arrays.asList(events));

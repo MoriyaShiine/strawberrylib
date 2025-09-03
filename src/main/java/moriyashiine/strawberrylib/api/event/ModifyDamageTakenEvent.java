@@ -9,6 +9,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.world.ServerWorld;
 
+@FunctionalInterface
 public interface ModifyDamageTakenEvent {
 	Event<ModifyDamageTakenEvent> MULTIPLY_BASE = EventFactory.createArrayBacked(ModifyDamageTakenEvent.class, events -> (phase, amount, world, source, victim) -> {
 		for (ModifyDamageTakenEvent event : events) {

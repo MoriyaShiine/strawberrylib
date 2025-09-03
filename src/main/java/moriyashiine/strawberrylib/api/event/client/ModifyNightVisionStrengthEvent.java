@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.entity.LivingEntity;
 
+@FunctionalInterface
 public interface ModifyNightVisionStrengthEvent {
 	Event<ModifyNightVisionStrengthEvent> MULTIPLY_BASE = EventFactory.createArrayBacked(ModifyNightVisionStrengthEvent.class, events -> (original, entity) -> {
 		for (ModifyNightVisionStrengthEvent event : events) {

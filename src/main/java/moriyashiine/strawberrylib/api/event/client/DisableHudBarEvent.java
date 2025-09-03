@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+@FunctionalInterface
 public interface DisableHudBarEvent {
 	Event<DisableHudBarEvent> EVENT = EventFactory.createArrayBacked(DisableHudBarEvent.class, events -> player -> {
 		List<DisableHudBarEvent> sortedEvents = new ArrayList<>(Arrays.asList(events));

@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+@FunctionalInterface
 public interface ReplaceHeartTexturesEvent {
 	Event<ReplaceHeartTexturesEvent> EVENT = EventFactory.createArrayBacked(ReplaceHeartTexturesEvent.class, events -> player -> {
 		List<ReplaceHeartTexturesEvent> sortedEvents = new ArrayList<>(Arrays.asList(events));

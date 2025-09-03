@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+@FunctionalInterface
 public interface ModifyCriticalStatusEvent {
 	Event<ModifyCriticalStatusEvent> EVENT = EventFactory.createArrayBacked(ModifyCriticalStatusEvent.class, events -> (attacker, target, attackCooldownProgress) -> {
 		List<ModifyCriticalStatusEvent> sortedEvents = new ArrayList<>(Arrays.asList(events));

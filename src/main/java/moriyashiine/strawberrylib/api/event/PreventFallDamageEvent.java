@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+@FunctionalInterface
 public interface PreventFallDamageEvent {
 	Event<PreventFallDamageEvent> EVENT = EventFactory.createArrayBacked(PreventFallDamageEvent.class, events -> (world, entity, fallDistance, damagePerDistance, damageSource) -> {
 		List<PreventFallDamageEvent> sortedEvents = new ArrayList<>(Arrays.asList(events));

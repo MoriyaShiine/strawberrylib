@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+@FunctionalInterface
 public interface PreventEquipmentUsageEvent {
 	Event<PreventEquipmentUsageEvent> EVENT = EventFactory.createArrayBacked(PreventEquipmentUsageEvent.class, events -> (entity, stack) -> {
 		List<PreventEquipmentUsageEvent> sortedEvents = new ArrayList<>(Arrays.asList(events));

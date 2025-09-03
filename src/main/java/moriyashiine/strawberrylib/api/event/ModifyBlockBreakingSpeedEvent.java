@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 
+@FunctionalInterface
 public interface ModifyBlockBreakingSpeedEvent {
 	Event<ModifyBlockBreakingSpeedEvent> MULTIPLY_BASE = EventFactory.createArrayBacked(ModifyBlockBreakingSpeedEvent.class, events -> (breakSpeed, player, state, world, pos) -> {
 		for (ModifyBlockBreakingSpeedEvent event : events) {

@@ -10,6 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+@FunctionalInterface
 public interface EatFoodEvent {
 	Event<EatFoodEvent> EVENT = EventFactory.createArrayBacked(EatFoodEvent.class, events -> (world, entity, stack, foodComponent) -> {
 		for (EatFoodEvent event : events) {

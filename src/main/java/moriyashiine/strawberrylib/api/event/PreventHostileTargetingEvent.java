@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+@FunctionalInterface
 public interface PreventHostileTargetingEvent {
 	Event<PreventHostileTargetingEvent> EVENT = EventFactory.createArrayBacked(PreventHostileTargetingEvent.class, events -> (attacker, target) -> {
 		List<PreventHostileTargetingEvent> sortedEvents = new ArrayList<>(Arrays.asList(events));
