@@ -1,4 +1,10 @@
 ------------------------------------------------------
+Version 1.21.7-r7
+------------------------------------------------------
+- optimize entity outline event. this is a breaking change, so update your mods if you use it
+- add riptide check to isGroundedOrAirborne
+
+------------------------------------------------------
 Version 1.21.7-r6
 ------------------------------------------------------
 - cleaner current attack cooldown api
