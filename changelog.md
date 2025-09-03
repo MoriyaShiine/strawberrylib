@@ -1,4 +1,9 @@
 ------------------------------------------------------
+Version 1.21.7-r9
+------------------------------------------------------
+- fix outline event returning when the state is true or false instead of if the data isn't empty
+
+------------------------------------------------------
 Version 1.21.7-r8
 ------------------------------------------------------
 - allow outlines to change state without changing color in outline entity event. oops lol
