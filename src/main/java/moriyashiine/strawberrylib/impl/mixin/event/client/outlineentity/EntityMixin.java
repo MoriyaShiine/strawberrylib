@@ -6,7 +6,6 @@ package moriyashiine.strawberrylib.impl.mixin.event.client.outlineentity;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import moriyashiine.strawberrylib.api.event.client.OutlineEntityEvent;
 import moriyashiine.strawberrylib.impl.client.event.OutlineDataAttachment;
-import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -31,8 +30,8 @@ public class EntityMixin implements OutlineDataAttachment {
 
 	@ModifyReturnValue(method = "getTeamColorValue", at = @At(value = "RETURN", ordinal = 1))
 	private int slib$outlineEntity(int original) {
-		if (outlineData.state() != TriState.DEFAULT) {
-			return outlineData.color();
+		if (outlineData.color().isPresent()) {
+			return outlineData.color().getAsInt();
 		}
 		return original;
 	}
