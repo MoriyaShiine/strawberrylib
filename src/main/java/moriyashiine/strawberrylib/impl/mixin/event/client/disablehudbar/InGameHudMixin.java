@@ -28,7 +28,7 @@ public abstract class InGameHudMixin {
 
 	@Inject(method = "renderMainHud", at = @At("HEAD"))
 	private void slib$disableHudBar(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
-		shouldDisableHudBar = DisableHudBarEvent.EVENT.invoker().shouldDisableHudBar(getCameraPlayer());
+		shouldDisableHudBar = DisableHudBarEvent.EVENT.invoker().shouldDisableHudBar(getCameraPlayer()).get();
 	}
 
 	@ModifyExpressionValue(method = "renderMainHud", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;getCurrentBarType()Lnet/minecraft/client/gui/hud/InGameHud$BarType;"))

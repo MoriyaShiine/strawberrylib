@@ -21,6 +21,6 @@ public class ArmorSlotMixin {
 
 	@ModifyReturnValue(method = "canInsert(Lnet/minecraft/item/ItemStack;)Z", at = @At("RETURN"))
 	private boolean slib$preventEquipmentUsage(boolean original, ItemStack stack) {
-		return original && !PreventEquipmentUsageEvent.EVENT.invoker().preventsUsage(entity, stack);
+		return original && !PreventEquipmentUsageEvent.EVENT.invoker().preventsUsage(entity, stack).get();
 	}
 }

@@ -35,7 +35,7 @@ public class LivingEntityMixin {
 
 	@ModifyReturnValue(method = "canTarget(Lnet/minecraft/entity/LivingEntity;)Z", at = @At("RETURN"))
 	private boolean slib$preventHostileTargeting(boolean original, LivingEntity target) {
-		if (!attackers.contains(target) && PreventHostileTargetingEvent.EVENT.invoker().shouldNotTarget((LivingEntity) (Object) this, target)) {
+		if (!attackers.contains(target) && PreventHostileTargetingEvent.EVENT.invoker().preventsTargeting((LivingEntity) (Object) this, target).get()) {
 			return false;
 		}
 		return original;

@@ -23,13 +23,13 @@ public abstract class LivingEntityMixin extends Entity {
 
 	@ModifyVariable(method = "damage", at = @At("HEAD"), argsOnly = true)
 	private float slib$modifyDamageTaken(float amount, ServerWorld world, DamageSource source) {
-		return ModifyDamageTakenEvent.Base.getModifiedDamage(amount, world, source, (LivingEntity) (Object) this);
+		return ModifyDamageTakenEvent.getModifiedDamage(ModifyDamageTakenEvent.Phase.BASE, amount, world, source, (LivingEntity) (Object) this);
 	}
 
 	@ModifyReturnValue(method = "modifyAppliedDamage", at = @At("RETURN"))
 	private float slib$modifyDamageTaken(float original, DamageSource source) {
 		if (getWorld() instanceof ServerWorld world) {
-			return ModifyDamageTakenEvent.Final.getModifiedDamage(original, world, source, (LivingEntity) (Object) this);
+			return ModifyDamageTakenEvent.getModifiedDamage(ModifyDamageTakenEvent.Phase.FINAL, original, world, source, (LivingEntity) (Object) this);
 		}
 		return original;
 	}

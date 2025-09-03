@@ -21,7 +21,7 @@ public abstract class WardenEntityMixin extends LivingEntity {
 
 	@ModifyReturnValue(method = "isValidTarget", at = @At("RETURN"))
 	private boolean slib$preventHostileTargeting(boolean original, Entity entity) {
-		if (entity instanceof LivingEntity target && getAttacker() != target && PreventHostileTargetingEvent.EVENT.invoker().shouldNotTarget(this, target)) {
+		if (entity instanceof LivingEntity target && getAttacker() != target && PreventHostileTargetingEvent.EVENT.invoker().preventsTargeting(this, target).get()) {
 			return false;
 		}
 		return original;

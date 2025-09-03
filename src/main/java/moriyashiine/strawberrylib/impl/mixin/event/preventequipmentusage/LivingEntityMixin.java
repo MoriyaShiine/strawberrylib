@@ -20,7 +20,7 @@ public class LivingEntityMixin {
 	@SuppressWarnings("ConstantValue")
 	@ModifyReturnValue(method = {"canEquip", "canEquipFromDispenser"}, at = @At("RETURN"))
 	private boolean slib$preventEquipmentUsage(boolean original, ItemStack stack) {
-		return original && !PreventEquipmentUsageEvent.EVENT.invoker().preventsUsage((LivingEntity) (Object) this, stack);
+		return original && !PreventEquipmentUsageEvent.EVENT.invoker().preventsUsage((LivingEntity) (Object) this, stack).get();
 	}
 
 	@Inject(method = "sendEquipmentChanges(Ljava/util/Map;)V", at = @At("TAIL"))

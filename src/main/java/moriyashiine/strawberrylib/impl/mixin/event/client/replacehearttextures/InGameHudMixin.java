@@ -14,8 +14,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
-import java.util.Optional;
-
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
 	@Shadow
@@ -25,19 +23,18 @@ public abstract class InGameHudMixin {
 	@ModifyExpressionValue(method = "drawHeart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud$HeartType;getTexture(ZZZ)Lnet/minecraft/util/Identifier;"))
 	private Identifier slib$replaceHeartTextures(Identifier original, DrawContext context, InGameHud.HeartType type, int x, int y, boolean hardcore, boolean blinking, boolean half) {
 		if (type != InGameHud.HeartType.CONTAINER && type != InGameHud.HeartType.ABSORBING) {
-			Optional<ReplaceHeartTexturesEvent.TextureSet> textureSet = ReplaceHeartTexturesEvent.EVENT.invoker().getTextureSet(getCameraPlayer());
-			if (textureSet.isPresent()) {
-				ReplaceHeartTexturesEvent.TextureSet set = textureSet.get();
+			@Nullable ReplaceHeartTexturesEvent.TextureSet textureSet = ReplaceHeartTexturesEvent.EVENT.invoker().getTextureSet(getCameraPlayer());
+			if (textureSet != null) {
 				if (!hardcore) {
 					if (half) {
-						return blinking ? set.halfBlinkingTexture() : set.halfTexture();
+						return blinking ? textureSet.halfBlinkingTexture() : textureSet.halfTexture();
 					} else {
-						return blinking ? set.fullBlinkingTexture() : set.fullTexture();
+						return blinking ? textureSet.fullBlinkingTexture() : textureSet.fullTexture();
 					}
 				} else if (half) {
-					return blinking ? set.hardcoreHalfBlinkingTexture() : set.hardcoreHalfTexture();
+					return blinking ? textureSet.hardcoreHalfBlinkingTexture() : textureSet.hardcoreHalfTexture();
 				} else {
-					return blinking ? set.hardcoreFullBlinkingTexture() : set.hardcoreFullTexture();
+					return blinking ? textureSet.hardcoreFullBlinkingTexture() : textureSet.hardcoreFullTexture();
 				}
 			}
 		}

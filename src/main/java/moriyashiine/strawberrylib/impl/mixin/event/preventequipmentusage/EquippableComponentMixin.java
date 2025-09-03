@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class EquippableComponentMixin {
 	@Inject(method = "equip", at = @At("HEAD"), cancellable = true)
 	private void slib$preventEquipmentUsage(ItemStack stack, PlayerEntity player, CallbackInfoReturnable<ActionResult> cir) {
-		if (PreventEquipmentUsageEvent.EVENT.invoker().preventsUsage(player, stack)) {
+		if (PreventEquipmentUsageEvent.EVENT.invoker().preventsUsage(player, stack).get()) {
 			cir.setReturnValue(ActionResult.PASS);
 		}
 	}

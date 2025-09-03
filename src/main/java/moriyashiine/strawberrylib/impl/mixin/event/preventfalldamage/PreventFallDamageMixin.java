@@ -23,7 +23,7 @@ public abstract class PreventFallDamageMixin extends Entity {
 
 	@Inject(method = "handleFallDamage", at = @At("HEAD"), cancellable = true)
 	private void slib$preventFallDamage(double fallDistance, float damagePerDistance, DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
-		if (PreventFallDamageEvent.EVENT.invoker().shouldNotTakeFallDamage(getWorld(), (LivingEntity) (Object) this, fallDistance, damagePerDistance, damageSource)) {
+		if (PreventFallDamageEvent.EVENT.invoker().preventsFallDamage(getWorld(), (LivingEntity) (Object) this, fallDistance, damagePerDistance, damageSource).get()) {
 			cir.setReturnValue(false);
 		}
 	}
