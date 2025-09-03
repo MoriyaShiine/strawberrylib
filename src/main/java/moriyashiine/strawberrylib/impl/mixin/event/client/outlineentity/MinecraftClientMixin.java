@@ -5,6 +5,7 @@ package moriyashiine.strawberrylib.impl.mixin.event.client.outlineentity;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import moriyashiine.strawberrylib.api.event.client.OutlineEntityEvent;
+import moriyashiine.strawberrylib.impl.client.event.OutlineDataAttachment;
 import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -15,9 +16,9 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MinecraftClientMixin {
 	@ModifyReturnValue(method = "hasOutline", at = @At("RETURN"))
 	private boolean slib$outlineEntity(boolean original, Entity entity) {
-		TriState state = OutlineEntityEvent.HAS_OUTLINE.invoker().hasOutline(entity);
-		if (state != TriState.DEFAULT) {
-			return state.get();
+		OutlineEntityEvent.OutlineData outlineData = ((OutlineDataAttachment) entity).slib$getOutlineData();
+		if (outlineData.state() != TriState.DEFAULT) {
+			return outlineData.state().get();
 		}
 		return original;
 	}
