@@ -14,7 +14,7 @@ public interface OutlineEntityEvent {
 	Event<OutlineEntityEvent> EVENT = EventFactory.createArrayBacked(OutlineEntityEvent.class, events -> entity -> {
 		for (OutlineEntityEvent event : events) {
 			OutlineData data = event.getOutlineData(entity);
-			if (data.state() != TriState.DEFAULT) {
+			if (data != OutlineData.EMPTY) {
 				return data;
 			}
 		}
