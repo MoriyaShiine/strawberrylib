@@ -1,4 +1,9 @@
 ------------------------------------------------------
+Version 1.21.7-r8
+------------------------------------------------------
+- allow outlines to change state without changing color in outline entity event. oops lol
+
+------------------------------------------------------
 Version 1.21.7-r7
 ------------------------------------------------------
 - optimize entity outline event. this is a breaking change, so update your mods if you use it
