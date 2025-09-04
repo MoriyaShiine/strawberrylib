@@ -203,8 +203,12 @@ public final class SLibUtils {
 		}
 	}
 
+	public static void addParticles(Entity entity, ParticleType<?> particleType, int count, ParticleAnchor anchor, ParticleVelocity velocity) {
+		addParticles(entity, particleType, count, anchor, PacketTarget.ALL, velocity);
+	}
+
 	public static void addParticles(Entity entity, ParticleType<?> particleType, int count, ParticleAnchor anchor) {
-		addParticles(entity, particleType, count, anchor, PacketTarget.ALL, ParticleVelocity.ZERO);
+		addParticles(entity, particleType, count, anchor, ParticleVelocity.ZERO);
 	}
 
 	public static void playSound(Entity entity, SoundEvent soundEvent, float volume, float pitch) {
