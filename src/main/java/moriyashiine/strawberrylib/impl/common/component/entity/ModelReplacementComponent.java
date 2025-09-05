@@ -118,7 +118,7 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 		replacement.inPowderSnow = obj.inPowderSnow;
 		replacement.wasInPowderSnow = obj.wasInPowderSnow;
 		// LivingEntity
-		replacement.setJumping(obj.jumping);
+		replacement.setJumping(obj.jumping && !obj.getAbilities().flying);
 		replacement.handSwinging = obj.handSwinging;
 		replacement.preferredHand = obj.getMainArm() == Arm.RIGHT ? Hand.MAIN_HAND : Hand.OFF_HAND;
 		replacement.handSwingTicks = obj.handSwingTicks;
