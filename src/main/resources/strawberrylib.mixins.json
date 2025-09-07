@@ -3,6 +3,7 @@
   "package": "moriyashiine.strawberrylib.impl.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+	"event.afterdamageincludingdeath.LivingEntityMixin",
 	"event.eatfood.FoodComponentMixin",
 	"event.modifyblockbreakingspeed.AbstractBlockMixin",
 	"event.modifycriticalstatus.PlayerEntityMixin",
