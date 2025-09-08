@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.storage.ReadView;
@@ -28,6 +29,7 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 	private EntityType<?> replacementType = null;
 	@Nullable
 	private LivingEntity replacement = null;
+	private int ambientSoundChance = 0;
 
 	public ModelReplacementComponent(PlayerEntity obj) {
 		this.obj = obj;
@@ -35,13 +37,15 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 
 	@Override
 	public void readData(ReadView readView) {
-		readView.getOptionalString("ReplacementType").ifPresentOrElse(string -> replacementType = Registries.ENTITY_TYPE.get(Identifier.of(string)), () -> replacementType = null);
+		readView.getOptionalString("ReplacementType").ifPresentOrElse(type -> replacementType = Registries.ENTITY_TYPE.get(Identifier.of(type)), () -> replacementType = null);
+		ambientSoundChance = readView.getInt("AmbientSoundChance", 0);
 	}
 
 	@Override
 	public void writeData(WriteView writeView) {
 		if (replacementType != null) {
 			writeView.putString("ReplacementType", Registries.ENTITY_TYPE.getId(replacementType).toString());
+			writeView.putInt("AmbientSoundChance", ambientSoundChance);
 		}
 	}
 
@@ -62,10 +66,15 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 		}
 		if (replacementType == null || (replacement != null && (obj.getWorld() != replacement.getWorld() || replacement.getType() != replacementType))) {
 			replacement = null;
+			ambientSoundChance = 0;
 			obj.calculateDimensions();
 		}
 		if (replacement != null) {
 			copyData(replacement);
+			if (replacement instanceof MobEntity mob && mob.getRandom().nextInt(1000) < ambientSoundChance++) {
+				resetSoundDelay(mob);
+				obj.playSound(mob.getAmbientSound());
+			}
 		}
 	}
 
@@ -89,6 +98,10 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 			replacementType = null;
 		}
 		this.replacementType = replacementType;
+	}
+
+	public void resetSoundDelay(MobEntity mob) {
+		ambientSoundChance = -mob.getMinAmbientSoundDelay();
 	}
 
 	private void copyData(LivingEntity replacement) {

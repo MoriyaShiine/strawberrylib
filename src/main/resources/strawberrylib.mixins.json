@@ -18,6 +18,7 @@
 	"event.preventhostiletargeting.WardenEntityMixin",
 	"modelreplacement.DisableAttackMixin",
 	"modelreplacement.EntityMixin",
+	"modelreplacement.LivingEntityMixin",
 	"modelreplacement.PlayerEntityMixin",
 	"modelreplacement.ServerPlayerEntityMixin",
 	"modelreplacement.ServerWorldMixin",
