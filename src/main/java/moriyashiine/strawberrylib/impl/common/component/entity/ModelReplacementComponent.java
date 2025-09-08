@@ -119,6 +119,8 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 		replacement.setFrozenTicks(obj.getFrozenTicks());
 		if (obj.hasVehicle()) {
 			replacement.startRiding(obj.getVehicle(), true);
+		} else {
+			replacement.dismountVehicle();
 		}
 		replacement.setOnGround(obj.isOnGround());
 		replacement.horizontalCollision = obj.horizontalCollision;
