@@ -1,4 +1,17 @@
 ------------------------------------------------------
+Version 1.21.8-r1
+------------------------------------------------------
+- update to 1.21.8
+- add after damage including death event
+- refactor a bunch of events
+- add extra addParticles overload in SLibUtils
+- model replacement jumping state is no longer set to true when the player is flying
+- model replacements now replace your sounds
+- fix model replacement entity duping
+- merge https://github.com/MoriyaShiine/strawberrylib/pull/1
+  - adds Ukrainian translation. Thanks StarmanMine142!
+
+------------------------------------------------------
 Version 1.21.7-r9
 ------------------------------------------------------
 - fix outline event returning when the state is true or false instead of if the data isn't empty
