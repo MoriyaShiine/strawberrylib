@@ -5,36 +5,58 @@ package moriyashiine.strawberrylib.impl.mixin.modelreplacement;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import moriyashiine.strawberrylib.api.module.SLibUtils;
+import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity {
-	protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
-		super(entityType, world);
+public abstract class PlayerEntityMixin extends LivingEntityMixin {
+	@Override
+	protected void slib$modelReplacementStepSound(BlockPos pos, BlockState state, CallbackInfo ci) {
+		if (SLibUtils.getModelReplacement((PlayerEntity) (Object) this) instanceof LivingEntity replacement) {
+			replacement.playStepSound(pos, state);
+			ci.cancel();
+		}
 	}
 
-	@ModifyReturnValue(method = "getBaseDimensions", at = @At("RETURN"))
-	private EntityDimensions slib$modelReplacement(EntityDimensions original, EntityPose pose) {
+	@Override
+	protected void slib$modelReplacementStepSound(BlockState state, CallbackInfo ci) {
+		if (SLibUtils.getModelReplacement((PlayerEntity) (Object) this) instanceof LivingEntity replacement) {
+			replacement.playSecondaryStepSound(state);
+			ci.cancel();
+		}
+	}
+
+	@Override
+	protected void slib$modelReplacementHurtSound(DamageSource damageSource, CallbackInfo ci) {
+		if (SLibUtils.getModelReplacement((PlayerEntity) (Object) this) instanceof MobEntity mob) {
+			ModEntityComponents.MODEL_REPLACEMENT.get(this).resetSoundDelay(mob);
+		}
+	}
+
+	@Override
+	protected EntityDimensions slib$modelReplacementDimensions(EntityDimensions original, EntityPose pose) {
 		if (isPartOfGame()) {
 			LivingEntity replacement = SLibUtils.getModelReplacement((PlayerEntity) (Object) this);
 			if (replacement != null) {
-				return replacement.getBaseDimensions(pose);
+				return replacement.getDimensions(pose);
 			}
 		}
-		return original;
+		return super.slib$modelReplacementDimensions(original, pose);
 	}
 
 	@ModifyReturnValue(method = "getFallSounds", at = @At("RETURN"))
-	private FallSounds slib$modelReplacementFallSounds(FallSounds original) {
+	private LivingEntity.FallSounds slib$modelReplacementFallSounds(LivingEntity.FallSounds original) {
 		if (SLibUtils.getModelReplacement((PlayerEntity) (Object) this) instanceof LivingEntity replacement) {
 			return replacement.getFallSounds();
 		}

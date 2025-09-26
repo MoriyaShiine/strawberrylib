@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 	@Shadow
-	public abstract ServerWorld getWorld();
+	public abstract ServerWorld getEntityWorld();
 
 	public ServerPlayerEntityMixin(World world, GameProfile profile) {
 		super(world, profile);
@@ -33,7 +33,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 		@Nullable LivingEntity modelReplacement = SLibUtils.getModelReplacement(this);
 		if (modelReplacement != null) {
 			ModelReplacementComponent.disableAttack = true;
-			modelReplacement.tryAttack(getWorld(), target);
+			modelReplacement.tryAttack(getEntityWorld(), target);
 			ModelReplacementComponent.disableAttack = false;
 		}
 	}

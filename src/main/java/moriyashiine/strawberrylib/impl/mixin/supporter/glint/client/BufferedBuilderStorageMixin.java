@@ -22,7 +22,7 @@ public abstract class BufferedBuilderStorageMixin {
 	}
 
 	@Inject(method = "method_54639", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BufferBuilderStorage;assignBufferBuilder(Lit/unimi/dsi/fastutil/objects/Object2ObjectLinkedOpenHashMap;Lnet/minecraft/client/render/RenderLayer;)V", ordinal = 0))
-	private void slib$supporterGlint(Object2ObjectLinkedOpenHashMap<RenderLayer, BufferAllocator> map, CallbackInfo ci) {
+	private static void slib$supporterGlint(Object2ObjectLinkedOpenHashMap<RenderLayer, BufferAllocator> map, CallbackInfo ci) {
 		for (GlintColor color : GlintColor.values()) {
 			if (color != GlintColor.PURPLE) {
 				GlintLayers layers = GlintLayers.getLayers(color);

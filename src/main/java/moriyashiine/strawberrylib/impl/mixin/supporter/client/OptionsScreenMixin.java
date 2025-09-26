@@ -42,7 +42,7 @@ public abstract class OptionsScreenMixin extends Screen {
 
 	@Inject(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/ThreePartsLayoutWidget;addBody(Lnet/minecraft/client/gui/widget/Widget;)Lnet/minecraft/client/gui/widget/Widget;"))
 	private void slib$supporterGlint(CallbackInfo ci, @Local GridWidget.Adder adder) {
-		if (SupporterInit.isSupporter(client.getGameProfile().getId())) {
+		if (SupporterInit.isSupporter(client.getGameProfile().id())) {
 			adder.add(createButton(SupporterOptionsScreen.STRAWBERRY_TEXT.copy().append(STRAWBERRYLIB_TEXT), () -> new SupporterOptionsScreen(this, settings)));
 		}
 	}

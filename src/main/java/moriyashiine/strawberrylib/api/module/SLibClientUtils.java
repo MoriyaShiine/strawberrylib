@@ -5,7 +5,6 @@ package moriyashiine.strawberrylib.api.module;
 
 import moriyashiine.strawberrylib.api.objects.enums.ParticleAnchor;
 import moriyashiine.strawberrylib.api.objects.records.ParticleVelocity;
-import moriyashiine.strawberrylib.api.registry.client.particle.AnchoredParticle;
 import moriyashiine.strawberrylib.impl.client.sound.AnchoredSoundInstance;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -27,9 +26,7 @@ public final class SLibClientUtils {
 	}
 
 	public static void addAnchoredParticle(Entity entity, ParticleType<?> particleType, double yOffset, double speed, double intensity) {
-		AnchoredParticle.shouldForce = true;
-		entity.getWorld().addParticleClient((ParticleEffect) particleType, entity.getX(), entity.getZ(), entity.getId(), yOffset, speed, intensity);
-		AnchoredParticle.shouldForce = false;
+		entity.getEntityWorld().addImportantParticleClient((ParticleEffect) particleType, true, entity.getX(), entity.getZ(), entity.getId(), yOffset, speed, intensity);
 	}
 
 	public static void addEmitterParticle(Entity entity, ParticleType<?> particleType) {
@@ -60,7 +57,7 @@ public final class SLibClientUtils {
 					velocityY = randomized.getY();
 					velocityZ = randomized.getZ();
 				}
-				entity.getWorld().addParticleClient(particleEffect, entity.getParticleX(1), y, entity.getParticleZ(1), velocityX, velocityY, velocityZ);
+				entity.getEntityWorld().addParticleClient(particleEffect, entity.getParticleX(1), y, entity.getParticleZ(1), velocityX, velocityY, velocityZ);
 			}
 		}
 	}

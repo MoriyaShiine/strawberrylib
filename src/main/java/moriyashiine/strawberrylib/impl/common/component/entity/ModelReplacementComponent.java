@@ -56,7 +56,7 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 	@Override
 	public void tick() {
 		if (replacement == null && replacementType != null) {
-			if (replacementType.create(obj.getWorld(), SpawnReason.LOAD) instanceof LivingEntity living) {
+			if (replacementType.create(obj.getEntityWorld(), SpawnReason.LOAD) instanceof LivingEntity living) {
 				replacement = living;
 				obj.calculateDimensions();
 			} else {
@@ -64,7 +64,7 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 				replacementType = null;
 			}
 		}
-		if (replacementType == null || (replacement != null && (obj.getWorld() != replacement.getWorld() || replacement.getType() != replacementType))) {
+		if (replacementType == null || (replacement != null && (obj.getEntityWorld() != replacement.getEntityWorld() || replacement.getType() != replacementType))) {
 			replacement = null;
 			ambientSoundChance = 0;
 			obj.calculateDimensions();
@@ -106,7 +106,7 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 
 	private void copyData(LivingEntity replacement) {
 		// Entity
-		replacement.refreshPositionAndAngles(obj.getPos(), obj.getYaw(), obj.getPitch());
+		replacement.refreshPositionAndAngles(obj.getEntityPos(), obj.getYaw(), obj.getPitch());
 		replacement.setSneaking(obj.isSneaking());
 		replacement.setSprinting(obj.isSprinting());
 		replacement.setSwimming(obj.isSwimming());
@@ -118,7 +118,7 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 		replacement.setPose(obj.getPose());
 		replacement.setFrozenTicks(obj.getFrozenTicks());
 		if (obj.hasVehicle()) {
-			replacement.startRiding(obj.getVehicle(), true);
+			replacement.startRiding(obj.getVehicle(), true, false);
 		} else {
 			replacement.dismountVehicle();
 		}

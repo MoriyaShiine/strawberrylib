@@ -32,7 +32,7 @@ public record AddEmitterParticlePayload(int entityId, ParticleType<?> particleTy
 	public static class Receiver implements ClientPlayNetworking.PlayPayloadHandler<AddEmitterParticlePayload> {
 		@Override
 		public void receive(AddEmitterParticlePayload payload, ClientPlayNetworking.Context context) {
-			Entity entity = context.player().getWorld().getEntityById(payload.entityId());
+			Entity entity = context.player().getEntityWorld().getEntityById(payload.entityId());
 			if (entity != null) {
 				SLibClientUtils.addEmitterParticle(entity, payload.particleType());
 			}

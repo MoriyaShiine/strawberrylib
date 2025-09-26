@@ -3,20 +3,23 @@
  */
 package moriyashiine.strawberrylib.api.registry.client.particle;
 
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.BillboardParticle;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleFactory;
+import net.minecraft.client.particle.SpriteProvider;
+import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.random.Random;
 
-public class AnchoredParticle extends SpriteBillboardParticle {
-	public static boolean shouldForce = false;
-
+public class AnchoredParticle extends BillboardParticle {
 	protected final Entity entity;
 	protected final double yOffset, speed, intensity;
 
-	public AnchoredParticle(ClientWorld world, double x, double z, int entityId, double yOffset, double speed, double intensity) {
-		super(world, x, Integer.MIN_VALUE, z, 0, 0, 0);
+	public AnchoredParticle(ClientWorld world, double x, double z, int entityId, double yOffset, double speed, double intensity, Sprite sprite) {
+		super(world, x, Integer.MIN_VALUE, z, 0, 0, 0, sprite);
 		velocityX = velocityY = velocityZ = 0;
 		maxAge = 2;
 		scale = 1 / 3F;
@@ -27,8 +30,8 @@ public class AnchoredParticle extends SpriteBillboardParticle {
 	}
 
 	@Override
-	public ParticleTextureSheet getType() {
-		return ParticleTextureSheet.PARTICLE_SHEET_OPAQUE;
+	protected RenderType getRenderType() {
+		return RenderType.PARTICLE_ATLAS_OPAQUE;
 	}
 
 	@Override
@@ -45,10 +48,8 @@ public class AnchoredParticle extends SpriteBillboardParticle {
 
 	public record Factory(SpriteProvider spriteProvider) implements ParticleFactory<SimpleParticleType> {
 		@Override
-		public Particle createParticle(SimpleParticleType parameters, ClientWorld world, double x, double z, double entityId, double yOffset, double speed, double intensity) {
-			AnchoredParticle particle = new AnchoredParticle(world, x, z, MathHelper.floor(entityId), yOffset, speed, intensity);
-			particle.setSprite(spriteProvider);
-			return particle;
+		public Particle createParticle(SimpleParticleType parameters, ClientWorld world, double x, double z, double entityId, double yOffset, double speed, double intensity, Random random) {
+			return new AnchoredParticle(world, x, z, MathHelper.floor(entityId), yOffset, speed, intensity, spriteProvider().getSprite(random));
 		}
 	}
 }

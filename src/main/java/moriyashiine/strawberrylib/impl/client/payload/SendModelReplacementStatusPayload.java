@@ -34,7 +34,7 @@ public record SendModelReplacementStatusPayload(int entityId, byte entityStatus)
 	public static class Receiver implements ClientPlayNetworking.PlayPayloadHandler<SendModelReplacementStatusPayload> {
 		@Override
 		public void receive(SendModelReplacementStatusPayload payload, ClientPlayNetworking.Context context) {
-			Entity entity = context.player().getWorld().getEntityById(payload.entityId());
+			Entity entity = context.player().getEntityWorld().getEntityById(payload.entityId());
 			if (entity instanceof PlayerEntity player) {
 				SLibUtils.getModelReplacement(player).handleStatus(payload.entityStatus());
 			}

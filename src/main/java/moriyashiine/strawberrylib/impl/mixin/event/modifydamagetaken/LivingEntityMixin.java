@@ -28,7 +28,7 @@ public abstract class LivingEntityMixin extends Entity {
 
 	@ModifyReturnValue(method = "modifyAppliedDamage", at = @At("RETURN"))
 	private float slib$modifyDamageTaken(float original, DamageSource source) {
-		if (getWorld() instanceof ServerWorld world) {
+		if (getEntityWorld() instanceof ServerWorld world) {
 			return ModifyDamageTakenEvent.getModifiedDamage(ModifyDamageTakenEvent.Phase.FINAL, original, world, source, (LivingEntity) (Object) this);
 		}
 		return original;

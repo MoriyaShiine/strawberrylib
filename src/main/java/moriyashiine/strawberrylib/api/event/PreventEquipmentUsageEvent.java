@@ -41,7 +41,7 @@ public interface PreventEquipmentUsageEvent {
 		for (EquipmentSlot slot : EquipmentSlot.values()) {
 			ItemStack stack = entity.getEquippedStack(slot);
 			if (!stack.isEmpty() && PreventEquipmentUsageEvent.EVENT.invoker().preventsUsage(entity, stack).get()) {
-				SLibUtils.insertOrDrop((ServerWorld) entity.getWorld(), entity, stack.copyAndEmpty());
+				SLibUtils.insertOrDrop((ServerWorld) entity.getEntityWorld(), entity, stack.copyAndEmpty());
 			}
 		}
 	}

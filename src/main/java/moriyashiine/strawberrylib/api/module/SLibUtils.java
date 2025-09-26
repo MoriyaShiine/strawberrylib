@@ -48,14 +48,14 @@ public final class SLibUtils {
 	public static void setModelReplacement(PlayerEntity player, @Nullable EntityType<?> entityType) {
 		ModelReplacementComponent modelReplacementComponent = ModEntityComponents.MODEL_REPLACEMENT.get(player);
 		modelReplacementComponent.setReplacementType(entityType);
-		if (!player.getWorld().isClient) {
+		if (!player.getEntityWorld().isClient()) {
 			modelReplacementComponent.sync();
 		}
 	}
 
 	public static boolean conditionallyApplyAttributeModifier(LivingEntity entity, RegistryEntry<EntityAttribute> attribute, EntityAttributeModifier modifier, boolean shouldHave) {
 		EntityAttributeInstance instance = entity.getAttributeInstance(attribute);
-		if (instance == null || entity.getWorld().isClient) {
+		if (instance == null || entity.getEntityWorld().isClient()) {
 			return false;
 		}
 		if (shouldHave) {
@@ -72,9 +72,9 @@ public final class SLibUtils {
 
 
 	public static boolean canSee(Entity host, Entity target, int range) {
-		if (target.getWorld() == host.getWorld() && host.getPos().distanceTo(target.getPos()) <= 32) {
+		if (target.getEntityWorld() == host.getEntityWorld() && host.getEntityPos().distanceTo(target.getEntityPos()) <= 32) {
 			for (int i = -range; i <= range; i++) {
-				if (host.getWorld().raycast(new RaycastContext(host.getPos().add(0, i, 0), target.getPos().add(0, i, 0), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, host)).getType() == HitResult.Type.MISS) {
+				if (host.getEntityWorld().raycast(new RaycastContext(host.getEntityPos().add(0, i, 0), target.getEntityPos().add(0, i, 0), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, host)).getType() == HitResult.Type.MISS) {
 					return true;
 				}
 			}
@@ -114,7 +114,7 @@ public final class SLibUtils {
 
 	public static boolean isSubmerged(Entity entity, SubmersionGate gate) {
 		for (int i = 0; i < MathHelper.ceil(entity.getHeight()); i++) {
-			BlockState blockState = entity.getWorld().getBlockState(entity.getBlockPos().up(i));
+			BlockState blockState = entity.getEntityWorld().getBlockState(entity.getBlockPos().up(i));
 			if (gate.allowsWater() && !blockState.isOf(Blocks.BUBBLE_COLUMN) && blockState.getFluidState().isIn(ConventionalFluidTags.WATER)) {
 				return true;
 			}
@@ -129,7 +129,7 @@ public final class SLibUtils {
 	}
 
 	public static boolean isSufficientlyHigh(Entity entity, double distanceFromGround) {
-		return entity.getWorld().raycast(new RaycastContext(entity.getPos(), entity.getPos().add(0, -distanceFromGround, 0), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.ANY, entity)).getType() == HitResult.Type.MISS;
+		return entity.getEntityWorld().raycast(new RaycastContext(entity.getEntityPos(), entity.getEntityPos().add(0, -distanceFromGround, 0), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.ANY, entity)).getType() == HitResult.Type.MISS;
 	}
 
 	public static boolean shouldHurt(Entity attacker, Entity target) {
@@ -212,7 +212,7 @@ public final class SLibUtils {
 	}
 
 	public static void playSound(Entity entity, SoundEvent soundEvent, float volume, float pitch) {
-		entity.getWorld().playSound(null, entity.getBlockPos(), soundEvent, entity.getSoundCategory(), volume, pitch);
+		entity.getEntityWorld().playSound(null, entity.getBlockPos(), soundEvent, entity.getSoundCategory(), volume, pitch);
 	}
 
 	public static void playSound(Entity entity, SoundEvent soundEvent) {

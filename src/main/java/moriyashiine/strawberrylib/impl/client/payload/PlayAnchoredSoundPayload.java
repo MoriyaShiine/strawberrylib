@@ -34,7 +34,7 @@ public record PlayAnchoredSoundPayload(int entityId, SoundEvent soundEvent) impl
 	public static class Receiver implements ClientPlayNetworking.PlayPayloadHandler<PlayAnchoredSoundPayload> {
 		@Override
 		public void receive(PlayAnchoredSoundPayload payload, ClientPlayNetworking.Context context) {
-			Entity entity = context.player().getWorld().getEntityById(payload.entityId());
+			Entity entity = context.player().getEntityWorld().getEntityById(payload.entityId());
 			if (entity != null) {
 				SLibClientUtils.playAnchoredSound(entity, payload.soundEvent());
 			}

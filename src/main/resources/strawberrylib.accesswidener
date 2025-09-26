@@ -6,7 +6,6 @@ accessible method net/minecraft/entity/Entity getSplashSound ()Lnet/minecraft/so
 accessible method net/minecraft/entity/Entity getHighSpeedSplashSound ()Lnet/minecraft/sound/SoundEvent;
 accessible method net/minecraft/entity/Entity playSecondaryStepSound (Lnet/minecraft/block/BlockState;)V
 accessible method net/minecraft/entity/Entity playStepSound (Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)V
-accessible method net/minecraft/entity/LivingEntity getBaseDimensions (Lnet/minecraft/entity/EntityPose;)Lnet/minecraft/entity/EntityDimensions;
 accessible method net/minecraft/entity/LivingEntity getHurtSound (Lnet/minecraft/entity/damage/DamageSource;)Lnet/minecraft/sound/SoundEvent;
 accessible method net/minecraft/entity/LivingEntity getDeathSound ()Lnet/minecraft/sound/SoundEvent;
 accessible method net/minecraft/entity/mob/MobEntity getAmbientSound ()Lnet/minecraft/sound/SoundEvent;

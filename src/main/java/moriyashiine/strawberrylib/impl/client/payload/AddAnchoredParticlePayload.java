@@ -39,7 +39,7 @@ public record AddAnchoredParticlePayload(int entityId, ParticleType<?> particleT
 	public static class Receiver implements ClientPlayNetworking.PlayPayloadHandler<AddAnchoredParticlePayload> {
 		@Override
 		public void receive(AddAnchoredParticlePayload payload, ClientPlayNetworking.Context context) {
-			Entity entity = context.player().getWorld().getEntityById(payload.entityId());
+			Entity entity = context.player().getEntityWorld().getEntityById(payload.entityId());
 			if (entity != null) {
 				SLibClientUtils.addAnchoredParticle(entity, payload.particleType(), payload.yOffset(), payload.speed(), payload.intensity());
 			}

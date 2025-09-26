@@ -32,7 +32,7 @@ public class GameOptionsMixin {
 
 	@Inject(method = "load", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/KeyBinding;updateKeysByCode()V"))
 	private void slib$supporterGlint(CallbackInfo ci, @Local(ordinal = 1) NbtCompound compound) {
-		if (SupporterInit.isSupporter(client.getGameProfile().getId())) {
+		if (SupporterInit.isSupporter(client.getGameProfile().id())) {
 			SupporterOptions.EQUIPPABLE_GLINT_COLOR.setValue(GlintColor.valueOf(compound.getString(EQUIPPABLE_GLINT_COLOR_KEY, GlintColor.PURPLE.name())));
 			SupporterOptions.GLINT_COLOR.setValue(GlintColor.valueOf(compound.getString(GLINT_COLOR_KEY, GlintColor.PURPLE.name())));
 		}
@@ -40,7 +40,7 @@ public class GameOptionsMixin {
 
 	@Inject(method = "write", at = @At(value = "INVOKE", target = "Ljava/io/PrintWriter;close()V"))
 	private void slib$supporterGlint(CallbackInfo ci, @Local PrintWriter printWriter) {
-		if (SupporterInit.isSupporter(client.getGameProfile().getId())) {
+		if (SupporterInit.isSupporter(client.getGameProfile().id())) {
 			write(printWriter, EQUIPPABLE_GLINT_COLOR_KEY, SupporterOptions.EQUIPPABLE_GLINT_COLOR.getValue().name());
 			write(printWriter, GLINT_COLOR_KEY, SupporterOptions.GLINT_COLOR.getValue().name());
 		}
