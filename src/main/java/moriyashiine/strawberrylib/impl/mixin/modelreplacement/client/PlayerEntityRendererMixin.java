@@ -5,7 +5,7 @@ package moriyashiine.strawberrylib.impl.mixin.modelreplacement.client;
 
 import moriyashiine.strawberrylib.api.module.SLibUtils;
 import moriyashiine.strawberrylib.impl.client.StrawberrylibClient;
-import moriyashiine.strawberrylib.impl.client.supporter.render.entity.state.ModelReplacementAddition;
+import moriyashiine.strawberrylib.impl.client.supporter.render.entity.state.ModelReplacementRenderState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerLikeEntity;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
@@ -23,12 +23,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PlayerEntityRendererMixin<AvatarlikeEntity extends PlayerLikeEntity & ClientPlayerLikeEntity> {
 	@Inject(method = "updateRenderState(Lnet/minecraft/entity/PlayerLikeEntity;Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;F)V", at = @At("TAIL"))
 	private void slib$modelReplacement(AvatarlikeEntity entity, PlayerEntityRenderState state, float tickProgress, CallbackInfo ci) {
-		LivingEntityRenderState replacementState = null;
+		ModelReplacementRenderState modelReplacementRenderState = new ModelReplacementRenderState();
 		if (entity instanceof PlayerEntity player && SLibUtils.getModelReplacement(player) instanceof LivingEntity replacement) {
 			StrawberrylibClient.currentPlayerRenderState = state;
-			replacementState = (LivingEntityRenderState) MinecraftClient.getInstance().getEntityRenderDispatcher().getAndUpdateRenderState(replacement, tickProgress);
+			modelReplacementRenderState.replacementRenderState = (LivingEntityRenderState) MinecraftClient.getInstance().getEntityRenderDispatcher().getAndUpdateRenderState(replacement, tickProgress);
 			StrawberrylibClient.currentPlayerRenderState = null;
 		}
-		((ModelReplacementAddition) state).slib$setReplacementRenderState(replacementState);
+		state.setData(ModelReplacementRenderState.KEY, modelReplacementRenderState);
 	}
 }

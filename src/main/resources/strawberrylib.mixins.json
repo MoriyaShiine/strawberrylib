@@ -38,7 +38,6 @@
 	"modelreplacement.client.InventoryScreenMixin",
 	"modelreplacement.client.LivingEntityRendererMixin",
 	"modelreplacement.client.PlayerEntityRendererMixin",
-	"modelreplacement.client.PlayerEntityRenderStateMixin",
 	"supporter.client.GameOptionsMixin",
 	"supporter.client.OptionsScreenMixin",
 	"supporter.glint.client.BatchingRenderCommandQueueMixin",
