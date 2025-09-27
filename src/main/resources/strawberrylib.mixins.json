@@ -48,7 +48,6 @@
 	"supporter.glint.client.ItemModelManagerMixin",
 	"supporter.glint.client.ItemRenderStateMixin",
 	"supporter.glint.client.PlayerEntityRendererMixin",
-	"supporter.glint.client.PlayerEntityRenderStateMixin",
 	"supporter.glint.client.RenderLayerMixin",
 	"supporter.glint.client.WorldRendererMixin"
   ],

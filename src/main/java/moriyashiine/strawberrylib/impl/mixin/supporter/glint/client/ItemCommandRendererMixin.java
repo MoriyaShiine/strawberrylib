@@ -5,7 +5,7 @@ package moriyashiine.strawberrylib.impl.mixin.supporter.glint.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import moriyashiine.strawberrylib.impl.client.supporter.objects.records.GlintLayers;
-import moriyashiine.strawberrylib.impl.client.supporter.render.item.GlintLayersAddition;
+import moriyashiine.strawberrylib.impl.client.supporter.render.item.GlintLayersRenderState;
 import net.minecraft.client.render.OutlineVertexConsumerProvider;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.command.BatchingRenderCommandQueue;
@@ -21,7 +21,7 @@ public class ItemCommandRendererMixin {
 	@SuppressWarnings({"DataFlowIssue", "LocalMayBeArgsOnly"})
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;push()V"))
 	private void slib$supporterGlint(BatchingRenderCommandQueue queue, VertexConsumerProvider.Immediate vertexConsumers, OutlineVertexConsumerProvider outlineVertexConsumers, CallbackInfo ci, @Local OrderedRenderCommandQueueImpl.ItemCommand command) {
-		GlintLayers.currentLayer = ((GlintLayersAddition) (Object) command).slib$getGlintLayers();
+		GlintLayers.currentLayer = ((GlintLayersRenderState.Command) (Object) command).slib$getGlintLayers();
 	}
 
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;pop()V"))

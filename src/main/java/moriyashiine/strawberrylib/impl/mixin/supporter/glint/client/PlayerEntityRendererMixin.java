@@ -4,7 +4,7 @@
 package moriyashiine.strawberrylib.impl.mixin.supporter.glint.client;
 
 import moriyashiine.strawberrylib.impl.client.supporter.objects.records.GlintLayers;
-import moriyashiine.strawberrylib.impl.client.supporter.render.item.GlintLayersAddition;
+import moriyashiine.strawberrylib.impl.client.supporter.render.item.GlintLayersRenderState;
 import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
 import moriyashiine.strawberrylib.impl.common.supporter.SupporterInit;
 import net.minecraft.client.network.ClientPlayerLikeEntity;
@@ -21,10 +21,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PlayerEntityRendererMixin<AvatarlikeEntity extends PlayerLikeEntity & ClientPlayerLikeEntity> {
 	@Inject(method = "updateRenderState(Lnet/minecraft/entity/PlayerLikeEntity;Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;F)V", at = @At("TAIL"))
 	private void slib$supporterGlint(AvatarlikeEntity entity, PlayerEntityRenderState state, float tickProgress, CallbackInfo ci) {
-		GlintLayers layer = null;
+		GlintLayersRenderState glintLayersRenderState = new GlintLayersRenderState();
 		if (entity instanceof PlayerEntity player && SupporterInit.isSupporter(player)) {
-			layer = GlintLayers.getLayers(ModEntityComponents.SUPPORTER.get(player).getEquippableGlintColor());
+			glintLayersRenderState.glintLayers = GlintLayers.getLayers(ModEntityComponents.SUPPORTER.get(player).getEquippableGlintColor());
 		}
-		((GlintLayersAddition) state).slib$setGlintLayers(layer);
+		state.setData(GlintLayersRenderState.KEY, glintLayersRenderState);
 	}
 }

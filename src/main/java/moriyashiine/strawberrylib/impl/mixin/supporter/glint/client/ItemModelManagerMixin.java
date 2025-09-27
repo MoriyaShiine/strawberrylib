@@ -4,7 +4,7 @@
 package moriyashiine.strawberrylib.impl.mixin.supporter.glint.client;
 
 import moriyashiine.strawberrylib.impl.client.supporter.objects.records.GlintLayers;
-import moriyashiine.strawberrylib.impl.client.supporter.render.item.GlintLayersAddition;
+import moriyashiine.strawberrylib.impl.client.supporter.render.item.GlintLayersRenderState;
 import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
 import moriyashiine.strawberrylib.impl.common.supporter.SupporterInit;
 import moriyashiine.strawberrylib.impl.common.supporter.component.entity.SupporterComponent;
@@ -25,11 +25,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ItemModelManagerMixin {
 	@Inject(method = "update", at = @At("TAIL"))
 	private void slib$supporterGlint(ItemRenderState renderState, ItemStack stack, ItemDisplayContext displayContext, World world, HeldItemContext heldItemContext, int seed, CallbackInfo ci) {
-		GlintLayers layers = null;
+		GlintLayersRenderState glintLayersRenderState = new GlintLayersRenderState();
 		if (heldItemContext != null && heldItemContext.getEntity() instanceof PlayerEntity player && SupporterInit.isSupporter(player)) {
 			SupporterComponent supporterComponent = ModEntityComponents.SUPPORTER.get(player);
-			layers = GlintLayers.getLayers(stack.contains(DataComponentTypes.EQUIPPABLE) ? supporterComponent.getEquippableGlintColor() : supporterComponent.getGlintColor());
+			glintLayersRenderState.glintLayers = GlintLayers.getLayers(stack.contains(DataComponentTypes.EQUIPPABLE) ? supporterComponent.getEquippableGlintColor() : supporterComponent.getGlintColor());
 		}
-		((GlintLayersAddition) renderState).slib$setGlintLayers(layers);
+		renderState.setData(GlintLayersRenderState.KEY, glintLayersRenderState);
 	}
 }

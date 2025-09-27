@@ -25,11 +25,11 @@ public abstract class BufferedBuilderStorageMixin {
 	private static void slib$supporterGlint(Object2ObjectLinkedOpenHashMap<RenderLayer, BufferAllocator> map, CallbackInfo ci) {
 		for (GlintColor color : GlintColor.values()) {
 			if (color != GlintColor.PURPLE) {
-				GlintLayers layers = GlintLayers.getLayers(color);
-				assignBufferBuilder(map, layers.glintTranslucent());
-				assignBufferBuilder(map, layers.glint());
-				assignBufferBuilder(map, layers.entityGlint());
-				assignBufferBuilder(map, layers.armorEntityGlint());
+				GlintLayers glintLayers = GlintLayers.getLayers(color);
+				assignBufferBuilder(map, glintLayers.glintTranslucent());
+				assignBufferBuilder(map, glintLayers.glint());
+				assignBufferBuilder(map, glintLayers.entityGlint());
+				assignBufferBuilder(map, glintLayers.armorEntityGlint());
 			}
 		}
 	}

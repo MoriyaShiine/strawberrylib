@@ -25,11 +25,11 @@ public class WorldRendererMixin {
 	private void slib$supporterGlint(GpuBufferSlice gpuBufferSlice, WorldRenderState worldRenderState, Profiler profiler, Matrix4f matrix4f, Handle<?> handle, Handle<?> handle2, boolean bl, Frustum frustum, Handle<?> handle3, Handle<?> handle4, CallbackInfo ci, @Local(ordinal = 0) VertexConsumerProvider.Immediate immediate) {
 		for (GlintColor color : GlintColor.values()) {
 			if (color != GlintColor.PURPLE) {
-				GlintLayers layers = GlintLayers.getLayers(color);
-				immediate.draw(layers.glintTranslucent());
-				immediate.draw(layers.glint());
-				immediate.draw(layers.entityGlint());
-				immediate.draw(layers.armorEntityGlint());
+				GlintLayers glintLayers = GlintLayers.getLayers(color);
+				immediate.draw(glintLayers.glintTranslucent());
+				immediate.draw(glintLayers.glint());
+				immediate.draw(glintLayers.entityGlint());
+				immediate.draw(glintLayers.armorEntityGlint());
 			}
 		}
 	}
