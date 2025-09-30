@@ -43,7 +43,7 @@ public record AddParticlesPayload(int entityId, ParticleType<?> particleType, in
 		public void receive(AddParticlesPayload payload, ClientPlayNetworking.Context context) {
 			Entity entity = context.player().getEntityWorld().getEntityById(payload.entityId());
 			if (entity != null) {
-				SLibClientUtils.addParticles(entity, payload.particleType(), payload.count, payload.anchor(), payload.velocity());
+				SLibClientUtils.addParticles(entity, payload.particleType(), payload.count(), payload.anchor(), payload.velocity());
 			}
 		}
 	}
