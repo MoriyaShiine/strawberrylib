@@ -40,9 +40,9 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    modIncludeImplementation "org.ladysnake.cardinal-components-api:cardinal-components-base:${cardinal_components_version}"
-    modIncludeImplementation "org.ladysnake.cardinal-components-api:cardinal-components-entity:${cardinal_components_version}"
-    modIncludeImplementation "dev.upcraft.datasync:datasync-minecraft-${datasync_version}"
+    modIncludeApi "org.ladysnake.cardinal-components-api:cardinal-components-base:${cardinal_components_version}"
+    modIncludeApi "org.ladysnake.cardinal-components-api:cardinal-components-entity:${cardinal_components_version}"
+    modIncludeApi "dev.upcraft.datasync:datasync-minecraft-${datasync_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
