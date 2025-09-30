@@ -71,7 +71,7 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 		}
 		if (replacement != null) {
 			copyData(replacement);
-			if (replacement instanceof MobEntity mob && mob.getRandom().nextInt(1000) < ambientSoundChance++) {
+			if (obj.isPartOfGame() && replacement instanceof MobEntity mob && mob.getRandom().nextInt(1000) < ambientSoundChance++) {
 				resetSoundDelay(mob);
 				obj.playSound(mob.getAmbientSound());
 			}
@@ -81,7 +81,7 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 	@Override
 	public void clientTick() {
 		tick();
-		if (replacement != null) {
+		if (replacement != null && obj.isPartOfGame()) {
 			disableTick = true;
 			replacement.tick();
 			disableTick = false;

@@ -46,8 +46,9 @@ public abstract class PlayerEntityMixin extends LivingEntityMixin {
 
 	@Override
 	protected EntityDimensions slib$modelReplacementDimensions(EntityDimensions original, EntityPose pose) {
-		if (isPartOfGame()) {
-			LivingEntity replacement = SLibUtils.getModelReplacement((PlayerEntity) (Object) this);
+		PlayerEntity player = (PlayerEntity) (Object) this;
+		if (player.isPartOfGame()) {
+			LivingEntity replacement = SLibUtils.getModelReplacement(player);
 			if (replacement != null) {
 				return replacement.getDimensions(pose);
 			}
