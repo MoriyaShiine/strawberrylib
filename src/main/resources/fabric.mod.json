@@ -32,7 +32,7 @@
   "accessWidener": "strawberrylib.accesswidener",
   "depends": {
 	"fabricloader": "*",
-	"minecraft": "~1.21.8",
+	"minecraft": "~1.21.9",
 	"java": ">=21",
 	"fabric-api": "*"
   },
