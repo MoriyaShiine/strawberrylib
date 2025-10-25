@@ -1,4 +1,9 @@
 ------------------------------------------------------
+Version 1.21.10-r3
+------------------------------------------------------
+- fix supporter options not being saved properly
+
+------------------------------------------------------
 Version 1.21.10-r2
 ------------------------------------------------------
 - fix after damage including death event not taking final modify damage taken event changes into account
