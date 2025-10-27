@@ -11,8 +11,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.OrderedText;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class SLibClientUtils {
 	private static final MinecraftClient client = MinecraftClient.getInstance();
@@ -72,5 +79,36 @@ public final class SLibClientUtils {
 
 	public static void playAnchoredSound(Entity entity, SoundEvent soundEvent) {
 		client.getSoundManager().play(new AnchoredSoundInstance(entity, soundEvent));
+	}
+
+	public static List<Text> wrapText(Text text, int width) {
+		List<Text> lines = new ArrayList<>();
+		StringBuilder[] builder = new StringBuilder[1];
+		Style[] lastStyle = new Style[1];
+		for (OrderedText orderedText : client.textRenderer.wrapLines(text, width)) {
+			builder[0] = new StringBuilder();
+			lastStyle[0] = Style.EMPTY;
+			MutableText mutableText = Text.empty();
+			orderedText.accept((index, style, codePoint) -> {
+				if (!style.equals(lastStyle[0])) {
+					if (!builder[0].isEmpty()) {
+						mutableText.append(Text.literal(builder[0].toString()).setStyle(lastStyle[0]));
+						builder[0] = new StringBuilder();
+					}
+					lastStyle[0] = style;
+				}
+				builder[0].appendCodePoint(codePoint);
+				return true;
+			});
+			if (!builder[0].isEmpty()) {
+				mutableText.append(Text.literal(builder[0].toString()).setStyle(lastStyle[0]));
+			}
+			lines.add(mutableText);
+		}
+		return lines;
+	}
+
+	public static List<Text> wrapText(Text text) {
+		return wrapText(text, 192);
 	}
 }
