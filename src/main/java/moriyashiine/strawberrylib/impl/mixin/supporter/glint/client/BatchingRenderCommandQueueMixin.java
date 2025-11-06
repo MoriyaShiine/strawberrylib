@@ -38,7 +38,7 @@ public class BatchingRenderCommandQueueMixin {
 		}
 		if (possibleState != null) {
 			@Nullable GlintLayersRenderState glintLayersRenderState = possibleState.getData(GlintLayersRenderState.KEY);
-			if (glintLayersRenderState != null) {
+			if (glintLayersRenderState != null && glintLayersRenderState.glintLayers != null) {
 				if (layer == RenderLayer.getGlintTranslucent()) {
 					return glintLayersRenderState.glintLayers.glintTranslucent();
 				} else if (layer == RenderLayer.getGlint()) {
