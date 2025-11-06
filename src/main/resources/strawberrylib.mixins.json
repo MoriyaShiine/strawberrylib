@@ -42,7 +42,6 @@
 	"supporter.client.OptionsScreenMixin",
 	"supporter.glint.client.BatchingRenderCommandQueueMixin",
 	"supporter.glint.client.BufferedBuilderStorageMixin",
-	"supporter.glint.client.EquipmentRendererMixin",
 	"supporter.glint.client.ItemCommandMixin",
 	"supporter.glint.client.ItemCommandRendererMixin",
 	"supporter.glint.client.ItemModelManagerMixin",
