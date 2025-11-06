@@ -1,4 +1,9 @@
 ------------------------------------------------------
+Version 1.21.10-r5
+------------------------------------------------------
+- fix supporter glint not working on custom armor renderers
+
+------------------------------------------------------
 Version 1.21.10-r4
 ------------------------------------------------------
 - add wrapText client util method (thank you EightSidedSquare)
