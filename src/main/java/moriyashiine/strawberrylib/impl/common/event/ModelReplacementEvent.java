@@ -16,7 +16,7 @@ public class ModelReplacementEvent implements EntitySleepEvents.AllowSleeping {
 	public PlayerEntity.SleepFailureReason allowSleep(PlayerEntity player, BlockPos sleepingPos) {
 		if (SLibUtils.getModelReplacement(player) != null) {
 			player.sendMessage(Text.translatable("block.minecraft.bed.alternate_form"), true);
-			return PlayerEntity.SleepFailureReason.OTHER_PROBLEM;
+			return PlayerEntity.SleepFailureReason.OTHER;
 		}
 		return null;
 	}

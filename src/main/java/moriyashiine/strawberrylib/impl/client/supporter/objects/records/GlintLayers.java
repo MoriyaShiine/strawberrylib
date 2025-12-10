@@ -5,23 +5,20 @@ package moriyashiine.strawberrylib.impl.client.supporter.objects.records;
 
 import moriyashiine.strawberrylib.impl.common.StrawberryLib;
 import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderPhase;
+import net.minecraft.client.render.*;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.minecraft.client.render.RenderPhase.*;
-
-public record GlintLayers(RenderLayer glintTranslucent, RenderLayer glint, RenderLayer entityGlint,
-						  RenderLayer armorEntityGlint) {
+public record GlintLayers(RenderLayer armorEntityGlint, RenderLayer glintTranslucent, RenderLayer glint,
+						  RenderLayer entityGlint) {
 	private static final Map<GlintColor, GlintLayers> LAYERS = new HashMap<>();
 
 	static {
 		for (GlintColor color : GlintColor.values()) {
 			if (color == GlintColor.PURPLE) {
-				LAYERS.put(color, new GlintLayers(RenderLayer.getGlintTranslucent(), RenderLayer.getGlint(), RenderLayer.getEntityGlint(), RenderLayer.getArmorEntityGlint()));
+				LAYERS.put(color, new GlintLayers(RenderLayers.armorEntityGlint(), RenderLayers.glintTranslucent(), RenderLayers.glint(), RenderLayers.entityGlint()));
 			} else {
 				LAYERS.put(color, of(color));
 			}
@@ -35,47 +32,39 @@ public record GlintLayers(RenderLayer glintTranslucent, RenderLayer glint, Rende
 	}
 
 	private static GlintLayers of(GlintColor color) {
-		Identifier itemName = StrawberryLib.id("textures/misc/enchanted_glint_item_" + color.getName() + ".png");
 		Identifier entityName = StrawberryLib.id("textures/misc/enchanted_glint_armor_" + color.getName() + ".png");
+		Identifier itemName = StrawberryLib.id("textures/misc/enchanted_glint_item_" + color.getName() + ".png");
 
+		RenderLayer armorEntityGlint = RenderLayer.of(
+				"armor_entity_glint_" + color.getName(),
+				RenderSetup.builder(RenderPipelines.GLINT)
+						.texture("Sampler0", entityName)
+						.textureTransform(TextureTransform.ARMOR_ENTITY_GLINT_TEXTURING)
+						.layeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
+						.build()
+		);
 		RenderLayer glintTranslucent = RenderLayer.of(
 				"glint_translucent_" + color.getName(),
-				1536,
-				RenderPipelines.GLINT,
-				RenderLayer.MultiPhaseParameters.builder()
-						.texture(new RenderPhase.Texture(itemName, false))
-						.texturing(GLINT_TEXTURING)
-						.target(ITEM_ENTITY_TARGET)
-						.build(false)
+				RenderSetup.builder(RenderPipelines.GLINT)
+						.texture("Sampler0", itemName)
+						.textureTransform(TextureTransform.GLINT_TEXTURING)
+						.outputTarget(OutputTarget.ITEM_ENTITY_TARGET)
+						.build()
 		);
 		RenderLayer glint = RenderLayer.of(
 				"glint_" + color.getName(),
-				1536,
-				RenderPipelines.GLINT,
-				RenderLayer.MultiPhaseParameters.builder()
-						.texture(new RenderPhase.Texture(itemName, false))
-						.texturing(GLINT_TEXTURING)
-						.build(false)
+				RenderSetup.builder(RenderPipelines.GLINT)
+						.texture("Sampler0", itemName)
+						.textureTransform(TextureTransform.GLINT_TEXTURING)
+						.build()
 		);
 		RenderLayer entityGlint = RenderLayer.of(
 				"entity_glint_" + color.getName(),
-				1536,
-				RenderPipelines.GLINT,
-				RenderLayer.MultiPhaseParameters.builder()
-						.texture(new RenderPhase.Texture(itemName, false))
-						.texturing(ENTITY_GLINT_TEXTURING)
-						.build(false)
+				RenderSetup.builder(RenderPipelines.GLINT)
+						.texture("Sampler0", itemName)
+						.textureTransform(TextureTransform.ENTITY_GLINT_TEXTURING)
+						.build()
 		);
-		RenderLayer armorEntityGlint = RenderLayer.of(
-				"armor_entity_glint_" + color.getName(),
-				1536,
-				RenderPipelines.GLINT,
-				RenderLayer.MultiPhaseParameters.builder()
-						.texture(new RenderPhase.Texture(entityName, false))
-						.texturing(ARMOR_ENTITY_GLINT_TEXTURING)
-						.layering(VIEW_OFFSET_Z_LAYERING)
-						.build(false)
-		);
-		return new GlintLayers(glintTranslucent, glint, entityGlint, armorEntityGlint);
+		return new GlintLayers(armorEntityGlint, glintTranslucent, glint, entityGlint);
 	}
 }

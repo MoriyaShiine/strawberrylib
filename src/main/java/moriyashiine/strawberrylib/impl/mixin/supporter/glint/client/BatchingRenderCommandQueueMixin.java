@@ -9,6 +9,7 @@ import moriyashiine.strawberrylib.impl.client.supporter.objects.records.GlintLay
 import moriyashiine.strawberrylib.impl.client.supporter.render.item.GlintLayersRenderState;
 import net.fabricmc.fabric.api.client.rendering.v1.FabricRenderState;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.render.command.BatchingRenderCommandQueue;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,14 +40,14 @@ public class BatchingRenderCommandQueueMixin {
 		if (possibleState != null) {
 			@Nullable GlintLayersRenderState glintLayersRenderState = possibleState.getData(GlintLayersRenderState.KEY);
 			if (glintLayersRenderState != null && glintLayersRenderState.glintLayers != null) {
-				if (layer == RenderLayer.getGlintTranslucent()) {
-					return glintLayersRenderState.glintLayers.glintTranslucent();
-				} else if (layer == RenderLayer.getGlint()) {
-					return glintLayersRenderState.glintLayers.glint();
-				} else if (layer == RenderLayer.getEntityGlint()) {
-					return glintLayersRenderState.glintLayers.entityGlint();
-				} else if (layer == RenderLayer.getArmorEntityGlint()) {
+				if (layer == RenderLayers.armorEntityGlint()) {
 					return glintLayersRenderState.glintLayers.armorEntityGlint();
+				} else if (layer == RenderLayers.glintTranslucent()) {
+					return glintLayersRenderState.glintLayers.glintTranslucent();
+				} else if (layer == RenderLayers.glint()) {
+					return glintLayersRenderState.glintLayers.glint();
+				} else if (layer == RenderLayers.entityGlint()) {
+					return glintLayersRenderState.glintLayers.entityGlint();
 				}
 			}
 		}

@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemCommandRenderer.class)
 public class ItemCommandRendererMixin {
-	@SuppressWarnings({"DataFlowIssue", "LocalMayBeArgsOnly"})
+	@SuppressWarnings("DataFlowIssue")
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;push()V"))
 	private void slib$supporterGlint(BatchingRenderCommandQueue queue, VertexConsumerProvider.Immediate vertexConsumers, OutlineVertexConsumerProvider outlineVertexConsumers, CallbackInfo ci, @Local OrderedRenderCommandQueueImpl.ItemCommand command) {
 		GlintLayers.currentLayer = ((GlintLayersRenderState.Command) (Object) command).slib$getGlintLayers();
