@@ -34,6 +34,7 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.potion.Potion;
+import net.minecraft.predicate.entity.EntitySubPredicate;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.registry.Registries;
@@ -94,6 +95,10 @@ public final class SLibRegistries {
 		EntityType<T> type = registerEntityType(name, builder);
 		FabricDefaultAttributeRegistry.register(type, attributeBuilder);
 		return type;
+	}
+
+	public static <T extends EntitySubPredicate> MapCodec<T> registerEntitySubPredicateType(String name, MapCodec<T> codec) {
+		return Registry.register(Registries.ENTITY_SUB_PREDICATE_TYPE, StrawberryLib.cid(name), codec);
 	}
 
 	public static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
