@@ -3,6 +3,8 @@
  */
 package moriyashiine.strawberrylib.impl.common.component.entity;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import moriyashiine.strawberrylib.impl.common.StrawberryLib;
 import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
 import net.minecraft.entity.EntityType;
@@ -11,17 +13,16 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.Registries;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.CommonTickingComponent;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ModelReplacementComponent implements AutoSyncedComponent, CommonTickingComponent {
@@ -30,8 +31,7 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 	public static boolean disableAttack = false, disableTick = false;
 
 	private final PlayerEntity obj;
-	@Nullable
-	private EntityType<?> replacementType = null;
+	private final List<ReplacementType> replacementTypes = new ArrayList<>();
 	@Nullable
 	private LivingEntity replacement = null;
 	private int ambientSoundChance = 0;
@@ -42,16 +42,15 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 
 	@Override
 	public void readData(ReadView readView) {
-		readView.getOptionalString("ReplacementType").ifPresentOrElse(type -> replacementType = Registries.ENTITY_TYPE.get(Identifier.of(type)), () -> replacementType = null);
+		replacementTypes.clear();
+		replacementTypes.addAll(readView.read("ReplacementTypes", ReplacementType.CODEC.listOf()).orElse(List.of()));
 		ambientSoundChance = readView.getInt("AmbientSoundChance", 0);
 	}
 
 	@Override
 	public void writeData(WriteView writeView) {
-		if (replacementType != null) {
-			writeView.putString("ReplacementType", Registries.ENTITY_TYPE.getId(replacementType).toString());
-			writeView.putInt("AmbientSoundChance", ambientSoundChance);
-		}
+		writeView.put("ReplacementTypes", ReplacementType.CODEC.listOf(), replacementTypes);
+		writeView.putInt("AmbientSoundChance", ambientSoundChance);
 	}
 
 	public void sync() {
@@ -60,6 +59,7 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 
 	@Override
 	public void tick() {
+		@Nullable EntityType<?> replacementType = replacementTypes.isEmpty() ? null : replacementTypes.getFirst().type();
 		if (replacement == null && replacementType != null) {
 			if (replacementType.create(obj.getEntityWorld(), SpawnReason.LOAD) instanceof LivingEntity living) {
 				replacement = living;
@@ -98,11 +98,17 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 		return replacement;
 	}
 
-	public void setReplacementType(@Nullable EntityType<?> replacementType) {
-		if (replacementType == EntityType.PLAYER) {
-			replacementType = null;
+	public void addReplacementType(EntityType<?> type, int priority) {
+		replacementTypes.add(new ReplacementType(type, priority));
+		replacementTypes.sort(Comparator.comparingInt(ReplacementType::priority));
+	}
+
+	public void removeReplacementType(EntityType<?> type) {
+		for (int i = replacementTypes.size() - 1; i >= 0; i--) {
+			if (replacementTypes.get(i).type() == type) {
+				replacementTypes.remove(i);
+			}
 		}
-		this.replacementType = replacementType;
 	}
 
 	public void resetSoundDelay(MobEntity mob) {
@@ -163,5 +169,12 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 
 	public interface CopyFunction {
 		void copyData(PlayerEntity player, LivingEntity replacement);
+	}
+
+	private record ReplacementType(EntityType<?> type, int priority) {
+		private static final Codec<ReplacementType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+						EntityType.CODEC.fieldOf("entity_type").forGetter(ReplacementType::type),
+						Codec.INT.fieldOf("priority").forGetter(ReplacementType::priority))
+				.apply(instance, ReplacementType::new));
 	}
 }
