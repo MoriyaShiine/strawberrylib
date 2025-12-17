@@ -1,4 +1,11 @@
 ------------------------------------------------------
+Version 1.21.11-r2
+------------------------------------------------------
+- add registerEntityAttribute helper method
+- add model replacement copy function api
+- model replacements now have a priority queue
+
+------------------------------------------------------
 Version 1.21.11-r1
 ------------------------------------------------------
 - update to 1.21.11
