@@ -20,6 +20,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -84,6 +85,10 @@ public final class SLibRegistries {
 
 	public static <T extends EnchantmentEntityEffect> MapCodec<T> registerEnchantmentEntityEffectType(String name, MapCodec<T> codec) {
 		return Registry.register(Registries.ENCHANTMENT_ENTITY_EFFECT_TYPE, StrawberryLib.cid(name), codec);
+	}
+
+	public static RegistryEntry<EntityAttribute> registerEntityAttribute(Identifier id, EntityAttribute attribute) {
+		return Registry.registerReference(Registries.ATTRIBUTE, id, attribute);
 	}
 
 	public static <T extends Entity> EntityType<T> registerEntityType(String name, EntityType.Builder<T> builder) {
