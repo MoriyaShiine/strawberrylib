@@ -21,7 +21,12 @@ import org.jetbrains.annotations.Nullable;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.CommonTickingComponent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ModelReplacementComponent implements AutoSyncedComponent, CommonTickingComponent {
+	public static final List<CopyFunction> COPY_FUNCTIONS = new ArrayList<>();
+
 	public static boolean disableAttack = false, disableTick = false;
 
 	private final PlayerEntity obj;
@@ -153,5 +158,10 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 		for (EquipmentSlot slot : EquipmentSlot.values()) {
 			replacement.equipStack(slot, obj.getEquippedStack(slot));
 		}
+		COPY_FUNCTIONS.forEach(copyFunction -> copyFunction.copyData(obj, replacement));
+	}
+
+	public interface CopyFunction {
+		void copyData(PlayerEntity player, LivingEntity replacement);
 	}
 }

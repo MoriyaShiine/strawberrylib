@@ -6,6 +6,7 @@ package moriyashiine.strawberrylib.api.module;
 import com.mojang.serialization.MapCodec;
 import moriyashiine.strawberrylib.api.objects.records.ModifierTrio;
 import moriyashiine.strawberrylib.impl.common.StrawberryLib;
+import moriyashiine.strawberrylib.impl.common.component.entity.ModelReplacementComponent;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.advancement.criterion.Criterion;
@@ -181,5 +182,9 @@ public final class SLibRegistries {
 	public static Item.Settings editModifiers(Supplier<Item.Settings> settings, ModifierTrio... modifiers) {
 		ModifierTrio.current = modifiers;
 		return settings.get();
+	}
+
+	public static void registerModelReplacementCopyFunction(ModelReplacementComponent.CopyFunction copyFunction) {
+		ModelReplacementComponent.COPY_FUNCTIONS.add(copyFunction);
 	}
 }
