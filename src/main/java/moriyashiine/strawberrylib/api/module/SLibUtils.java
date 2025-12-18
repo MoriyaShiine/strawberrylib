@@ -45,12 +45,20 @@ public final class SLibUtils {
 		return ModEntityComponents.MODEL_REPLACEMENT.get(player).getReplacement();
 	}
 
+	public static boolean hasModelReplacementType(PlayerEntity player, EntityType<?> type) {
+		return ModEntityComponents.MODEL_REPLACEMENT.get(player).hasReplacementType(type);
+	}
+
 	public static void addModelReplacementType(PlayerEntity player, EntityType<?> type, int priority) {
 		ModelReplacementComponent modelReplacementComponent = ModEntityComponents.MODEL_REPLACEMENT.get(player);
 		modelReplacementComponent.addReplacementType(type, priority);
 		if (!player.getEntityWorld().isClient()) {
 			modelReplacementComponent.sync();
 		}
+	}
+
+	public static void addModelReplacementType(PlayerEntity player, EntityType<?> type) {
+		addModelReplacementType(player, type, 1000);
 	}
 
 	public static void removeModelReplacementType(PlayerEntity player, EntityType<?> type) {

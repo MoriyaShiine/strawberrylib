@@ -98,6 +98,10 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 		return replacement;
 	}
 
+	public boolean hasReplacementType(EntityType<?> type) {
+		return replacementTypes.stream().anyMatch(replacementType -> replacementType.type() == type);
+	}
+
 	public void addReplacementType(EntityType<?> type, int priority) {
 		replacementTypes.add(new ReplacementType(type, priority));
 		replacementTypes.sort(Comparator.comparingInt(ReplacementType::priority));
