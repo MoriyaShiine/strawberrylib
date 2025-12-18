@@ -1,4 +1,10 @@
 ------------------------------------------------------
+Version 1.21.11-r3
+------------------------------------------------------
+- add model replacement overload method with default priority
+- add hasModelReplacementType api
+
+------------------------------------------------------
 Version 1.21.11-r2
 ------------------------------------------------------
 - add registerEntityAttribute helper method
