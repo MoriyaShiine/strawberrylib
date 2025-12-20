@@ -4,6 +4,7 @@
 package moriyashiine.strawberrylib.impl.client;
 
 import moriyashiine.strawberrylib.impl.client.payload.*;
+import moriyashiine.strawberrylib.impl.client.supporter.ClientSupporterInit;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
@@ -13,6 +14,7 @@ public class StrawberrylibClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		ClientSupporterInit.init();
 		initPayloads();
 	}
 

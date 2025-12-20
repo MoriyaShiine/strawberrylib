@@ -4,48 +4,49 @@
 package moriyashiine.strawberrylib.impl.common.supporter.component.entity;
 
 import moriyashiine.strawberrylib.api.module.SLibClientUtils;
-import moriyashiine.strawberrylib.impl.client.supporter.SupporterOptions;
-import moriyashiine.strawberrylib.impl.client.supporter.objects.records.GlintColor;
+import moriyashiine.strawberrylib.api.module.SLibSupporterUtils;
+import moriyashiine.strawberrylib.api.supporter.objects.SupporterData;
+import moriyashiine.strawberrylib.api.supporter.objects.SupporterDataKey;
+import moriyashiine.strawberrylib.impl.client.supporter.ClientSupporterInit;
 import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
 import moriyashiine.strawberrylib.impl.common.supporter.SupporterInit;
-import moriyashiine.strawberrylib.impl.common.supporter.payload.SyncGlintColorPayload;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import org.ladysnake.cca.api.v3.component.tick.ClientTickingComponent;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SupporterComponent implements AutoSyncedComponent, ClientTickingComponent {
 	private final PlayerEntity obj;
-	private GlintColor equippableGlintColor = GlintColor.PURPLE, glintColor = GlintColor.PURPLE;
+	private final Map<SupporterDataKey<?>, SupporterData<?>> dataMap = new HashMap<>();
 
 	public SupporterComponent(PlayerEntity obj) {
 		this.obj = obj;
+		SupporterInit.DATA.forEach((key, data) -> dataMap.put(key, data.copy()));
 	}
 
 	@Override
 	public void readData(ReadView readView) {
-		equippableGlintColor = GlintColor.valueOf(readView.getString("EquippableGlintColor", GlintColor.PURPLE.name()));
-		glintColor = GlintColor.valueOf(readView.getString("GlintColor", GlintColor.PURPLE.name()));
+		dataMap.values().forEach(data -> data.readData(readView));
 	}
 
 	@Override
 	public void writeData(WriteView writeView) {
-		writeView.putString("EquippableGlintColor", equippableGlintColor.name());
-		writeView.putString("GlintColor", glintColor.name());
+		dataMap.values().forEach(data -> data.writeData(writeView));
 	}
 
 	@Override
 	public void clientTick() {
-		if (SLibClientUtils.isHost(obj) && SupporterInit.isSupporter(obj)) {
-			if (getEquippableGlintColor() != SupporterOptions.EQUIPPABLE_GLINT_COLOR.getValue()) {
-				equippableGlintColor = SupporterOptions.EQUIPPABLE_GLINT_COLOR.getValue();
-				SyncGlintColorPayload.send(true, equippableGlintColor);
-			}
-			if (getGlintColor() != SupporterOptions.GLINT_COLOR.getValue()) {
-				glintColor = SupporterOptions.GLINT_COLOR.getValue();
-				SyncGlintColorPayload.send(false, glintColor);
-			}
+		if (SLibClientUtils.isHost(obj) && SLibSupporterUtils.isSupporter(obj)) {
+			ClientSupporterInit.OPTIONS.forEach((key, clientData) -> {
+				SupporterData<?> data = getData(key);
+				if (data.getValue() != clientData.option().getValue()) {
+					data.setValueFromOption(clientData);
+				}
+			});
 		}
 	}
 
@@ -53,19 +54,8 @@ public class SupporterComponent implements AutoSyncedComponent, ClientTickingCom
 		ModEntityComponents.SUPPORTER.sync(obj);
 	}
 
-	public GlintColor getEquippableGlintColor() {
-		return equippableGlintColor;
-	}
-
-	public void setEquippableGlintColor(GlintColor equippableGlintColor) {
-		this.equippableGlintColor = equippableGlintColor;
-	}
-
-	public GlintColor getGlintColor() {
-		return glintColor;
-	}
-
-	public void setGlintColor(GlintColor glintColor) {
-		this.glintColor = glintColor;
+	@SuppressWarnings("unchecked")
+	public <T> SupporterData<T> getData(SupporterDataKey<T> key) {
+		return (SupporterData<T>) dataMap.get(key);
 	}
 }

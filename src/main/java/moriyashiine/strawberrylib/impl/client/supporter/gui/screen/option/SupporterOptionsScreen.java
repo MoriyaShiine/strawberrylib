@@ -3,17 +3,21 @@
  */
 package moriyashiine.strawberrylib.impl.client.supporter.gui.screen.option;
 
-import moriyashiine.strawberrylib.impl.client.supporter.SupporterOptions;
+import moriyashiine.strawberrylib.api.supporter.objects.SupporterDataKey;
+import moriyashiine.strawberrylib.impl.client.supporter.ClientSupporterInit;
 import moriyashiine.strawberrylib.impl.common.StrawberryLib;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.option.GameOptionsScreen;
 import net.minecraft.client.option.GameOptions;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 public class SupporterOptionsScreen extends GameOptionsScreen {
-	public static final MutableText STRAWBERRY_TEXT = Text.literal("\uD83C\uDF53 ").formatted(Formatting.RED);
+	public static final Text STRAWBERRY_TEXT = Text.literal("\uD83C\uDF53 ").formatted(Formatting.RED);
 	private static final Text TITLE_TEXT = Text.translatable("options." + StrawberryLib.MOD_ID + "Title").formatted(Formatting.WHITE);
 
 	public SupporterOptionsScreen(Screen parent, GameOptions gameOptions) {
@@ -22,7 +26,8 @@ public class SupporterOptionsScreen extends GameOptionsScreen {
 
 	@Override
 	protected void addOptions() {
-		body.addSingleOptionEntry(SupporterOptions.EQUIPPABLE_GLINT_COLOR);
-		body.addSingleOptionEntry(SupporterOptions.GLINT_COLOR);
+		List<SupporterDataKey<?>> sorted = new ArrayList<>(ClientSupporterInit.OPTIONS.keySet());
+		sorted.sort(Comparator.comparing(SupporterDataKey::id));
+		sorted.forEach(key -> body.addSingleOptionEntry(ClientSupporterInit.OPTIONS.get(key).option()));
 	}
 }

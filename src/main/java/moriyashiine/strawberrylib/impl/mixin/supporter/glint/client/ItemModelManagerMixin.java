@@ -3,11 +3,10 @@
  */
 package moriyashiine.strawberrylib.impl.mixin.supporter.glint.client;
 
+import moriyashiine.strawberrylib.api.module.SLibSupporterUtils;
 import moriyashiine.strawberrylib.impl.client.supporter.objects.records.GlintLayers;
 import moriyashiine.strawberrylib.impl.client.supporter.render.item.GlintLayersRenderState;
-import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
 import moriyashiine.strawberrylib.impl.common.supporter.SupporterInit;
-import moriyashiine.strawberrylib.impl.common.supporter.component.entity.SupporterComponent;
 import net.minecraft.client.item.ItemModelManager;
 import net.minecraft.client.render.item.ItemRenderState;
 import net.minecraft.component.DataComponentTypes;
@@ -26,9 +25,8 @@ public class ItemModelManagerMixin {
 	@Inject(method = "update", at = @At("TAIL"))
 	private void slib$supporterGlint(ItemRenderState renderState, ItemStack stack, ItemDisplayContext displayContext, World world, HeldItemContext heldItemContext, int seed, CallbackInfo ci) {
 		GlintLayersRenderState glintLayersRenderState = new GlintLayersRenderState();
-		if (heldItemContext != null && heldItemContext.getEntity() instanceof PlayerEntity player && SupporterInit.isSupporter(player)) {
-			SupporterComponent supporterComponent = ModEntityComponents.SUPPORTER.get(player);
-			glintLayersRenderState.glintLayers = GlintLayers.getLayers(stack.contains(DataComponentTypes.EQUIPPABLE) ? supporterComponent.getEquippableGlintColor() : supporterComponent.getGlintColor());
+		if (heldItemContext != null && heldItemContext.getEntity() instanceof PlayerEntity player && SLibSupporterUtils.isSupporter(player)) {
+			glintLayersRenderState.glintLayers = GlintLayers.getLayers(SLibSupporterUtils.getData(player, stack.contains(DataComponentTypes.EQUIPPABLE) ? SupporterInit.EQUIPPABLE_GLINT_COLOR : SupporterInit.GLINT_COLOR));
 		}
 		renderState.setData(GlintLayersRenderState.KEY, glintLayersRenderState);
 	}

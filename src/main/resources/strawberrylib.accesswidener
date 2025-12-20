@@ -17,3 +17,4 @@ mutable field net/minecraft/entity/LivingEntity limbAnimator Lnet/minecraft/enti
 
 accessible class net/minecraft/client/gui/hud/InGameHud$BarType
 accessible class net/minecraft/client/gui/hud/InGameHud$HeartType
+transitive-accessible class net/minecraft/client/option/SimpleOption$Callbacks

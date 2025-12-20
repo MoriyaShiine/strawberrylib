@@ -3,11 +3,10 @@
  */
 package moriyashiine.strawberrylib.impl.common.supporter.payload;
 
+import moriyashiine.strawberrylib.api.module.SLibSupporterUtils;
 import moriyashiine.strawberrylib.impl.client.supporter.objects.records.GlintColor;
 import moriyashiine.strawberrylib.impl.common.StrawberryLib;
-import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
 import moriyashiine.strawberrylib.impl.common.supporter.SupporterInit;
-import moriyashiine.strawberrylib.impl.common.supporter.component.entity.SupporterComponent;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
@@ -35,14 +34,8 @@ public record SyncGlintColorPayload(boolean equippable, GlintColor color) implem
 	public static class Receiver implements ServerPlayNetworking.PlayPayloadHandler<SyncGlintColorPayload> {
 		@Override
 		public void receive(SyncGlintColorPayload payload, ServerPlayNetworking.Context context) {
-			if (SupporterInit.isSupporter(context.player())) {
-				SupporterComponent supporterComponent = ModEntityComponents.SUPPORTER.get(context.player());
-				if (payload.equippable()) {
-					supporterComponent.setEquippableGlintColor(payload.color());
-				} else {
-					supporterComponent.setGlintColor(payload.color());
-				}
-				supporterComponent.sync();
+			if (SLibSupporterUtils.isSupporter(context.player())) {
+				SLibSupporterUtils.setData(context.player(), payload.equippable() ? SupporterInit.EQUIPPABLE_GLINT_COLOR : SupporterInit.GLINT_COLOR, payload.color());
 			}
 		}
 	}
