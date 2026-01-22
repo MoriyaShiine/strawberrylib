@@ -1,6 +1,7 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.api;
 
 import moriyashiine.strawberrylib.impl.common.StrawberryLib;

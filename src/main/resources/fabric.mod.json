@@ -29,11 +29,11 @@
   "mixins": [
 	"strawberrylib.mixins.json"
   ],
-  "accessWidener": "strawberrylib.accesswidener",
+  "accessWidener": "strawberrylib.classtweaker",
   "depends": {
 	"fabricloader": "*",
-	"minecraft": "~1.21.11",
-	"java": ">=21",
+	"minecraft": "~26.1",
+	"java": ">=25",
 	"fabric-api": "*"
   },
   "custom": {

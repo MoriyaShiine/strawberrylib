@@ -1,13 +1,14 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.impl.mixin.event.preventhostiletargeting;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import moriyashiine.strawberrylib.api.event.PreventHostileTargetingEvent;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,16 +25,17 @@ public class LivingEntityMixin {
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	private void slib$preventHostileTargeting(CallbackInfo ci) {
-		attackers.removeIf(attacker -> attacker == null || !attacker.canTakeDamage());
+		attackers.removeIf(attacker -> attacker == null || !attacker.canBeSeenAsEnemy());
 	}
 
-	@WrapOperation(method = "becomeAngry", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setAttacker(Lnet/minecraft/entity/LivingEntity;)V"))
-	private void slib$preventHostileTargeting(LivingEntity instance, LivingEntity attacker, Operation<Void> original) {
-		original.call(instance, attacker);
-		attackers.add(attacker);
+	@WrapOperation(method = "resolveMobResponsibleForDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setLastHurtByMob(Lnet/minecraft/world/entity/LivingEntity;)V"))
+	private void slib$preventHostileTargeting(LivingEntity instance, LivingEntity hurtBy, Operation<Void> original) {
+		original.call(instance, hurtBy);
+		attackers.add(hurtBy);
 	}
 
-	@ModifyReturnValue(method = "canTarget(Lnet/minecraft/entity/LivingEntity;)Z", at = @At("RETURN"))
+	@SuppressWarnings("ConstantValue")
+	@ModifyReturnValue(method = "canAttack(Lnet/minecraft/world/entity/LivingEntity;)Z", at = @At("RETURN"))
 	private boolean slib$preventHostileTargeting(boolean original, LivingEntity target) {
 		if (!attackers.contains(target) && PreventHostileTargetingEvent.EVENT.invoker().preventsTargeting((LivingEntity) (Object) this, target).get()) {
 			return false;

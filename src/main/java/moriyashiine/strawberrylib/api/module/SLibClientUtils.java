@@ -1,98 +1,99 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.api.module;
 
 import moriyashiine.strawberrylib.api.objects.enums.ParticleAnchor;
 import moriyashiine.strawberrylib.api.objects.records.ParticleVelocity;
 import moriyashiine.strawberrylib.impl.client.sound.AnchoredSoundInstance;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleType;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.OrderedText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public final class SLibClientUtils {
-	private static final MinecraftClient client = MinecraftClient.getInstance();
+	private static final Minecraft minecraft = Minecraft.getInstance();
 
 	public static boolean isHost(Entity entity) {
-		return entity == client.player;
+		return entity == minecraft.player;
 	}
 
 	public static boolean shouldAddParticles(Entity entity) {
-		return client.gameRenderer.getCamera().isThirdPerson() || client.getCameraEntity() != entity;
+		return minecraft.gameRenderer.getMainCamera().isDetached() || minecraft.getCameraEntity() != entity;
 	}
 
-	public static void addAnchoredParticle(Entity entity, ParticleType<?> particleType, double yOffset, double speed, double intensity) {
-		entity.getEntityWorld().addImportantParticleClient((ParticleEffect) particleType, true, entity.getX(), entity.getZ(), entity.getId(), yOffset, speed, intensity);
+	public static void addAnchoredParticle(Entity entity, ParticleType<?> particle, double yOffset, double speed, double intensity) {
+		entity.level().addAlwaysVisibleParticle((ParticleOptions) particle, true, entity.getX(), entity.getZ(), entity.getId(), yOffset, speed, intensity);
 	}
 
-	public static void addEmitterParticle(Entity entity, ParticleType<?> particleType) {
-		client.particleManager.addEmitter(entity, (ParticleEffect) particleType);
+	public static void addTrackingEmitter(Entity entity, ParticleType<?> particle) {
+		minecraft.particleEngine.createTrackingEmitter(entity, (ParticleOptions) particle);
 	}
 
-	public static void addParticleEffects(Entity entity, ParticleEffect particleEffect, int count, ParticleAnchor anchor, ParticleVelocity velocity) {
+	public static void addParticles(Entity entity, ParticleOptions particle, int count, ParticleAnchor anchor, ParticleVelocity velocity) {
 		if (shouldAddParticles(entity)) {
 			for (int i = 0; i < count; i++) {
 				double y = entity.getY();
 				if (anchor == ParticleAnchor.BODY) {
-					y = entity.getRandomBodyY();
+					y = entity.getRandomY();
 				} else if (anchor == ParticleAnchor.EYES) {
-					y = entity.getEyeY() + MathHelper.nextDouble(entity.getRandom(), -0.1, 0.1);
+					y = entity.getEyeY() + Mth.nextDouble(entity.getRandom(), -0.1, 0.1);
 				} else if (anchor == ParticleAnchor.CHEST) {
-					y += entity.getHeight() * MathHelper.nextDouble(entity.getRandom(), 0.4, 0.8);
+					y += entity.getBbHeight() * Mth.nextDouble(entity.getRandom(), 0.4, 0.8);
 				} else if (anchor == ParticleAnchor.FEET) {
-					y += entity.getHeight() * 0.15;
+					y += entity.getBbHeight() * 0.15;
 				}
 				double velocityX, velocityY, velocityZ;
 				if (velocity.randomMultiplier() == 0) {
-					velocityX = velocity.velocity().getX();
-					velocityY = velocity.velocity().getY();
-					velocityZ = velocity.velocity().getZ();
+					velocityX = velocity.velocity().x();
+					velocityY = velocity.velocity().y();
+					velocityZ = velocity.velocity().z();
 				} else {
-					Vec3d randomized = velocity.velocity().addRandom(entity.getRandom(), (float) velocity.randomMultiplier());
-					velocityX = randomized.getX();
-					velocityY = randomized.getY();
-					velocityZ = randomized.getZ();
+					Vec3 randomized = velocity.velocity().offsetRandom(entity.getRandom(), (float) velocity.randomMultiplier());
+					velocityX = randomized.x();
+					velocityY = randomized.y();
+					velocityZ = randomized.z();
 				}
-				entity.getEntityWorld().addParticleClient(particleEffect, entity.getParticleX(1), y, entity.getParticleZ(1), velocityX, velocityY, velocityZ);
+				entity.level().addParticle(particle, entity.getRandomX(1), y, entity.getRandomZ(1), velocityX, velocityY, velocityZ);
 			}
 		}
 	}
 
-	public static void addParticles(Entity entity, ParticleType<?> particleType, int count, ParticleAnchor anchor, ParticleVelocity velocity) {
-		addParticleEffects(entity, (ParticleEffect) particleType, count, anchor, velocity);
+	public static void addParticles(Entity entity, ParticleType<?> particle, int count, ParticleAnchor anchor, ParticleVelocity velocity) {
+		addParticles(entity, (ParticleOptions) particle, count, anchor, velocity);
 	}
 
-	public static void addParticles(Entity entity, ParticleType<?> particleType, int count, ParticleAnchor anchor) {
-		addParticles(entity, particleType, count, anchor, ParticleVelocity.ZERO);
+	public static void addParticles(Entity entity, ParticleType<?> particle, int count, ParticleAnchor anchor) {
+		addParticles(entity, particle, count, anchor, ParticleVelocity.ZERO);
 	}
 
-	public static void playAnchoredSound(Entity entity, SoundEvent soundEvent) {
-		client.getSoundManager().play(new AnchoredSoundInstance(entity, soundEvent));
+	public static void playAnchoredSound(Entity entity, SoundEvent sound) {
+		minecraft.getSoundManager().play(new AnchoredSoundInstance(entity, sound));
 	}
 
-	public static List<Text> wrapText(Text text, int width) {
-		List<Text> lines = new ArrayList<>();
+	public static List<Component> wrapText(Component text, int width) {
+		List<Component> lines = new ArrayList<>();
 		StringBuilder[] builder = new StringBuilder[1];
 		Style[] lastStyle = new Style[1];
-		for (OrderedText orderedText : client.textRenderer.wrapLines(text, width)) {
+		for (FormattedCharSequence sequence : minecraft.font.split(text, width)) {
 			builder[0] = new StringBuilder();
 			lastStyle[0] = Style.EMPTY;
-			MutableText mutableText = Text.empty();
-			orderedText.accept((index, style, codePoint) -> {
+			MutableComponent component = Component.empty();
+			sequence.accept((_, style, codePoint) -> {
 				if (!style.equals(lastStyle[0])) {
 					if (!builder[0].isEmpty()) {
-						mutableText.append(Text.literal(builder[0].toString()).setStyle(lastStyle[0]));
+						component.append(Component.literal(builder[0].toString()).setStyle(lastStyle[0]));
 						builder[0] = new StringBuilder();
 					}
 					lastStyle[0] = style;
@@ -101,14 +102,14 @@ public final class SLibClientUtils {
 				return true;
 			});
 			if (!builder[0].isEmpty()) {
-				mutableText.append(Text.literal(builder[0].toString()).setStyle(lastStyle[0]));
+				component.append(Component.literal(builder[0].toString()).setStyle(lastStyle[0]));
 			}
-			lines.add(mutableText);
+			lines.add(component);
 		}
 		return lines;
 	}
 
-	public static List<Text> wrapText(Text text) {
+	public static List<Component> wrapText(Component text) {
 		return wrapText(text, 192);
 	}
 }

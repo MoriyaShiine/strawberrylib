@@ -1,13 +1,14 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.api.event.client;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Player;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,7 @@ public interface ReplaceHeartTexturesEvent {
 		return 1000;
 	}
 
-	@Nullable TextureSet getTextureSet(PlayerEntity player);
+	@Nullable TextureSet getTextureSet(Player player);
 
 	record TextureSet(Identifier fullTexture, Identifier fullBlinkingTexture,
 					  Identifier halfTexture, Identifier halfBlinkingTexture,

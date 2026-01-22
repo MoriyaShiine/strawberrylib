@@ -1,0 +1,22 @@
+classTweaker v1 official
+accessible class net/minecraft/world/inventory/ArmorSlot
+
+accessible method net/minecraft/world/entity/Entity getSwimSound ()Lnet/minecraft/sounds/SoundEvent;
+accessible method net/minecraft/world/entity/Entity getSwimSplashSound ()Lnet/minecraft/sounds/SoundEvent;
+accessible method net/minecraft/world/entity/Entity getSwimHighSpeedSplashSound ()Lnet/minecraft/sounds/SoundEvent;
+accessible method net/minecraft/world/entity/Entity playMuffledStepSound (Lnet/minecraft/world/level/block/state/BlockState;)V
+accessible method net/minecraft/world/entity/Entity playStepSound (Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V
+accessible method net/minecraft/world/entity/LivingEntity getHurtSound (Lnet/minecraft/world/damagesource/DamageSource;)Lnet/minecraft/sounds/SoundEvent;
+accessible method net/minecraft/world/entity/LivingEntity getDeathSound ()Lnet/minecraft/sounds/SoundEvent;
+accessible method net/minecraft/world/entity/Mob getAmbientSound ()Lnet/minecraft/sounds/SoundEvent;
+
+transitive-accessible field net/minecraft/world/entity/LivingEntity jumping Z
+accessible field net/minecraft/world/entity/LivingEntity swimAmount F
+accessible field net/minecraft/world/entity/LivingEntity swimAmountO F
+mutable field net/minecraft/world/entity/LivingEntity walkAnimation Lnet/minecraft/world/entity/WalkAnimationState;
+
+accessible class net/minecraft/client/gui/Gui$ContextualInfo
+accessible class net/minecraft/client/gui/Gui$HeartType
+transitive-accessible class net/minecraft/client/OptionInstance$ValueSet
+
+transitive-inject-interface net/minecraft/world/entity/LivingEntity moriyashiine/strawberrylib/impl/common/injection/SLibLivingEntity

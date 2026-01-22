@@ -1,13 +1,14 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.api.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.fabricmc.fabric.api.util.TriState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,5 +33,5 @@ public interface ModifyCriticalStatusEvent {
 		return 1000;
 	}
 
-	TriState isCritical(PlayerEntity attacker, Entity target, float attackCooldownProgress);
+	TriState isCritical(Player attacker, Entity target, float attackCooldownProgress);
 }

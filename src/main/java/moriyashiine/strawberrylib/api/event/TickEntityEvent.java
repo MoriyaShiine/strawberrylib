@@ -1,20 +1,21 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.api.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.entity.Entity;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 
 @FunctionalInterface
 public interface TickEntityEvent {
-	Event<TickEntityEvent> EVENT = EventFactory.createArrayBacked(TickEntityEvent.class, events -> (world, entity) -> {
+	Event<TickEntityEvent> EVENT = EventFactory.createArrayBacked(TickEntityEvent.class, events -> (level, entity) -> {
 		for (TickEntityEvent event : events) {
-			event.tick(world, entity);
+			event.tick(level, entity);
 		}
 	});
 
-	void tick(ServerWorld world, Entity entity);
+	void tick(Level level, Entity entity);
 }

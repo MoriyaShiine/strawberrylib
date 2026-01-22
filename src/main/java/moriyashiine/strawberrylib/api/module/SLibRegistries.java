@@ -1,6 +1,7 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.api.module;
 
 import com.mojang.serialization.MapCodec;
@@ -9,45 +10,42 @@ import moriyashiine.strawberrylib.impl.common.StrawberryLib;
 import moriyashiine.strawberrylib.impl.common.component.entity.ModelReplacementComponent;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.minecraft.advancement.criterion.Criterion;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.component.ComponentType;
-import net.minecraft.enchantment.effect.EnchantmentEntityEffect;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.Items;
-import net.minecraft.item.consume.ConsumeEffect;
-import net.minecraft.loot.condition.LootCondition;
-import net.minecraft.loot.condition.LootConditionType;
-import net.minecraft.loot.function.LootFunction;
-import net.minecraft.loot.function.LootFunctionType;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.particle.ParticleType;
-import net.minecraft.potion.Potion;
-import net.minecraft.predicate.entity.EntitySubPredicate;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
+import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.advancements.criterion.EntitySubPredicate;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -56,132 +54,137 @@ import java.util.function.UnaryOperator;
 public final class SLibRegistries {
 	// register helpers
 
-	public static Block registerBlock(String name, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {
-		return Blocks.register(RegistryKey.of(RegistryKeys.BLOCK, StrawberryLib.cid(name)), factory, settings);
+	public static Holder<Attribute> registerAttribute(Identifier id, Attribute attribute) {
+		return Registry.registerForHolder(BuiltInRegistries.ATTRIBUTE, id, attribute);
+	}
+
+	public static Block registerBlock(String name, Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties properties) {
+		return Blocks.register(ResourceKey.create(Registries.BLOCK, StrawberryLib.cid(name)), factory, properties);
 	}
 
 	public static <T extends Block> MapCodec<T> registerBlockType(String name, MapCodec<T> codec) {
-		return Registry.register(Registries.BLOCK_TYPE, StrawberryLib.cid(name), codec);
+		return Registry.register(BuiltInRegistries.BLOCK_TYPE, StrawberryLib.cid(name), codec);
 	}
 
 	public static <T extends BlockEntity> BlockEntityType<T> registerBlockEntityType(String name, FabricBlockEntityTypeBuilder<T> builder) {
-		return Registry.register(Registries.BLOCK_ENTITY_TYPE, StrawberryLib.cid(name), builder.build());
+		return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, StrawberryLib.cid(name), builder.build());
 	}
 
-	public static <T> ComponentType<T> registerComponentType(String name, ComponentType.Builder<T> builder) {
-		return Registry.register(Registries.DATA_COMPONENT_TYPE, StrawberryLib.cid(name), builder.build());
+	public static <T> DataComponentType<T> registerComponentType(String name, DataComponentType.Builder<T> builder) {
+		return Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, StrawberryLib.cid(name), builder.build());
 	}
 
-	public static <T extends ConsumeEffect> ConsumeEffect.Type<T> registerConsumeEffectType(String name, MapCodec<T> codec, PacketCodec<RegistryByteBuf, T> packetCodec) {
-		return Registry.register(Registries.CONSUME_EFFECT_TYPE, StrawberryLib.cid(name), new ConsumeEffect.Type<>(codec, packetCodec));
+	public static <T extends ConsumeEffect> ConsumeEffect.Type<T> registerConsumeEffectType(String name, MapCodec<T> codec, StreamCodec<RegistryFriendlyByteBuf, T> streamCodec) {
+		return Registry.register(BuiltInRegistries.CONSUME_EFFECT_TYPE, StrawberryLib.cid(name), new ConsumeEffect.Type<>(codec, streamCodec));
 	}
 
-	public static <T extends Criterion<?>> T registerCriterion(String name, T criterion) {
-		return Registry.register(Registries.CRITERION, StrawberryLib.cid(name), criterion);
+	public static CreativeModeTab registerCreativeModeTab(String name, CreativeModeTab creativeModeTab) {
+		return Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, StrawberryLib.cid(name), creativeModeTab);
 	}
 
-	public static <T> ComponentType<T> registerEnchantmentEffectComponentType(String name, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
-		return Registry.register(Registries.ENCHANTMENT_EFFECT_COMPONENT_TYPE, StrawberryLib.cid(name), builderOperator.apply(ComponentType.builder()).build());
+	public static CreativeModeTab registerCreativeModeTab(CreativeModeTab creativeModeTab) {
+		return registerCreativeModeTab(StrawberryLib.currentModId, creativeModeTab);
+	}
+
+	public static <T> DataComponentType<T> registerEnchantmentEffectComponentType(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
+		return Registry.register(BuiltInRegistries.ENCHANTMENT_EFFECT_COMPONENT_TYPE, StrawberryLib.cid(name), builderOperator.apply(DataComponentType.builder()).build());
 	}
 
 	public static <T extends EnchantmentEntityEffect> MapCodec<T> registerEnchantmentEntityEffectType(String name, MapCodec<T> codec) {
-		return Registry.register(Registries.ENCHANTMENT_ENTITY_EFFECT_TYPE, StrawberryLib.cid(name), codec);
-	}
-
-	public static RegistryEntry<EntityAttribute> registerEntityAttribute(Identifier id, EntityAttribute attribute) {
-		return Registry.registerReference(Registries.ATTRIBUTE, id, attribute);
+		return Registry.register(BuiltInRegistries.ENCHANTMENT_ENTITY_EFFECT_TYPE, StrawberryLib.cid(name), codec);
 	}
 
 	public static <T extends Entity> EntityType<T> registerEntityType(String name, EntityType.Builder<T> builder) {
-		RegistryKey<EntityType<?>> key = RegistryKey.of(RegistryKeys.ENTITY_TYPE, StrawberryLib.cid(name));
-		return Registry.register(Registries.ENTITY_TYPE, key.getValue(), builder.build(key));
+		ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, StrawberryLib.cid(name));
+		return Registry.register(BuiltInRegistries.ENTITY_TYPE, key.identifier(), builder.build(key));
 	}
 
-	public static <T extends LivingEntity> EntityType<T> registerEntityType(String name, EntityType.Builder<T> builder, DefaultAttributeContainer.Builder attributeBuilder) {
+	public static <T extends LivingEntity> EntityType<T> registerEntityType(String name, EntityType.Builder<T> builder, AttributeSupplier.Builder attributeBuilder) {
 		EntityType<T> type = registerEntityType(name, builder);
 		FabricDefaultAttributeRegistry.register(type, attributeBuilder);
 		return type;
 	}
 
 	public static <T extends EntitySubPredicate> MapCodec<T> registerEntitySubPredicateType(String name, MapCodec<T> codec) {
-		return Registry.register(Registries.ENTITY_SUB_PREDICATE_TYPE, StrawberryLib.cid(name), codec);
+		return Registry.register(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE, StrawberryLib.cid(name), codec);
 	}
 
-	public static Item registerItem(String name, Function<Item.Settings, Item> factory, Item.Settings settings) {
-		return Items.register(RegistryKey.of(RegistryKeys.ITEM, StrawberryLib.cid(name)), factory, settings);
+	public static Item registerItem(String name, Function<Item.Properties, Item> factory, Item.Properties properties) {
+		ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, StrawberryLib.cid(name));
+		Item item = factory.apply(properties.setId(key));
+		if (item instanceof BlockItem blockItem) {
+			blockItem.registerBlocks(Item.BY_BLOCK, item);
+		}
+		return Registry.register(BuiltInRegistries.ITEM, key, item);
 	}
 
-	public static Item registerItem(String name, Function<Item.Settings, Item> factory) {
-		return registerItem(name, factory, new Item.Settings());
+	public static Item registerItem(String name, Function<Item.Properties, Item> factory) {
+		return registerItem(name, factory, new Item.Properties());
 	}
 
-	public static Item registerItem(String name, Item.Settings settings) {
-		return registerItem(name, Item::new, settings);
+	public static Item registerItem(String name, Item.Properties properties) {
+		return registerItem(name, Item::new, properties);
 	}
 
 	public static Item registerItem(String name) {
 		return registerItem(name, Item::new);
 	}
 
-	public static Item registerBlockItem(String name, Block block, Item.Settings settings) {
-		return registerItem(name, s -> new BlockItem(block, s), settings.useBlockPrefixedTranslationKey());
+	public static Item registerBlockItem(String name, Block block, Item.Properties properties) {
+		return registerItem(name, s -> new BlockItem(block, s), properties.useBlockDescriptionPrefix());
 	}
 
 	public static Item registerBlockItem(String name, Block block) {
-		return registerBlockItem(name, block, new Item.Settings());
+		return registerBlockItem(name, block, new Item.Properties());
 	}
 
-	public static ItemGroup registerItemGroup(String name, ItemGroup itemGroup) {
-		return Registry.register(Registries.ITEM_GROUP, StrawberryLib.cid(name), itemGroup);
+	public static <T extends LootItemCondition> MapCodec<T> registerLootConditionType(String name, MapCodec<T> codec) {
+		return Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, StrawberryLib.cid(name), codec);
 	}
 
-	public static ItemGroup registerItemGroup(ItemGroup itemGroup) {
-		return registerItemGroup(StrawberryLib.currentModId, itemGroup);
+	public static <T extends LootItemFunction> MapCodec<T> registerLootFunctionType(String name, MapCodec<T> codec) {
+		return Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, StrawberryLib.cid(name), codec);
 	}
 
-	public static LootConditionType registerLootConditionType(String name, MapCodec<? extends LootCondition> codec) {
-		return Registry.register(Registries.LOOT_CONDITION_TYPE, StrawberryLib.cid(name), new LootConditionType(codec));
+	public static <T extends AbstractContainerMenu> MenuType<T> registerMenuType(String name, MenuType<T> menuType) {
+		return Registry.register(BuiltInRegistries.MENU, StrawberryLib.cid(name), menuType);
 	}
 
-	public static <T extends LootFunction> LootFunctionType<T> registerLootFunctionType(String name, MapCodec<T> codec) {
-		return Registry.register(Registries.LOOT_FUNCTION_TYPE, StrawberryLib.cid(name), new LootFunctionType<>(codec));
+	public static Holder<MobEffect> registerMobEffect(String name, MobEffect mobEffect) {
+		return Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT, StrawberryLib.cid(name), mobEffect);
 	}
 
 	public static <T extends ParticleType<?>> T registerParticleType(String name, T particleType) {
-		return Registry.register(Registries.PARTICLE_TYPE, StrawberryLib.cid(name), particleType);
+		return Registry.register(BuiltInRegistries.PARTICLE_TYPE, StrawberryLib.cid(name), particleType);
 	}
 
-	public static RegistryEntry<Potion> registerPotion(String name, Potion potion) {
-		return Registry.registerReference(Registries.POTION, StrawberryLib.cid(name), potion);
+	public static Holder<Potion> registerPotion(String name, Potion potion) {
+		return Registry.registerForHolder(BuiltInRegistries.POTION, StrawberryLib.cid(name), potion);
 	}
 
 	public static <T extends Recipe<?>> RecipeSerializer<T> registerRecipeSerializer(String name, RecipeSerializer<T> recipeSerializer) {
-		return Registry.register(Registries.RECIPE_SERIALIZER, StrawberryLib.cid(name), recipeSerializer);
-	}
-
-	public static <T extends ScreenHandler> ScreenHandlerType<T> registerScreenHandlerType(String name, ScreenHandlerType<T> screenHandlerType) {
-		return Registry.register(Registries.SCREEN_HANDLER, StrawberryLib.cid(name), screenHandlerType);
+		return Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, StrawberryLib.cid(name), recipeSerializer);
 	}
 
 	public static SoundEvent registerSoundEvent(String name) {
 		Identifier id = StrawberryLib.cid(name);
-		return Registry.register(Registries.SOUND_EVENT, id, SoundEvent.of(id));
+		return Registry.register(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
 	}
 
-	public static RegistryEntry<SoundEvent> registerSoundEventReference(String name) {
+	public static Holder<SoundEvent> registerSoundEventHolder(String name) {
 		Identifier id = StrawberryLib.cid(name);
-		return Registry.registerReference(Registries.SOUND_EVENT, id, SoundEvent.of(id));
+		return Registry.registerForHolder(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
 	}
 
-	public static RegistryEntry<StatusEffect> registerStatusEffect(String name, StatusEffect statusEffect) {
-		return Registry.registerReference(Registries.STATUS_EFFECT, StrawberryLib.cid(name), statusEffect);
+	public static <T extends CriterionTrigger<?>> T registerTrigger(String name, T trigger) {
+		return Registry.register(BuiltInRegistries.TRIGGER_TYPES, StrawberryLib.cid(name), trigger);
 	}
 
 	// misc
 
-	public static Item.Settings editModifiers(Supplier<Item.Settings> settings, ModifierTrio... modifiers) {
+	public static Item.Properties editModifiers(Supplier<Item.Properties> properties, ModifierTrio... modifiers) {
 		ModifierTrio.current = modifiers;
-		return settings.get();
+		return properties.get();
 	}
 
 	public static void registerModelReplacementCopyFunction(ModelReplacementComponent.CopyFunction copyFunction) {

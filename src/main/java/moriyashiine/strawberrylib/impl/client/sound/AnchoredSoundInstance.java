@@ -1,34 +1,35 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.impl.client.sound;
 
-import net.minecraft.client.sound.MovingSoundInstance;
-import net.minecraft.entity.Entity;
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.Entity;
 
 import java.util.function.Predicate;
 
-public class AnchoredSoundInstance extends MovingSoundInstance {
+public class AnchoredSoundInstance extends AbstractTickableSoundInstance {
 	private final Entity entity;
-	private final Predicate<Entity> donePredicate;
+	private final Predicate<Entity> finishPredicate;
 
-	public AnchoredSoundInstance(Entity entity, SoundEvent soundEvent, Predicate<Entity> donePredicate) {
-		super(soundEvent, entity.getSoundCategory(), entity.getRandom());
+	public AnchoredSoundInstance(Entity entity, SoundEvent event, Predicate<Entity> finishPredicate) {
+		super(event, entity.getSoundSource(), entity.getRandom());
 		this.entity = entity;
-		this.donePredicate = donePredicate;
+		this.finishPredicate = finishPredicate;
 	}
 
 	public AnchoredSoundInstance(Entity entity, SoundEvent soundEvent) {
-		this(entity, soundEvent, currentEntity -> false);
+		this(entity, soundEvent, _ -> false);
 	}
 
 	@Override
 	public void tick() {
-		if (entity == null || !entity.isAlive() || donePredicate.test(entity)) {
+		if (entity == null || !entity.isAlive() || finishPredicate.test(entity)) {
 			volume -= 0.1F;
 			if (volume <= 0) {
-				setDone();
+				stop();
 			}
 			return;
 		}

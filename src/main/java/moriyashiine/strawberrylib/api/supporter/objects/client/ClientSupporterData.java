@@ -1,23 +1,24 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.api.supporter.objects.client;
 
-import net.minecraft.client.option.SimpleOption;
+import net.minecraft.client.OptionInstance;
 
-public record ClientSupporterData<T>(String optionKey, SimpleOption<T> option, T defaultOption, Reader<T> reader,
+public record ClientSupporterData<T>(String optionKey, OptionInstance<T> option, T initialValue, Reader<T> reader,
 									 Writer<T> writer,
 									 PayloadSender<T> payloadSender) {
 	public void read(String key) {
-		option().setValue(reader().read(key));
+		option().set(reader().read(key));
 	}
 
 	public String write() {
-		return writer().write(option().getValue());
+		return writer().write(option().get());
 	}
 
-	public String defaultName() {
-		return writer().write(defaultOption());
+	public String initialName() {
+		return writer().write(initialValue());
 	}
 
 	public interface Reader<T> {

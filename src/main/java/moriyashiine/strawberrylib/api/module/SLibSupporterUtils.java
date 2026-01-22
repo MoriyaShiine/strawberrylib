@@ -1,6 +1,7 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.api.module;
 
 import com.mojang.serialization.Codec;
@@ -11,12 +12,12 @@ import moriyashiine.strawberrylib.impl.client.supporter.ClientSupporterInit;
 import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
 import moriyashiine.strawberrylib.impl.common.supporter.SupporterInit;
 import moriyashiine.strawberrylib.impl.common.supporter.component.entity.SupporterComponent;
-import net.minecraft.client.option.SimpleOption;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.OptionInstance;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Player;
 
 public final class SLibSupporterUtils {
-	public static boolean isSupporter(PlayerEntity player) {
+	public static boolean isSupporter(Player player) {
 		return SupporterInit.isSupporter(player);
 	}
 
@@ -26,27 +27,27 @@ public final class SLibSupporterUtils {
 		return key;
 	}
 
-	public static <T> T getData(PlayerEntity player, SupporterDataKey<T> key) {
+	public static <T> T getData(Player player, SupporterDataKey<T> key) {
 		return ModEntityComponents.SUPPORTER.get(player).getData(key).getValue();
 	}
 
-	public static <T> void setData(PlayerEntity player, SupporterDataKey<T> key, T value) {
+	public static <T> void setData(Player player, SupporterDataKey<T> key, T value) {
 		SupporterComponent supporterComponent = ModEntityComponents.SUPPORTER.get(player);
 		supporterComponent.getData(key).setValue(value);
 		supporterComponent.sync();
 	}
 
-	public static <T> void registerOption(SupporterDataKey<T> key, SimpleOption<T> option, ClientSupporterData.Reader<T> reader, ClientSupporterData.Writer<T> writer, ClientSupporterData.PayloadSender<T> payloadSender) {
-		ClientSupporterInit.OPTIONS.put(key, (new ClientSupporterData<>(key.id().toString().replace(":", "."), option, option.getValue(), reader, writer, payloadSender)));
+	public static <T> void registerOption(SupporterDataKey<T> key, OptionInstance<T> option, ClientSupporterData.Reader<T> reader, ClientSupporterData.Writer<T> writer, ClientSupporterData.PayloadSender<T> payloadSender) {
+		ClientSupporterInit.OPTIONS.put(key, (new ClientSupporterData<>(key.id().toString().replace(":", "."), option, option.get(), reader, writer, payloadSender)));
 	}
 
-	public static <T> void registerOption(SupporterDataKey<T> key, SimpleOption.ValueTextGetter<T> valueTextGetter, SimpleOption.Callbacks<T> callbacks, T defaultValue, ClientSupporterData.Reader<T> reader, ClientSupporterData.Writer<T> writer, ClientSupporterData.PayloadSender<T> payloadSender) {
-		SimpleOption<T> option = createOption(key, valueTextGetter, callbacks, defaultValue);
+	public static <T> void registerOption(SupporterDataKey<T> key, OptionInstance.CaptionBasedToString<T> toString, OptionInstance.ValueSet<T> values, T initialValue, ClientSupporterData.Reader<T> reader, ClientSupporterData.Writer<T> writer, ClientSupporterData.PayloadSender<T> payloadSender) {
+		OptionInstance<T> option = createOption(key, toString, values, initialValue);
 		registerOption(key, option, reader, writer, payloadSender);
 	}
 
-	public static <T> SimpleOption<T> createOption(SupporterDataKey<T> key, SimpleOption.ValueTextGetter<T> valueTextGetter, SimpleOption.Callbacks<T> callbacks, T defaultValue) {
-		return new SimpleOption<>("options." + key.id().toString().replace(":", "."), SimpleOption.emptyTooltip(), valueTextGetter, callbacks, defaultValue, v -> {
+	public static <T> OptionInstance<T> createOption(SupporterDataKey<T> key, OptionInstance.CaptionBasedToString<T> toString, OptionInstance.ValueSet<T> values, T initialValue) {
+		return new OptionInstance<>("options." + key.id().toString().replace(":", "."), OptionInstance.noTooltip(), toString, values, initialValue, v -> {
 		});
 	}
 }

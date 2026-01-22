@@ -1,5 +1,5 @@
 plugins {
-    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
     id 'io.github.ladysnake.chenille' version "${chenille_version}"
 }
 
@@ -11,10 +11,9 @@ base {
 }
 
 chenille {
-    // todo uncomment this when chenille updates
-//    customLicense = rootProject.file("LICENSE")
+    customLicense = rootProject.file("LICENSE")
     github = new URL("https://github.com/MoriyaShiine/strawberrylib")
-    javaVersion = 21
+    javaVersion = 25
     configurePublishing {
         withLadysnakeMaven()
         withGithubRelease()
@@ -24,27 +23,23 @@ chenille {
 }
 
 loom {
-    accessWidenerPath = file("src/main/resources/strawberrylib.accesswidener")
+    accessWidenerPath = file("src/main/resources/strawberrylib.classtweaker")
 }
 
 repositories {
     chenille.repositories.ladysnake()
-    maven {
-        name "datasync"
-        url "https://maven.uuid.gg/releases"
-    }
+    chenille.repositories.up()
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${loader_version}"
 
-    modIncludeApi "org.ladysnake.cardinal-components-api:cardinal-components-base:${cardinal_components_version}"
-    modIncludeApi "org.ladysnake.cardinal-components-api:cardinal-components-entity:${cardinal_components_version}"
-    modIncludeApi "dev.upcraft.datasync:datasync-minecraft-${datasync_version}"
+    includeApi "org.ladysnake.cardinal-components-api:cardinal-components-base:${cardinal_components_version}"
+    includeApi "org.ladysnake.cardinal-components-api:cardinal-components-entity:${cardinal_components_version}"
+    includeApi "dev.upcraft.datasync:datasync-minecraft-${datasync_version}"
 
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
 }
 
 processResources {
@@ -56,14 +51,14 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
+    it.options.release = 25
 }
 
 java {
     withSourcesJar()
 
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 jar {

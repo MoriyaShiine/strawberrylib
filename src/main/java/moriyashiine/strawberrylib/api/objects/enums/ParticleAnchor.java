@@ -1,18 +1,19 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.api.objects.enums;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.util.function.ValueLists;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ByIdMap;
 
 import java.util.function.IntFunction;
 
 public enum ParticleAnchor {
 	BASE, BODY, EYES, CHEST, FEET;
 
-	private static final IntFunction<ParticleAnchor> INDEX_MAPPER = ValueLists.createIndexToValueFunction(ParticleAnchor::ordinal, values(), ValueLists.OutOfBoundsHandling.ZERO);
-	public static final PacketCodec<ByteBuf, ParticleAnchor> PACKET_CODEC = PacketCodecs.indexed(INDEX_MAPPER, ParticleAnchor::ordinal);
+	private static final IntFunction<ParticleAnchor> BY_ID = ByIdMap.continuous(ParticleAnchor::ordinal, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
+	public static final StreamCodec<ByteBuf, ParticleAnchor> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, ParticleAnchor::ordinal);
 }

@@ -1,13 +1,14 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.api.event.client;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.fabricmc.fabric.api.util.TriState;
-import net.minecraft.entity.Entity;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.entity.Entity;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 

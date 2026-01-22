@@ -1,6 +1,7 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.impl.common.supporter;
 
 import dev.upcraft.datasync.api.util.Entitlements;
@@ -13,8 +14,8 @@ import moriyashiine.strawberrylib.impl.common.supporter.payload.SyncGlintColorPa
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,8 +33,8 @@ public class SupporterInit {
 		initPayloads();
 	}
 
-	public static boolean isSupporter(PlayerEntity player) {
-		return isSupporter(player.getUuid());
+	public static boolean isSupporter(Player player) {
+		return isSupporter(player.getUUID());
 	}
 
 	public static boolean isSupporter(UUID uuid) {
@@ -42,8 +43,8 @@ public class SupporterInit {
 
 	private static void initPayloads() {
 		// server payloads
-		PayloadTypeRegistry.playC2S().register(SyncGlintColorPayload.ID, SyncGlintColorPayload.CODEC);
+		PayloadTypeRegistry.serverboundPlay().register(SyncGlintColorPayload.TYPE, SyncGlintColorPayload.CODEC);
 		// server receivers
-		ServerPlayNetworking.registerGlobalReceiver(SyncGlintColorPayload.ID, new SyncGlintColorPayload.Receiver());
+		ServerPlayNetworking.registerGlobalReceiver(SyncGlintColorPayload.TYPE, new SyncGlintColorPayload.Receiver());
 	}
 }

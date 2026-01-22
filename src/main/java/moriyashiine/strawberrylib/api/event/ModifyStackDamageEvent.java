@@ -1,44 +1,48 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.api.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 
 @FunctionalInterface
 public interface ModifyStackDamageEvent {
-	Event<ModifyStackDamageEvent> MULTIPLY_BASE = EventFactory.createArrayBacked(ModifyStackDamageEvent.class, events -> (amount, world, stack, target, source) -> {
+	Event<ModifyStackDamageEvent> MULTIPLY_BASE = EventFactory.createArrayBacked(ModifyStackDamageEvent.class, events -> (level, stack, victim, source, damage) -> {
+		float modifier = 1;
 		for (ModifyStackDamageEvent event : events) {
-			amount *= event.modify(amount, world, stack, target, source);
+			modifier *= event.modify(level, stack, victim, source, damage);
 		}
-		return amount;
+		return modifier;
 	});
 
-	Event<ModifyStackDamageEvent> ADD = EventFactory.createArrayBacked(ModifyStackDamageEvent.class, events -> (amount, world, stack, target, source) -> {
+	Event<ModifyStackDamageEvent> ADD = EventFactory.createArrayBacked(ModifyStackDamageEvent.class, events -> (level, stack, victim, source, damage) -> {
+		float modifier = 0;
 		for (ModifyStackDamageEvent event : events) {
-			amount += event.modify(amount, world, stack, target, source);
+			modifier += event.modify(level, stack, victim, source, damage);
 		}
-		return amount;
+		return modifier;
 	});
 
-	Event<ModifyStackDamageEvent> MULTIPLY_TOTAL = EventFactory.createArrayBacked(ModifyStackDamageEvent.class, events -> (amount, world, stack, target, source) -> {
+	Event<ModifyStackDamageEvent> MULTIPLY_TOTAL = EventFactory.createArrayBacked(ModifyStackDamageEvent.class, events -> (level, stack, victim, source, damage) -> {
+		float modifier = 1;
 		for (ModifyStackDamageEvent event : events) {
-			amount *= event.modify(amount, world, stack, target, source);
+			modifier *= event.modify(level, stack, victim, source, damage);
 		}
-		return amount;
+		return modifier;
 	});
 
-	static float getModifiedDamage(float amount, ServerWorld world, ItemStack stack, Entity target, DamageSource source) {
-		amount = MULTIPLY_BASE.invoker().modify(amount, world, stack, target, source);
-		amount = ADD.invoker().modify(amount, world, stack, target, source);
-		amount = MULTIPLY_TOTAL.invoker().modify(amount, world, stack, target, source);
-		return amount;
+	static float getModifiedDamage(float damage, ServerLevel level, ItemStack stack, Entity victim, DamageSource source) {
+		damage *= MULTIPLY_BASE.invoker().modify(level, stack, victim, source, damage);
+		damage += ADD.invoker().modify(level, stack, victim, source, damage);
+		damage *= MULTIPLY_TOTAL.invoker().modify(level, stack, victim, source, damage);
+		return damage;
 	}
 
-	float modify(float amount, ServerWorld world, ItemStack stack, Entity target, DamageSource source);
+	float modify(ServerLevel level, ItemStack stack, Entity victim, DamageSource source, float damage);
 }

@@ -1,12 +1,13 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.api.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,39 +18,39 @@ public final class ModifyMovementEvents {
 	private ModifyMovementEvents() {
 	}
 
-	public static final Event<JumpVelocity> JUMP_VELOCITY = EventFactory.createArrayBacked(JumpVelocity.class, events -> (velocity, entity) -> {
-		List<JumpVelocity> sortedEvents = new ArrayList<>(Arrays.asList(events));
-		sortedEvents.sort(Comparator.comparingInt(JumpVelocity::getPriority));
-		for (JumpVelocity event : sortedEvents) {
-			velocity = event.modify(velocity, entity);
+	public static final Event<JumpDelta> JUMP_DELTA = EventFactory.createArrayBacked(JumpDelta.class, events -> (delta, entity) -> {
+		List<JumpDelta> sortedEvents = new ArrayList<>(Arrays.asList(events));
+		sortedEvents.sort(Comparator.comparingInt(JumpDelta::getPriority));
+		for (JumpDelta event : sortedEvents) {
+			delta = event.modify(delta, entity);
 		}
-		return velocity;
+		return delta;
 	});
 
-	public static final Event<MovementVelocity> MOVEMENT_VELOCITY = EventFactory.createArrayBacked(MovementVelocity.class, events -> (velocity, entity) -> {
-		List<MovementVelocity> sortedEvents = new ArrayList<>(Arrays.asList(events));
-		sortedEvents.sort(Comparator.comparingInt(MovementVelocity::getPriority));
-		for (MovementVelocity event : sortedEvents) {
-			velocity = event.modify(velocity, entity);
+	public static final Event<MovementDelta> MOVEMENT_DELTA = EventFactory.createArrayBacked(MovementDelta.class, events -> (delta, entity) -> {
+		List<MovementDelta> sortedEvents = new ArrayList<>(Arrays.asList(events));
+		sortedEvents.sort(Comparator.comparingInt(MovementDelta::getPriority));
+		for (MovementDelta event : sortedEvents) {
+			delta = event.modify(delta, entity);
 		}
-		return velocity;
+		return delta;
 	});
 
 	@FunctionalInterface
-	public interface JumpVelocity {
+	public interface JumpDelta {
 		default int getPriority() {
 			return 1000;
 		}
 
-		Vec3d modify(Vec3d velocity, LivingEntity entity);
+		Vec3 modify(Vec3 delta, LivingEntity entity);
 	}
 
 	@FunctionalInterface
-	public interface MovementVelocity {
+	public interface MovementDelta {
 		default int getPriority() {
 			return 1000;
 		}
 
-		Vec3d modify(Vec3d velocity, LivingEntity entity);
+		Vec3 modify(Vec3 delta, LivingEntity entity);
 	}
 }

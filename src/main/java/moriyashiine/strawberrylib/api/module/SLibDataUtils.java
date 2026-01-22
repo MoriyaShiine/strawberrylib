@@ -1,45 +1,44 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.api.module;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import moriyashiine.strawberrylib.impl.common.StrawberryLib;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.data.*;
-import net.minecraft.client.render.model.json.WeightedVariant;
-import net.minecraft.state.property.Property;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.MultiVariant;
+import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.client.data.models.blockstates.PropertyDispatch;
+import net.minecraft.client.data.models.model.*;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.Optional;
 
-import static net.minecraft.client.data.BlockStateModelGenerator.*;
+import static net.minecraft.client.data.models.BlockModelGenerators.*;
 
 public final class SLibDataUtils {
-	public static final Model CROP_CROSS = new Model(Optional.of(StrawberryLib.id("block/crop_cross")), Optional.empty(), TextureKey.CROP);
+	public static final ModelTemplate CROP_CROSS = new ModelTemplate(Optional.of(StrawberryLib.id("block/crop_cross")), Optional.empty(), TextureSlot.CROP);
 
-	public static void generateCropCross(BlockStateModelGenerator generator, Block block, Property<Integer> ageProperty, int... ageTextureIndices) {
-		generator.registerItemModel(block.asItem());
-		if (ageProperty.getValues().size() != ageTextureIndices.length) {
+	public static void createCropCrossBlock(BlockModelGenerators generators, Block block, Property<Integer> property, int... stages) {
+		generators.registerSimpleFlatItemModel(block.asItem());
+		if (property.getPossibleValues().size() != stages.length) {
 			throw new IllegalArgumentException();
 		} else {
-			Int2ObjectMap<Identifier> map = new Int2ObjectOpenHashMap<>();
-			BlockStateVariantMap<WeightedVariant> variant = BlockStateVariantMap.models(ageProperty)
-					.generate(age -> createWeightedVariant(map.computeIfAbsent(ageTextureIndices[age], stage -> generator.createSubModel(block, "_stage" + stage, CROP_CROSS, TextureMap::crop))));
-			generator.blockStateCollector.accept(VariantsBlockModelDefinitionCreator.of(block).with(variant));
+			Int2ObjectMap<Identifier> models = new Int2ObjectOpenHashMap<>();
+			PropertyDispatch<MultiVariant> variant = PropertyDispatch.initial(property)
+					.generate(age -> plainVariant(models.computeIfAbsent(stages[age], stage -> generators.createSuffixedVariant(block, "_stage" + stage, CROP_CROSS, TextureMapping::crop))));
+			generators.blockStateOutput.accept(MultiVariantGenerator.dispatch(block).with(variant));
 		}
 	}
 
-	public static void generateSoilBlock(BlockStateModelGenerator generator, Block block) {
-		WeightedVariant mainVariant = modelWithYRotation(
-				createModelVariant(TexturedModel.CUBE_BOTTOM_TOP.get(block)
-						.textures(textures -> textures.put(TextureKey.BOTTOM, TextureMap.getId(Blocks.DIRT)))
-						.upload(block, generator.modelCollector)
-				)
-		);
-		WeightedVariant snowVariant = createWeightedVariant(TextureMap.getSubId(Blocks.GRASS_BLOCK, "_snow"));
-		generator.registerTopSoil(block, mainVariant, snowVariant);
+	public static void createGrassLikeBlock(BlockModelGenerators generators, Block block) {
+		MultiVariant snowy = plainVariant(ModelLocationUtils.getModelLocation(Blocks.GRASS_BLOCK, "_snow"));
+		MultiVariant plain = createRotatedVariants(plainModel(TexturedModel.CUBE_TOP_BOTTOM.get(block).updateTextures(m -> m.put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(Blocks.DIRT))).create(block, generators.modelOutput)));
+		generators.createGrassLikeBlock(block, plain, snowy);
 	}
 }

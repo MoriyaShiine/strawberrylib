@@ -1,16 +1,17 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.api.event;
 
 import moriyashiine.strawberrylib.api.module.SLibUtils;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.fabricmc.fabric.api.util.TriState;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,9 +40,9 @@ public interface PreventEquipmentUsageEvent {
 
 	static void triggerEquipmentCheck(LivingEntity entity) {
 		for (EquipmentSlot slot : EquipmentSlot.values()) {
-			ItemStack stack = entity.getEquippedStack(slot);
+			ItemStack stack = entity.getItemBySlot(slot);
 			if (!stack.isEmpty() && PreventEquipmentUsageEvent.EVENT.invoker().preventsUsage(entity, stack).get()) {
-				SLibUtils.insertOrDrop((ServerWorld) entity.getEntityWorld(), entity, stack.copyAndEmpty());
+				SLibUtils.insertOrDrop((ServerLevel) entity.level(), entity, stack.copyAndClear());
 			}
 		}
 	}

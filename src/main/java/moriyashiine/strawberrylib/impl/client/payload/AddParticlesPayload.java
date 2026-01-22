@@ -1,6 +1,7 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.impl.client.payload;
 
 import moriyashiine.strawberrylib.api.module.SLibClientUtils;
@@ -9,41 +10,41 @@ import moriyashiine.strawberrylib.api.objects.records.ParticleVelocity;
 import moriyashiine.strawberrylib.impl.common.StrawberryLib;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.entity.Entity;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.particle.ParticleType;
-import net.minecraft.registry.Registries;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 
-public record AddParticlesPayload(int entityId, ParticleType<?> particleType, int count,
-								  ParticleAnchor anchor, ParticleVelocity velocity) implements CustomPayload {
-	public static final Id<AddParticlesPayload> ID = new Id<>(StrawberryLib.id("add_particles"));
-	public static final PacketCodec<RegistryByteBuf, AddParticlesPayload> CODEC = PacketCodec.tuple(
-			PacketCodecs.VAR_INT, AddParticlesPayload::entityId,
-			PacketCodecs.registryCodec(Registries.PARTICLE_TYPE.getCodec()), AddParticlesPayload::particleType,
-			PacketCodecs.VAR_INT, AddParticlesPayload::count,
-			ParticleAnchor.PACKET_CODEC, AddParticlesPayload::anchor,
-			ParticleVelocity.PACKET_CODEC, AddParticlesPayload::velocity,
+public record AddParticlesPayload(int entityId, ParticleType<?> particle, int count,
+								  ParticleAnchor anchor, ParticleVelocity velocity) implements CustomPacketPayload {
+	public static final Type<AddParticlesPayload> TYPE = new Type<>(StrawberryLib.id("add_particles"));
+	public static final StreamCodec<RegistryFriendlyByteBuf, AddParticlesPayload> CODEC = StreamCodec.composite(
+			ByteBufCodecs.VAR_INT, AddParticlesPayload::entityId,
+			ByteBufCodecs.fromCodecWithRegistries(BuiltInRegistries.PARTICLE_TYPE.byNameCodec()), AddParticlesPayload::particle,
+			ByteBufCodecs.VAR_INT, AddParticlesPayload::count,
+			ParticleAnchor.STREAM_CODEC, AddParticlesPayload::anchor,
+			ParticleVelocity.STREAM_CODEC, AddParticlesPayload::velocity,
 			AddParticlesPayload::new);
 
 	@Override
-	public Id<? extends CustomPayload> getId() {
-		return ID;
+	public Type<AddParticlesPayload> type() {
+		return TYPE;
 	}
 
-	public static void send(ServerPlayerEntity receiver, Entity entity, ParticleType<?> particleType, int count, ParticleAnchor anchor, ParticleVelocity velocity) {
-		ServerPlayNetworking.send(receiver, new AddParticlesPayload(entity.getId(), particleType, count, anchor, velocity));
+	public static void send(ServerPlayer receiver, Entity entity, ParticleType<?> particle, int count, ParticleAnchor anchor, ParticleVelocity velocity) {
+		ServerPlayNetworking.send(receiver, new AddParticlesPayload(entity.getId(), particle, count, anchor, velocity));
 	}
 
 	public static class Receiver implements ClientPlayNetworking.PlayPayloadHandler<AddParticlesPayload> {
 		@Override
 		public void receive(AddParticlesPayload payload, ClientPlayNetworking.Context context) {
-			Entity entity = context.player().getEntityWorld().getEntityById(payload.entityId());
+			Entity entity = context.player().level().getEntity(payload.entityId());
 			if (entity != null) {
-				SLibClientUtils.addParticles(entity, payload.particleType(), payload.count(), payload.anchor(), payload.velocity());
+				SLibClientUtils.addParticles(entity, payload.particle(), payload.count(), payload.anchor(), payload.velocity());
 			}
 		}
 	}

@@ -1,35 +1,36 @@
 /*
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
+
 package moriyashiine.strawberrylib.impl.mixin.event.modifydamagetaken;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import moriyashiine.strawberrylib.api.event.ModifyDamageTakenEvent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
-	public LivingEntityMixin(EntityType<?> type, World world) {
-		super(type, world);
+	public LivingEntityMixin(EntityType<?> type, Level level) {
+		super(type, level);
 	}
 
-	@ModifyVariable(method = "damage", at = @At("HEAD"), argsOnly = true)
-	private float slib$modifyDamageTaken(float amount, ServerWorld world, DamageSource source) {
-		return ModifyDamageTakenEvent.getModifiedDamage(ModifyDamageTakenEvent.Phase.BASE, amount, world, source, (LivingEntity) (Object) this);
+	@ModifyVariable(method = "hurtServer", at = @At("HEAD"), argsOnly = true)
+	private float slib$modifyDamageTaken(float damage, ServerLevel level, DamageSource source) {
+		return ModifyDamageTakenEvent.getModifiedDamage(ModifyDamageTakenEvent.Phase.BASE, damage, (LivingEntity) (Object) this, level, source);
 	}
 
-	@ModifyReturnValue(method = "modifyAppliedDamage", at = @At("RETURN"))
-	private float slib$modifyDamageTaken(float original, DamageSource source) {
-		if (getEntityWorld() instanceof ServerWorld world) {
-			return ModifyDamageTakenEvent.getModifiedDamage(ModifyDamageTakenEvent.Phase.FINAL, original, world, source, (LivingEntity) (Object) this);
+	@ModifyReturnValue(method = "getDamageAfterMagicAbsorb", at = @At("RETURN"))
+	private float slib$modifyDamageTaken(float original, DamageSource damageSource) {
+		if (level() instanceof ServerLevel level) {
+			return ModifyDamageTakenEvent.getModifiedDamage(ModifyDamageTakenEvent.Phase.FINAL, original, (LivingEntity) (Object) this, level, damageSource);
 		}
 		return original;
 	}
