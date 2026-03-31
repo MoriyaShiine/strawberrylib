@@ -41,7 +41,7 @@ public final class SLibClientUtils {
 		minecraft.particleEngine.createTrackingEmitter(entity, (ParticleOptions) particle);
 	}
 
-	public static void addParticles(Entity entity, ParticleOptions particle, int count, ParticleAnchor anchor, ParticleVelocity velocity) {
+	public static void addParticleOptions(Entity entity, ParticleOptions particle, int count, ParticleAnchor anchor, ParticleVelocity velocity) {
 		if (shouldAddParticles(entity)) {
 			for (int i = 0; i < count; i++) {
 				double y = entity.getY();
@@ -71,7 +71,7 @@ public final class SLibClientUtils {
 	}
 
 	public static void addParticles(Entity entity, ParticleType<?> particle, int count, ParticleAnchor anchor, ParticleVelocity velocity) {
-		addParticles(entity, (ParticleOptions) particle, count, anchor, velocity);
+		addParticleOptions(entity, (ParticleOptions) particle, count, anchor, velocity);
 	}
 
 	public static void addParticles(Entity entity, ParticleType<?> particle, int count, ParticleAnchor anchor) {
