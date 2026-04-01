@@ -187,10 +187,10 @@ public final class SLibRegistries {
 		return properties.get();
 	}
 
-	public static void scanErrorless(Runnable runnable) {
-		StrawberryLib.scanErrorless = true;
+	public static void scanErrorless(String prefix, Runnable runnable) {
+		StrawberryLib.scanErrorless.add(prefix);
 		runnable.run();
-		StrawberryLib.scanErrorless = false;
+		StrawberryLib.scanErrorless.remove(prefix);
 	}
 
 	public static void registerModelReplacementCopyFunction(ModelReplacementComponent.CopyFunction copyFunction) {
