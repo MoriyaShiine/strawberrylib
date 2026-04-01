@@ -20,6 +20,7 @@ public class StrawberryLib implements ModInitializer {
 
 	public static String currentModId = "";
 
+	public static boolean scanErrorless = false;
 	public static boolean bypassPvpAllowed = false;
 
 	public static float currentAttackCooldown = -1;
