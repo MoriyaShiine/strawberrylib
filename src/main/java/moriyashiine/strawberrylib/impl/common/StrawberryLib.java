@@ -10,7 +10,9 @@ import moriyashiine.strawberrylib.impl.common.supporter.SupporterInit;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,8 +26,8 @@ public class StrawberryLib implements ModInitializer {
 	public static String currentModId = "";
 
 	public static volatile Set<String> scanErrorless = ConcurrentHashMap.newKeySet();
+	public static @Nullable BlockPos currentEventDestroyPos = null;
 	public static boolean bypassPvpAllowed = false;
-
 	public static float currentAttackCooldown = -1;
 
 	@Override
