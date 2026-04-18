@@ -84,9 +84,9 @@ public final class SLibUtils {
 	}
 
 
-	public static boolean hasLineOfSight(Entity host, Entity target, int range) {
+	public static boolean hasLineOfSight(Entity host, Entity target, int yRange) {
 		if (target.level() == host.level() && host.position().distanceTo(target.position()) <= 32) {
-			for (int i = -range; i <= range; i++) {
+			for (int i = -yRange; i <= yRange; i++) {
 				if (host.level().clip(new ClipContext(host.position().add(0, i, 0), target.position().add(0, i, 0), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, host)).getType() == HitResult.Type.MISS) {
 					return true;
 				}

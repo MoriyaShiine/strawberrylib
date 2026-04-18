@@ -6,9 +6,7 @@ package moriyashiine.strawberrylib.api.supporter.objects.client;
 
 import net.minecraft.client.OptionInstance;
 
-public record ClientSupporterData<T>(String optionKey, OptionInstance<T> option, T initialValue, Reader<T> reader,
-									 Writer<T> writer,
-									 PayloadSender<T> payloadSender) {
+public record ClientSupporterData<T>(String optionKey, OptionInstance<T> option, T initialValue, Reader<T> reader, Writer<T> writer, PayloadSender<T> payloadSender) {
 	public void read(String key) {
 		option().set(reader().read(key));
 	}

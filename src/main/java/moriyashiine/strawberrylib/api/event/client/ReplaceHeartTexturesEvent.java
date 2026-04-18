@@ -36,8 +36,8 @@ public interface ReplaceHeartTexturesEvent {
 	@Nullable TextureSet getTextureSet(Player player);
 
 	record TextureSet(Identifier fullTexture, Identifier fullBlinkingTexture,
-					  Identifier halfTexture, Identifier halfBlinkingTexture,
-					  Identifier hardcoreFullTexture, Identifier hardcoreFullBlinkingTexture,
-					  Identifier hardcoreHalfTexture, Identifier hardcoreHalfBlinkingTexture) {
+	                  Identifier halfTexture, Identifier halfBlinkingTexture,
+	                  Identifier hardcoreFullTexture, Identifier hardcoreFullBlinkingTexture,
+	                  Identifier hardcoreHalfTexture, Identifier hardcoreHalfBlinkingTexture) {
 	}
 }

@@ -12,8 +12,7 @@ import net.minecraft.resources.Identifier;
 import java.util.HashMap;
 import java.util.Map;
 
-public record GlintLayers(RenderType armorEntityGlint, RenderType glintTranslucent, RenderType glint,
-						  RenderType entityGlint) {
+public record GlintLayers(RenderType armorEntityGlint, RenderType glintTranslucent, RenderType glint, RenderType entityGlint) {
 	private static final Map<GlintColor, GlintLayers> LAYERS = new HashMap<>();
 
 	static {

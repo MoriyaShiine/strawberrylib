@@ -17,8 +17,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 
-public record AddAnchoredParticlePayload(int entityId, ParticleType<?> particle, double yOffset, double speed,
-										 double intensity) implements CustomPacketPayload {
+public record AddAnchoredParticlePayload(int entityId, ParticleType<?> particle, double yOffset, double speed, double intensity) implements CustomPacketPayload {
 	public static final Type<AddAnchoredParticlePayload> TYPE = new Type<>(StrawberryLib.id("add_anchored_particle"));
 	public static final StreamCodec<RegistryFriendlyByteBuf, AddAnchoredParticlePayload> CODEC = StreamCodec.composite(
 			ByteBufCodecs.VAR_INT, AddAnchoredParticlePayload::entityId,
