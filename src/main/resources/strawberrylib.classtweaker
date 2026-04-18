@@ -17,6 +17,9 @@ mutable field net/minecraft/world/entity/LivingEntity walkAnimation Lnet/minecra
 
 accessible class net/minecraft/client/gui/Gui$ContextualInfo
 accessible class net/minecraft/client/gui/Gui$HeartType
+accessible class net/minecraft/client/gui/screens/inventory/CreativeModeInventoryScreen$SlotWrapper
 transitive-accessible class net/minecraft/client/OptionInstance$ValueSet
+
+accessible field net/minecraft/client/gui/screens/inventory/CreativeModeInventoryScreen$SlotWrapper target Lnet/minecraft/world/inventory/Slot;
 
 transitive-inject-interface net/minecraft/world/entity/LivingEntity moriyashiine/strawberrylib/impl/common/injection/SLibLivingEntity

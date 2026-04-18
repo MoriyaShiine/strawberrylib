@@ -6,6 +6,7 @@ package moriyashiine.strawberrylib.impl.mixin.event.preventequipmentusage;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import moriyashiine.strawberrylib.api.event.PreventEquipmentUsageEvent;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.ArmorSlot;
 import net.minecraft.world.item.ItemStack;
@@ -20,8 +21,12 @@ public class ArmorSlotMixin {
 	@Final
 	private LivingEntity owner;
 
-	@ModifyReturnValue(method = "mayPlace(Lnet/minecraft/world/item/ItemStack;)Z", at = @At("RETURN"))
+	@Shadow
+	@Final
+	private EquipmentSlot slot;
+
+	@ModifyReturnValue(method = "mayPlace", at = @At("RETURN"))
 	private boolean slib$preventEquipmentUsage(boolean original, ItemStack itemStack) {
-		return original && !PreventEquipmentUsageEvent.EVENT.invoker().preventsUsage(owner, itemStack).get();
+		return original && !PreventEquipmentUsageEvent.cannotEquip(owner, itemStack, slot);
 	}
 }

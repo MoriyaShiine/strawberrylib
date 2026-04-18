@@ -39,7 +39,8 @@
   "custom": {
 	"cardinal-components": [
 	  "strawberrylib:supporter",
-	  "strawberrylib:model_replacement"
+	  "strawberrylib:model_replacement",
+	  "strawberrylib:stored_equipment"
 	]
   }
 }
