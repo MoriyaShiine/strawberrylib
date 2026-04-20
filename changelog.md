@@ -1,4 +1,9 @@
 ------------------------------------------------------
+Version 26.1-r5
+------------------------------------------------------
+- PreventEquipmentUsageEvent can now optionally store slots instead of moving/dropping
+
+------------------------------------------------------
 Version 26.1-r4
 ------------------------------------------------------
 - replace ModifyDestroyProgressEvent with ModifyDestroySpeedEvent
