@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
-import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,7 +26,7 @@ public abstract class EntityRenderDispatcherMixin {
 	@Inject(method = "submit", at = @At("HEAD"), cancellable = true)
 	private <S extends EntityRenderState> void slib$modelReplacement(S renderState, CameraRenderState camera, double x, double y, double z, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CallbackInfo ci) {
 		if (renderState instanceof AvatarRenderState playerRenderState && !playerRenderState.isSpectator) {
-			@Nullable ModelReplacementRenderState modelReplacementRenderState = playerRenderState.getData(ModelReplacementRenderState.KEY);
+			ModelReplacementRenderState modelReplacementRenderState = playerRenderState.getData(ModelReplacementRenderState.KEY);
 			if (modelReplacementRenderState != null) {
 				LivingEntityRenderState replacementState = modelReplacementRenderState.replacementRenderState;
 				if (replacementState != null) {

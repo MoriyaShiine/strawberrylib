@@ -18,7 +18,7 @@ public interface OutlineEntityEvent {
 		List<OutlineEntityEvent> sortedEvents = new ArrayList<>(Arrays.asList(events));
 		sortedEvents.sort(Comparator.comparingInt(OutlineEntityEvent::getPriority));
 		for (OutlineEntityEvent event : sortedEvents) {
-			@Nullable OutlineData data = event.getOutlineData(entity);
+			OutlineData data = event.getOutlineData(entity);
 			if (data != null) {
 				return data;
 			}

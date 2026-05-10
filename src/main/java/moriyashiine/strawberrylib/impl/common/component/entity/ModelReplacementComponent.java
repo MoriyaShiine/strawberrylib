@@ -55,7 +55,7 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 
 	@Override
 	public void tick() {
-		@Nullable EntityType<?> replacementType = replacementTypes.isEmpty() ? null : replacementTypes.getFirst().type();
+		EntityType<?> replacementType = replacementTypes.isEmpty() ? null : replacementTypes.getFirst().type();
 		if (replacement == null && replacementType != null) {
 			if (replacementType.create(obj.level(), EntitySpawnReason.LOAD) instanceof LivingEntity living) {
 				replacement = living;
@@ -72,7 +72,7 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 		}
 		if (replacement != null) {
 			copyData(replacement);
-			if (obj.slib$exists() && replacement instanceof Mob mob && mob.getRandom().nextInt(1000) < ambientSoundTime++) {
+			if (obj.slib$exists() && replacement instanceof Mob mob && mob.getAmbientSound() != null && mob.getRandom().nextInt(1000) < ambientSoundTime++) {
 				resetAmbientSoundTime(mob);
 				obj.makeSound(mob.getAmbientSound());
 			}

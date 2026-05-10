@@ -10,7 +10,6 @@ import moriyashiine.strawberrylib.impl.client.supporter.renderer.item.GlintLayer
 import net.fabricmc.fabric.api.client.rendering.v1.FabricRenderState;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
-import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,7 +20,7 @@ public class ItemStackRenderStateMixin {
 	@Inject(method = "submit", at = @At("HEAD"))
 	private void slib$supporterGlint(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, int overlayCoords, int outlineColor, CallbackInfo ci) {
 		GlintLayers glintLayers = null;
-		@Nullable GlintLayersRenderState glintLayersRenderState = ((FabricRenderState) this).getData(GlintLayersRenderState.KEY);
+		GlintLayersRenderState glintLayersRenderState = ((FabricRenderState) this).getData(GlintLayersRenderState.KEY);
 		if (glintLayersRenderState != null) {
 			glintLayers = glintLayersRenderState.glintLayers;
 		}

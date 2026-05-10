@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.SubmitNodeCollection;
 import net.minecraft.client.renderer.SubmitNodeStorage;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -37,7 +36,7 @@ public class SubmitNodeCollectionMixin {
 
 	@ModifyVariable(method = "submitModel", at = @At("HEAD"), argsOnly = true)
 	private <S> RenderType slib$supporterGlint(RenderType renderType, @Local(argsOnly = true) S state) {
-		@Nullable FabricRenderState possibleState = null;
+		FabricRenderState possibleState = null;
 		if (state instanceof FabricRenderState renderState) {
 			possibleState = renderState;
 		}
@@ -46,7 +45,7 @@ public class SubmitNodeCollectionMixin {
 			possibleState = renderState;
 		}
 		if (possibleState != null) {
-			@Nullable GlintLayersRenderState glintLayersRenderState = possibleState.getData(GlintLayersRenderState.KEY);
+			GlintLayersRenderState glintLayersRenderState = possibleState.getData(GlintLayersRenderState.KEY);
 			if (glintLayersRenderState != null && glintLayersRenderState.glintLayers != null) {
 				if (renderType == RenderTypes.armorEntityGlint()) {
 					return glintLayersRenderState.glintLayers.armorEntityGlint();

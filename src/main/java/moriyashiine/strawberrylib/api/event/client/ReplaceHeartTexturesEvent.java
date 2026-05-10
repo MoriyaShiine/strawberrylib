@@ -21,7 +21,7 @@ public interface ReplaceHeartTexturesEvent {
 		List<ReplaceHeartTexturesEvent> sortedEvents = new ArrayList<>(Arrays.asList(events));
 		sortedEvents.sort(Comparator.comparingInt(ReplaceHeartTexturesEvent::getPriority));
 		for (ReplaceHeartTexturesEvent event : sortedEvents) {
-			@Nullable TextureSet textureSet = event.getTextureSet(player);
+			TextureSet textureSet = event.getTextureSet(player);
 			if (textureSet != null) {
 				return textureSet;
 			}
