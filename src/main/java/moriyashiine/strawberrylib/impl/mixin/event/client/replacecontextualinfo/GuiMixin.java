@@ -2,10 +2,10 @@
  * Copyright (c) MoriyaShiine. All Rights Reserved.
  */
 
-package moriyashiine.strawberrylib.impl.mixin.event.client.disablecontextualinfo;
+package moriyashiine.strawberrylib.impl.mixin.event.client.replacecontextualinfo;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import moriyashiine.strawberrylib.api.event.client.DisableContextualInfoEvent;
+import moriyashiine.strawberrylib.api.event.client.ReplaceContextualInfoEvent;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -28,17 +28,17 @@ public class GuiMixin {
 	private Minecraft minecraft;
 
 	@Inject(method = "extractHotbarAndDecorations", at = @At("HEAD"))
-	private void slib$disableContextualInfo(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-		disable = minecraft.player != null && DisableContextualInfoEvent.EVENT.invoker().shouldDisable(minecraft.player).get();
+	private void slib$replaceContextualInfo(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
+		disable = minecraft.player != null && ReplaceContextualInfoEvent.EVENT.invoker().getInfo(minecraft.player) != null;
 	}
 
 	@ModifyExpressionValue(method = "extractHotbarAndDecorations", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;nextContextualInfoState()Lnet/minecraft/client/gui/Gui$ContextualInfo;"))
-	private Gui.ContextualInfo slib$disableContextualInfo(Gui.ContextualInfo original) {
+	private Gui.ContextualInfo slib$replaceContextualInfo(Gui.ContextualInfo original) {
 		return disable ? Gui.ContextualInfo.EMPTY : original;
 	}
 
 	@ModifyExpressionValue(method = "extractHotbarAndDecorations", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;hasExperience()Z"))
-	private boolean slib$disableContextualInfo(boolean original) {
+	private boolean slib$replaceContextualInfo(boolean original) {
 		return original && !disable;
 	}
 }

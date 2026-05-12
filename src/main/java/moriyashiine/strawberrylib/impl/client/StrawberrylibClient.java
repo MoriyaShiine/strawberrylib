@@ -4,10 +4,14 @@
 
 package moriyashiine.strawberrylib.impl.client;
 
+import moriyashiine.strawberrylib.impl.client.gui.hud.ReplaceContextualInfoHudElement;
 import moriyashiine.strawberrylib.impl.client.payload.*;
 import moriyashiine.strawberrylib.impl.client.supporter.ClientSupporterInit;
+import moriyashiine.strawberrylib.impl.common.StrawberryLib;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 
 public class StrawberrylibClient implements ClientModInitializer {
@@ -17,6 +21,7 @@ public class StrawberrylibClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		ClientSupporterInit.init();
 		initPayloads();
+		HudElementRegistry.attachElementAfter(VanillaHudElements.INFO_BAR, StrawberryLib.id("replace_contextual_info"), new ReplaceContextualInfoHudElement());
 	}
 
 	private void initPayloads() {

@@ -37,9 +37,9 @@
   "client": [
 	"event.client.addnightvisionscale.GameRendererMixin",
 	"event.client.addnightvisionscale.LivingEntityMixin",
-	"event.client.disablecontextualinfo.GuiMixin",
 	"event.client.outlineentity.EntityMixin",
 	"event.client.outlineentity.MinecraftMixin",
+	"event.client.replacecontextualinfo.GuiMixin",
 	"event.client.replacehearttextures.GuiMixin",
 	"event.preventequipmentusage.client.AbstractContainerScreenMixin",
 	"event.preventequipmentusage.client.ContainerScreenCancelMixin",
