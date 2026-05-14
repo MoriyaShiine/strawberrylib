@@ -30,7 +30,6 @@
 	"modelreplacement.ServerLevelMixin",
 	"registries.ItemPropertiesMixin",
 	"registries.SimpleJsonResourceReloadListenerMixin",
-	"tag.SmithingTrimRecipeMixin",
 	"utils.PlayerMixin",
 	"utils.ServerLevelMixin"
   ],
