@@ -1,4 +1,10 @@
 ------------------------------------------------------
+Version 26.1-r6
+------------------------------------------------------
+- replace DisableContextualInfoEvent with ReplaceContextualInfoEvent
+- remove `strawberrlib:untrimmable_armor` item tag since fabric api can remove entries from tags now
+
+------------------------------------------------------
 Version 26.1-r5
 ------------------------------------------------------
 - PreventEquipmentUsageEvent can now optionally store slots instead of moving/dropping
