@@ -1,4 +1,9 @@
 ------------------------------------------------------
+Version 26.1-r7
+------------------------------------------------------
+- fix ModifyMovementEvents.MOVEMENT_DELTA sometimes causing moved wrongly errors
+
+------------------------------------------------------
 Version 26.1-r6
 ------------------------------------------------------
 - replace DisableContextualInfoEvent with ReplaceContextualInfoEvent
