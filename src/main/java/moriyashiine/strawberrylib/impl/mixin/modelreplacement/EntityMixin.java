@@ -21,6 +21,13 @@ public abstract class EntityMixin {
 	@Shadow
 	public abstract Level level();
 
+	@Shadow
+	public abstract boolean isAlwaysTicking();
+
+	@Inject(method = "refreshDimensions", at = @At("TAIL"))
+	protected void slib$modelReplacement(CallbackInfo ci) {
+	}
+
 	@SuppressWarnings("CancellableInjectionUsage")
 	@Inject(method = "playStepSound", at = @At("HEAD"), cancellable = true)
 	protected void slib$modelReplacementStepSound(BlockPos pos, BlockState blockState, CallbackInfo ci) {
