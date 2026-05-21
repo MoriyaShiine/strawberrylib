@@ -1,4 +1,9 @@
 ------------------------------------------------------
+Version 26.1-r8
+------------------------------------------------------
+- players with model replacements now refresh their dimensions when their replacement entity does
+
+------------------------------------------------------
 Version 26.1-r7
 ------------------------------------------------------
 - fix ModifyMovementEvents.MOVEMENT_DELTA sometimes causing moved wrongly errors
