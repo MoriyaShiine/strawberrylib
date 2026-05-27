@@ -6,7 +6,7 @@ package moriyashiine.strawberrylib.impl.mixin.event.preventequipmentusage;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import moriyashiine.strawberrylib.api.event.PreventEquipmentUsageEvent;
-import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
+import moriyashiine.strawberrylib.impl.common.init.StrawberryLibEntityComponents;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
@@ -30,7 +30,7 @@ public class SlotMixin {
 	@ModifyReturnValue(method = "mayPlace", at = @At("RETURN"))
 	private boolean slib$preventEquipmentUsage(boolean original, ItemStack itemStack) {
 		if (container instanceof Inventory inventory) {
-			if (slot == ModEntityComponents.STORED_EQUIPMENT.get(inventory.player).getHotbarIndex()) {
+			if (slot == StrawberryLibEntityComponents.STORED_EQUIPMENT.get(inventory.player).getHotbarIndex()) {
 				return false;
 			}
 			if (slot == inventory.getSelectedSlot() && PreventEquipmentUsageEvent.cannotEquip(inventory.player, itemStack, EquipmentSlot.MAINHAND)) {

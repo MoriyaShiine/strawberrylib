@@ -15,8 +15,8 @@ accessible field net/minecraft/world/entity/LivingEntity swimAmount F
 accessible field net/minecraft/world/entity/LivingEntity swimAmountO F
 mutable field net/minecraft/world/entity/LivingEntity walkAnimation Lnet/minecraft/world/entity/WalkAnimationState;
 
-accessible class net/minecraft/client/gui/Gui$ContextualInfo
-accessible class net/minecraft/client/gui/Gui$HeartType
+accessible class net/minecraft/client/gui/Hud$ContextualInfo
+accessible class net/minecraft/client/gui/Hud$HeartType
 accessible class net/minecraft/client/gui/screens/inventory/CreativeModeInventoryScreen$SlotWrapper
 transitive-accessible class net/minecraft/client/OptionInstance$ValueSet
 

@@ -4,23 +4,17 @@
 
 package moriyashiine.strawberrylib.api.objects.records;
 
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.phys.Vec3;
 
 public record ParticleVelocity(Vec3 velocity, double randomMultiplier) {
-	public static final StreamCodec<ByteBuf, ParticleVelocity> STREAM_CODEC = new StreamCodec<>() {
-		@Override
-		public void encode(ByteBuf output, ParticleVelocity value) {
-			Vec3.STREAM_CODEC.encode(output, value.velocity());
-			output.writeDouble(value.randomMultiplier());
-		}
-
-		@Override
-		public ParticleVelocity decode(ByteBuf input) {
-			return new ParticleVelocity(Vec3.STREAM_CODEC.decode(input), input.readDouble());
-		}
-	};
+	public static final StreamCodec<FriendlyByteBuf, ParticleVelocity> STREAM_CODEC = StreamCodec.composite(
+			Vec3.STREAM_CODEC, ParticleVelocity::velocity,
+			ByteBufCodecs.DOUBLE, ParticleVelocity::randomMultiplier,
+			ParticleVelocity::new
+	);
 
 	public static final ParticleVelocity ZERO = new ParticleVelocity(Vec3.ZERO, 0);
 

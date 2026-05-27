@@ -6,12 +6,12 @@ package moriyashiine.strawberrylib.impl.mixin.supporter.glint.client;
 
 import moriyashiine.strawberrylib.impl.client.supporter.objects.records.GlintLayers;
 import moriyashiine.strawberrylib.impl.client.supporter.renderer.item.GlintLayersRenderState;
-import net.minecraft.client.renderer.SubmitNodeStorage;
+import net.minecraft.client.renderer.feature.ItemFeatureRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-@Mixin({SubmitNodeStorage.ItemSubmit.class, SubmitNodeStorage.ModelPartSubmit.class})
-public class GlintLayersRenderStateSubmitAdditionMixin implements GlintLayersRenderState.Submit {
+@Mixin(ItemFeatureRenderer.Submit.class)
+public class ItemFeatureRendererSubmitMixin implements GlintLayersRenderState.Submit {
 	@Unique
 	private GlintLayers glintLayers;
 

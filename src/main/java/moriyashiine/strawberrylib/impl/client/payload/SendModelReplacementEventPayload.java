@@ -21,7 +21,8 @@ public record SendModelReplacementEventPayload(int entityId, byte event) impleme
 	public static final StreamCodec<FriendlyByteBuf, SendModelReplacementEventPayload> CODEC = StreamCodec.composite(
 			ByteBufCodecs.VAR_INT, SendModelReplacementEventPayload::entityId,
 			ByteBufCodecs.BYTE, SendModelReplacementEventPayload::event,
-			SendModelReplacementEventPayload::new);
+			SendModelReplacementEventPayload::new
+	);
 
 	@Override
 	public Type<SendModelReplacementEventPayload> type() {

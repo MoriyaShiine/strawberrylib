@@ -8,7 +8,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import moriyashiine.strawberrylib.api.event.PreventEquipmentUsageEvent;
-import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
+import moriyashiine.strawberrylib.impl.common.init.StrawberryLibEntityComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -36,7 +36,7 @@ public class LivingEntityMixin {
 	@Inject(method = "dropEquipment", at = @At("TAIL"))
 	private void slib$preventEquipmentUsage(ServerLevel level, CallbackInfo ci) {
 		if (!level.getGameRules().get(GameRules.KEEP_INVENTORY)) {
-			ModEntityComponents.STORED_EQUIPMENT.get(this).dropStoredEquipment();
+			StrawberryLibEntityComponents.STORED_EQUIPMENT.get(this).dropStoredEquipment();
 		}
 	}
 }

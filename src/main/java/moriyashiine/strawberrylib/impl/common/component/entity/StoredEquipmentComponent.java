@@ -6,7 +6,7 @@ package moriyashiine.strawberrylib.impl.common.component.entity;
 
 import moriyashiine.strawberrylib.api.event.PreventEquipmentUsageEvent;
 import moriyashiine.strawberrylib.api.module.SLibUtils;
-import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
+import moriyashiine.strawberrylib.impl.common.init.StrawberryLibEntityComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityEquipment;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -70,7 +70,7 @@ public class StoredEquipmentComponent implements AutoSyncedComponent, ServerTick
 	}
 
 	public void sync() {
-		ModEntityComponents.STORED_EQUIPMENT.sync(obj);
+		StrawberryLibEntityComponents.STORED_EQUIPMENT.sync(obj);
 	}
 
 	public int getHotbarIndex() {

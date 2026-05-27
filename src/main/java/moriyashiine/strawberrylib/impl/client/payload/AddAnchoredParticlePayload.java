@@ -25,7 +25,8 @@ public record AddAnchoredParticlePayload(int entityId, ParticleType<?> particle,
 			ByteBufCodecs.DOUBLE, AddAnchoredParticlePayload::yOffset,
 			ByteBufCodecs.DOUBLE, AddAnchoredParticlePayload::speed,
 			ByteBufCodecs.DOUBLE, AddAnchoredParticlePayload::intensity,
-			AddAnchoredParticlePayload::new);
+			AddAnchoredParticlePayload::new
+	);
 
 	@Override
 	public Type<AddAnchoredParticlePayload> type() {

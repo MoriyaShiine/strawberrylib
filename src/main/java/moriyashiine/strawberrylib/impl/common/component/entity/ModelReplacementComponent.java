@@ -7,7 +7,7 @@ package moriyashiine.strawberrylib.impl.common.component.entity;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import moriyashiine.strawberrylib.impl.common.StrawberryLib;
-import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
+import moriyashiine.strawberrylib.impl.common.init.StrawberryLibEntityComponents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -20,9 +20,11 @@ import org.ladysnake.cca.api.v3.component.tick.CommonTickingComponent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ModelReplacementComponent implements AutoSyncedComponent, CommonTickingComponent {
 	public static final List<CopyFunction> COPY_FUNCTIONS = new ArrayList<>();
+	private static final AtomicInteger REPLACEMENT_ENTITY_COUNTER = new AtomicInteger();
 
 	public static boolean disableAttack = false, disableTick = false;
 
@@ -50,7 +52,7 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 	}
 
 	public void sync() {
-		ModEntityComponents.MODEL_REPLACEMENT.sync(obj);
+		StrawberryLibEntityComponents.MODEL_REPLACEMENT.sync(obj);
 	}
 
 	@Override
@@ -59,6 +61,7 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 		if (replacement == null && replacementType != null) {
 			if (replacementType.create(obj.level(), EntitySpawnReason.LOAD) instanceof LivingEntity living) {
 				replacement = living;
+				replacement.setId(REPLACEMENT_ENTITY_COUNTER.decrementAndGet());
 				obj.refreshDimensions();
 			} else {
 				StrawberryLib.LOGGER.error("Entity Type '{}' is not a living entity, cannot replace player model.", replacementType);
@@ -173,8 +176,8 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 
 	private record ReplacementType(EntityType<?> type, int priority) {
 		private static final Codec<ReplacementType> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-						EntityType.CODEC.fieldOf("entity_type").forGetter(ReplacementType::type),
-						Codec.INT.fieldOf("priority").forGetter(ReplacementType::priority))
-				.apply(instance, ReplacementType::new));
+				EntityType.CODEC.fieldOf("entity_type").forGetter(ReplacementType::type),
+				Codec.INT.fieldOf("priority").forGetter(ReplacementType::priority)
+		).apply(instance, ReplacementType::new));
 	}
 }

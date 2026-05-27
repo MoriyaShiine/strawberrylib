@@ -22,7 +22,8 @@ public record AddTrackingEmitterPayload(int entityId, ParticleType<?> particle) 
 	public static final StreamCodec<RegistryFriendlyByteBuf, AddTrackingEmitterPayload> CODEC = StreamCodec.composite(
 			ByteBufCodecs.VAR_INT, AddTrackingEmitterPayload::entityId,
 			ByteBufCodecs.fromCodecWithRegistries(BuiltInRegistries.PARTICLE_TYPE.byNameCodec()), AddTrackingEmitterPayload::particle,
-			AddTrackingEmitterPayload::new);
+			AddTrackingEmitterPayload::new
+	);
 
 	@Override
 	public Type<AddTrackingEmitterPayload> type() {

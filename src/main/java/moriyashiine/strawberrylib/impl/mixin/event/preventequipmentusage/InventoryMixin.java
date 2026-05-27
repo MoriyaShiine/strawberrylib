@@ -6,7 +6,7 @@ package moriyashiine.strawberrylib.impl.mixin.event.preventequipmentusage;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
+import moriyashiine.strawberrylib.impl.common.init.StrawberryLibEntityComponents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Final;
@@ -22,6 +22,6 @@ public class InventoryMixin {
 
 	@ModifyExpressionValue(method = "getFreeSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z"))
 	private boolean slib$preventEquipmentUsage(boolean original, @Local(name = "i") int i) {
-		return original && ModEntityComponents.STORED_EQUIPMENT.get(player).getHotbarIndex() != i;
+		return original && StrawberryLibEntityComponents.STORED_EQUIPMENT.get(player).getHotbarIndex() != i;
 	}
 }

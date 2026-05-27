@@ -7,7 +7,7 @@ package moriyashiine.strawberrylib.impl.mixin.modelreplacement;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import moriyashiine.strawberrylib.api.module.SLibUtils;
 import moriyashiine.strawberrylib.impl.common.component.entity.ModelReplacementComponent;
-import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
+import moriyashiine.strawberrylib.impl.common.init.StrawberryLibEntityComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -51,7 +51,7 @@ public abstract class PlayerMixin extends LivingEntityMixin {
 	@Override
 	protected void slib$modelReplacementHurtSound(DamageSource damageSource, CallbackInfo ci) {
 		if (SLibUtils.getModelReplacement((Player) (Object) this) instanceof Mob mob) {
-			ModEntityComponents.MODEL_REPLACEMENT.get(this).resetAmbientSoundTime(mob);
+			StrawberryLibEntityComponents.MODEL_REPLACEMENT.get(this).resetAmbientSoundTime(mob);
 		}
 	}
 

@@ -23,7 +23,7 @@
 	  "moriyashiine.strawberrylib.impl.client.StrawberrylibClient"
 	],
 	"cardinal-components": [
-	  "moriyashiine.strawberrylib.impl.common.init.ModEntityComponents"
+	  "moriyashiine.strawberrylib.impl.common.init.StrawberryLibEntityComponents"
 	]
   },
   "mixins": [
@@ -32,7 +32,7 @@
   "accessWidener": "strawberrylib.classtweaker",
   "depends": {
 	"fabricloader": "*",
-	"minecraft": "~26.1",
+	"minecraft": "~26.2-rc.1",
 	"java": ">=25",
 	"fabric-api": "*"
   },

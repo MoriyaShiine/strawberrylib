@@ -30,7 +30,7 @@ public final class SLibClientUtils {
 	}
 
 	public static boolean shouldAddParticles(Entity entity) {
-		return minecraft.gameRenderer.getMainCamera().isDetached() || minecraft.getCameraEntity() != entity;
+		return minecraft.gameRenderer.mainCamera().isDetached() || minecraft.getCameraEntity() != entity;
 	}
 
 	public static void addAnchoredParticle(Entity entity, ParticleType<?> particle, double yOffset, double speed, double intensity) {

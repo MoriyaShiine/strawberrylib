@@ -21,7 +21,8 @@ public record PlayAnchoredSoundPayload(int entityId, SoundEvent sound) implement
 	public static final StreamCodec<FriendlyByteBuf, PlayAnchoredSoundPayload> CODEC = StreamCodec.composite(
 			ByteBufCodecs.VAR_INT, PlayAnchoredSoundPayload::entityId,
 			SoundEvent.DIRECT_STREAM_CODEC, PlayAnchoredSoundPayload::sound,
-			PlayAnchoredSoundPayload::new);
+			PlayAnchoredSoundPayload::new
+	);
 
 	@Override
 	public Type<PlayAnchoredSoundPayload> type() {

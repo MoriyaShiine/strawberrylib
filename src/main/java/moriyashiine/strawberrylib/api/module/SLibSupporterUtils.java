@@ -9,7 +9,7 @@ import moriyashiine.strawberrylib.api.supporter.objects.SupporterData;
 import moriyashiine.strawberrylib.api.supporter.objects.SupporterDataKey;
 import moriyashiine.strawberrylib.api.supporter.objects.client.ClientSupporterData;
 import moriyashiine.strawberrylib.impl.client.supporter.ClientSupporterInit;
-import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
+import moriyashiine.strawberrylib.impl.common.init.StrawberryLibEntityComponents;
 import moriyashiine.strawberrylib.impl.common.supporter.SupporterInit;
 import moriyashiine.strawberrylib.impl.common.supporter.component.entity.SupporterComponent;
 import net.minecraft.client.OptionInstance;
@@ -28,13 +28,13 @@ public final class SLibSupporterUtils {
 	}
 
 	public static <T> T getData(Player player, SupporterDataKey<T> key) {
-		return ModEntityComponents.SUPPORTER.get(player).getData(key).getValue();
+		return StrawberryLibEntityComponents.SUPPORTER.get(player).getData(key).getValue();
 	}
 
 	public static <T> void setData(Player player, SupporterDataKey<T> key, T value) {
-		SupporterComponent supporterComponent = ModEntityComponents.SUPPORTER.get(player);
-		supporterComponent.getData(key).setValue(value);
-		supporterComponent.sync();
+		SupporterComponent supporter = StrawberryLibEntityComponents.SUPPORTER.get(player);
+		supporter.getData(key).setValue(value);
+		supporter.sync();
 	}
 
 	public static <T> void registerOption(SupporterDataKey<T> key, OptionInstance<T> option, ClientSupporterData.Reader<T> reader, ClientSupporterData.Writer<T> writer, ClientSupporterData.PayloadSender<T> payloadSender) {

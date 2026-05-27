@@ -27,7 +27,8 @@ public record AddParticlesPayload(int entityId, ParticleType<?> particle, int co
 			ByteBufCodecs.VAR_INT, AddParticlesPayload::count,
 			ParticleAnchor.STREAM_CODEC, AddParticlesPayload::anchor,
 			ParticleVelocity.STREAM_CODEC, AddParticlesPayload::velocity,
-			AddParticlesPayload::new);
+			AddParticlesPayload::new
+	);
 
 	@Override
 	public Type<AddParticlesPayload> type() {

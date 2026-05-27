@@ -15,7 +15,7 @@ import org.ladysnake.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import org.ladysnake.cca.api.v3.entity.EntityComponentInitializer;
 import org.ladysnake.cca.api.v3.entity.RespawnCopyStrategy;
 
-public class ModEntityComponents implements EntityComponentInitializer {
+public class StrawberryLibEntityComponents implements EntityComponentInitializer {
 	public static final ComponentKey<SupporterComponent> SUPPORTER = ComponentRegistry.getOrCreate(StrawberryLib.id("supporter"), SupporterComponent.class);
 	public static final ComponentKey<ModelReplacementComponent> MODEL_REPLACEMENT = ComponentRegistry.getOrCreate(StrawberryLib.id("model_replacement"), ModelReplacementComponent.class);
 	public static final ComponentKey<StoredEquipmentComponent> STORED_EQUIPMENT = ComponentRegistry.getOrCreate(StrawberryLib.id("stored_equipment"), StoredEquipmentComponent.class);

@@ -21,11 +21,11 @@ public abstract class GameRendererMixin {
 	private static boolean checkingScale = false;
 
 	@Shadow
-	public static float getNightVisionScale(LivingEntity camera, float a) {
+	public static float nightVisionScale(LivingEntity camera, float a) {
 		throw new UnsupportedOperationException();
 	}
 
-	@Inject(method = "getNightVisionScale", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "nightVisionScale", at = @At("HEAD"), cancellable = true)
 	private static void slib$addNightVisionScale(LivingEntity camera, float a, CallbackInfoReturnable<Float> cir) {
 		if (checkingScale) {
 			return;
@@ -35,7 +35,7 @@ public abstract class GameRendererMixin {
 			float original = 0;
 			if (camera.getActiveEffectsMap().containsKey(MobEffects.NIGHT_VISION)) {
 				checkingScale = true;
-				original = getNightVisionScale(camera, a);
+				original = nightVisionScale(camera, a);
 				checkingScale = false;
 			}
 			cir.setReturnValue(Math.min(original + scale, 1));

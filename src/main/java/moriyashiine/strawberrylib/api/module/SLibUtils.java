@@ -14,7 +14,7 @@ import moriyashiine.strawberrylib.impl.client.payload.AddTrackingEmitterPayload;
 import moriyashiine.strawberrylib.impl.client.payload.PlayAnchoredSoundPayload;
 import moriyashiine.strawberrylib.impl.common.StrawberryLib;
 import moriyashiine.strawberrylib.impl.common.component.entity.ModelReplacementComponent;
-import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
+import moriyashiine.strawberrylib.impl.common.init.StrawberryLibEntityComponents;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalFluidTags;
 import net.minecraft.core.Holder;
@@ -39,18 +39,18 @@ import org.jspecify.annotations.Nullable;
 public final class SLibUtils {
 	@Nullable
 	public static LivingEntity getModelReplacement(Player player) {
-		return ModEntityComponents.MODEL_REPLACEMENT.get(player).getReplacement();
+		return StrawberryLibEntityComponents.MODEL_REPLACEMENT.get(player).getReplacement();
 	}
 
 	public static boolean hasModelReplacementType(Player player, EntityType<?> type) {
-		return ModEntityComponents.MODEL_REPLACEMENT.get(player).hasReplacementType(type);
+		return StrawberryLibEntityComponents.MODEL_REPLACEMENT.get(player).hasReplacementType(type);
 	}
 
 	public static void addModelReplacementType(Player player, EntityType<?> type, int priority) {
-		ModelReplacementComponent modelReplacementComponent = ModEntityComponents.MODEL_REPLACEMENT.get(player);
-		modelReplacementComponent.addReplacementType(type, priority);
+		ModelReplacementComponent modelReplacement = StrawberryLibEntityComponents.MODEL_REPLACEMENT.get(player);
+		modelReplacement.addReplacementType(type, priority);
 		if (!player.level().isClientSide()) {
-			modelReplacementComponent.sync();
+			modelReplacement.sync();
 		}
 	}
 
@@ -59,14 +59,14 @@ public final class SLibUtils {
 	}
 
 	public static void removeModelReplacementType(Player player, EntityType<?> type) {
-		ModelReplacementComponent modelReplacementComponent = ModEntityComponents.MODEL_REPLACEMENT.get(player);
-		modelReplacementComponent.removeReplacementType(type);
+		ModelReplacementComponent modelReplacement = StrawberryLibEntityComponents.MODEL_REPLACEMENT.get(player);
+		modelReplacement.removeReplacementType(type);
 		if (!player.level().isClientSide()) {
-			modelReplacementComponent.sync();
+			modelReplacement.sync();
 		}
 	}
 
-	public static boolean conditionallyApplyAttributeModifier(LivingEntity entity, Holder<Attribute> attribute, AttributeModifier modifier, boolean shouldHave) {
+	public static boolean applyAttributeModifier(LivingEntity entity, Holder<Attribute> attribute, AttributeModifier modifier, boolean shouldHave) {
 		AttributeInstance instance = entity.getAttribute(attribute);
 		if (instance == null || entity.level().isClientSide()) {
 			return false;
@@ -99,7 +99,7 @@ public final class SLibUtils {
 		return StrawberryLib.currentAttackCooldown == -1 || StrawberryLib.currentAttackCooldown >= threshold;
 	}
 
-	public static boolean isGroundedOrAirborne(LivingEntity entity, boolean allowWater) {
+	public static boolean hasNormalMovement(LivingEntity entity, boolean allowWater) {
 		if (entity instanceof Player player && player.getAbilities().flying) {
 			return false;
 		}
@@ -111,15 +111,15 @@ public final class SLibUtils {
 		return !entity.isPassenger() && !entity.isAutoSpinAttack() && !entity.isFallFlying() && !entity.onClimbable();
 	}
 
-	public static boolean isGroundedOrAirborne(LivingEntity entity) {
-		return isGroundedOrAirborne(entity, false);
+	public static boolean hasNormalMovement(LivingEntity entity) {
+		return hasNormalMovement(entity, false);
 	}
 
 	public static boolean isCrouching(Entity entity, boolean checkSneaking) {
 		if (checkSneaking && entity.isShiftKeyDown()) {
 			return true;
 		}
-		if (entity instanceof TamableAnimal tamableAnimal && tamableAnimal.isOrderedToSit()) {
+		if (entity instanceof TamableAnimal tamable && tamable.isOrderedToSit()) {
 			return true;
 		}
 		return entity instanceof Mob && entity.getControllingPassenger() instanceof Player player && player.isShiftKeyDown();

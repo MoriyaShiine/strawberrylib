@@ -9,7 +9,7 @@ import moriyashiine.strawberrylib.api.module.SLibSupporterUtils;
 import moriyashiine.strawberrylib.api.supporter.objects.SupporterData;
 import moriyashiine.strawberrylib.api.supporter.objects.SupporterDataKey;
 import moriyashiine.strawberrylib.impl.client.supporter.ClientSupporterInit;
-import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
+import moriyashiine.strawberrylib.impl.common.init.StrawberryLibEntityComponents;
 import moriyashiine.strawberrylib.impl.common.supporter.SupporterInit;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.ValueInput;
@@ -52,7 +52,7 @@ public class SupporterComponent implements AutoSyncedComponent, ClientTickingCom
 	}
 
 	public void sync() {
-		ModEntityComponents.SUPPORTER.sync(obj);
+		StrawberryLibEntityComponents.SUPPORTER.sync(obj);
 	}
 
 	@SuppressWarnings("unchecked")

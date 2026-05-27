@@ -4,22 +4,23 @@
 
 package moriyashiine.strawberrylib.api.module;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import moriyashiine.strawberrylib.api.objects.records.ModifierTrio;
 import moriyashiine.strawberrylib.impl.common.StrawberryLib;
 import moriyashiine.strawberrylib.impl.common.component.entity.ModelReplacementComponent;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.minecraft.advancements.CriterionTrigger;
-import net.minecraft.advancements.criterion.EntitySubPredicate;
+import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
+import net.minecraft.advancements.triggers.CriterionTrigger;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
@@ -58,8 +59,12 @@ public final class SLibRegistries {
 		return Registry.registerForHolder(BuiltInRegistries.ATTRIBUTE, id, attribute);
 	}
 
-	public static Block registerBlock(String name, Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties properties) {
-		return Blocks.register(ResourceKey.create(Registries.BLOCK, StrawberryLib.cid(name)), factory, properties);
+	public static Block registerBlock(ResourceKey<Block> key, Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties properties) {
+		return Blocks.register(key, factory, properties);
+	}
+
+	public static Block registerBlock(BlockItemId id, Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties properties) {
+		return Blocks.register(id.block(), factory, properties);
 	}
 
 	public static <T extends Block> MapCodec<T> registerBlockType(String name, MapCodec<T> codec) {
@@ -68,10 +73,6 @@ public final class SLibRegistries {
 
 	public static <T extends BlockEntity> BlockEntityType<T> registerBlockEntityType(String name, FabricBlockEntityTypeBuilder<T> builder) {
 		return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, StrawberryLib.cid(name), builder.build());
-	}
-
-	public static <T> DataComponentType<T> registerComponentType(String name, DataComponentType.Builder<T> builder) {
-		return Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, StrawberryLib.cid(name), builder.build());
 	}
 
 	public static <T extends ConsumeEffect> ConsumeEffect.Type<T> registerConsumeEffectType(String name, MapCodec<T> codec, StreamCodec<RegistryFriendlyByteBuf, T> streamCodec) {
@@ -86,6 +87,10 @@ public final class SLibRegistries {
 		return registerCreativeModeTab(StrawberryLib.currentModId, creativeModeTab);
 	}
 
+	public static <T> DataComponentType<T> registerDataComponentType(String name, DataComponentType.Builder<T> builder) {
+		return Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, StrawberryLib.cid(name), builder.build());
+	}
+
 	public static <T> DataComponentType<T> registerEnchantmentEffectComponentType(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
 		return Registry.register(BuiltInRegistries.ENCHANTMENT_EFFECT_COMPONENT_TYPE, StrawberryLib.cid(name), builderOperator.apply(DataComponentType.builder()).build());
 	}
@@ -94,23 +99,21 @@ public final class SLibRegistries {
 		return Registry.register(BuiltInRegistries.ENCHANTMENT_ENTITY_EFFECT_TYPE, StrawberryLib.cid(name), codec);
 	}
 
-	public static <T extends Entity> EntityType<T> registerEntityType(String name, EntityType.Builder<T> builder) {
-		ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, StrawberryLib.cid(name));
+	public static <T extends Entity> EntityType<T> registerEntityType(ResourceKey<EntityType<?>> key, EntityType.Builder<T> builder) {
 		return Registry.register(BuiltInRegistries.ENTITY_TYPE, key.identifier(), builder.build(key));
 	}
 
-	public static <T extends LivingEntity> EntityType<T> registerEntityType(String name, EntityType.Builder<T> builder, AttributeSupplier.Builder attributeBuilder) {
-		EntityType<T> type = registerEntityType(name, builder);
+	public static <T extends LivingEntity> EntityType<T> registerEntityType(ResourceKey<EntityType<?>> key, EntityType.Builder<T> builder, AttributeSupplier.Builder attributeBuilder) {
+		EntityType<T> type = registerEntityType(key, builder);
 		FabricDefaultAttributeRegistry.register(type, attributeBuilder);
 		return type;
 	}
 
-	public static <T extends EntitySubPredicate> MapCodec<T> registerEntitySubPredicateType(String name, MapCodec<T> codec) {
+	public static <T extends EntitySubPredicate> Codec<T> registerEntitySubPredicateType(String name, Codec<T> codec) {
 		return Registry.register(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE, StrawberryLib.cid(name), codec);
 	}
 
-	public static Item registerItem(String name, Function<Item.Properties, Item> factory, Item.Properties properties) {
-		ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, StrawberryLib.cid(name));
+	public static Item registerItem(ResourceKey<Item> key, Function<Item.Properties, Item> factory, Item.Properties properties) {
 		Item item = factory.apply(properties.setId(key));
 		if (item instanceof BlockItem blockItem) {
 			blockItem.registerBlocks(Item.BY_BLOCK, item);
@@ -118,24 +121,24 @@ public final class SLibRegistries {
 		return Registry.register(BuiltInRegistries.ITEM, key, item);
 	}
 
-	public static Item registerItem(String name, Function<Item.Properties, Item> factory) {
-		return registerItem(name, factory, new Item.Properties());
+	public static Item registerItem(ResourceKey<Item> key, Function<Item.Properties, Item> factory) {
+		return registerItem(key, factory, new Item.Properties());
 	}
 
-	public static Item registerItem(String name, Item.Properties properties) {
-		return registerItem(name, Item::new, properties);
+	public static Item registerItem(ResourceKey<Item> key, Item.Properties properties) {
+		return registerItem(key, Item::new, properties);
 	}
 
-	public static Item registerItem(String name) {
-		return registerItem(name, Item::new);
+	public static Item registerItem(ResourceKey<Item> key) {
+		return registerItem(key, Item::new);
 	}
 
-	public static Item registerBlockItem(String name, Block block, Item.Properties properties) {
-		return registerItem(name, s -> new BlockItem(block, s), properties.useBlockDescriptionPrefix());
+	public static Item registerBlockItem(BlockItemId id, Block block, Item.Properties properties) {
+		return registerItem(id.item(), s -> new BlockItem(block, s), properties.useBlockDescriptionPrefix());
 	}
 
-	public static Item registerBlockItem(String name, Block block) {
-		return registerBlockItem(name, block, new Item.Properties());
+	public static Item registerBlockItem(BlockItemId id, Block block) {
+		return registerBlockItem(id, block, new Item.Properties());
 	}
 
 	public static <T extends LootItemCondition> MapCodec<T> registerLootConditionType(String name, MapCodec<T> codec) {
@@ -178,6 +181,22 @@ public final class SLibRegistries {
 
 	public static <T extends CriterionTrigger<?>> T registerTrigger(String name, T trigger) {
 		return Registry.register(BuiltInRegistries.TRIGGER_TYPES, StrawberryLib.cid(name), trigger);
+	}
+
+	// resources
+
+	public static <T> ResourceKey<T> key(ResourceKey<? extends Registry<T>> registryName, String name) {
+		return ResourceKey.create(registryName, StrawberryLib.cid(name));
+	}
+
+	public static BlockItemId blockItemId(String blockName, String itemName) {
+		Identifier blockId = StrawberryLib.cid(blockName);
+		Identifier itemId = StrawberryLib.cid(itemName);
+		return BlockItemId.create(blockId, itemId);
+	}
+
+	public static BlockItemId blockItemId(String name) {
+		return blockItemId(name, name);
 	}
 
 	// misc

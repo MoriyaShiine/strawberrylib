@@ -7,7 +7,7 @@ package moriyashiine.strawberrylib.impl.mixin.event.preventequipmentusage.client
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import moriyashiine.strawberrylib.impl.common.component.entity.StoredEquipmentComponent;
-import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
+import moriyashiine.strawberrylib.impl.common.init.StrawberryLibEntityComponents;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
@@ -37,19 +37,19 @@ public class AbstractContainerScreenMixin {
 			slot = wrapper.target;
 		}
 		if (slot.container instanceof Inventory inventory) {
-			StoredEquipmentComponent storedEquipmentComponent = ModEntityComponents.STORED_EQUIPMENT.get(inventory.player);
+			StoredEquipmentComponent storedEquipment = StrawberryLibEntityComponents.STORED_EQUIPMENT.get(inventory.player);
 			for (EquipmentSlot equipmentSlot : EquipmentSlot.values()) {
 				if (equipmentSlot != EquipmentSlot.MAINHAND && (equipmentSlot == EquipmentSlot.OFFHAND ? Inventory.SLOT_OFFHAND : equipmentSlot.getIndex(Inventory.INVENTORY_SIZE)) == slot.getContainerSlot()) {
-					ItemStack equippedStack = storedEquipmentComponent.getStoredStack(equipmentSlot);
+					ItemStack equippedStack = storedEquipment.getStoredStack(equipmentSlot);
 					if (!equippedStack.isEmpty()) {
 						renderBlocked = true;
 						return equippedStack;
 					}
 				}
 			}
-			if (storedEquipmentComponent.getHotbarIndex() == slot.getContainerSlot()) {
+			if (storedEquipment.getHotbarIndex() == slot.getContainerSlot()) {
 				renderBlocked = true;
-				return storedEquipmentComponent.getStoredStack(EquipmentSlot.MAINHAND);
+				return storedEquipment.getStoredStack(EquipmentSlot.MAINHAND);
 			}
 		}
 		return original;

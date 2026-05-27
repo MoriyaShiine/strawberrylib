@@ -5,7 +5,7 @@
 package moriyashiine.strawberrylib.api.event;
 
 import moriyashiine.strawberrylib.api.objects.enums.PreventionResult;
-import moriyashiine.strawberrylib.impl.common.init.ModEntityComponents;
+import moriyashiine.strawberrylib.impl.common.init.StrawberryLibEntityComponents;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -38,6 +38,6 @@ public interface PreventEquipmentUsageEvent {
 	PreventionResult getPreventionResult(LivingEntity entity, ItemStack stack, EquipmentSlot slot);
 
 	static boolean cannotEquip(LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
-		return ModEntityComponents.STORED_EQUIPMENT.get(entity).hasStoredStack(slot) || PreventEquipmentUsageEvent.EVENT.invoker().getPreventionResult(entity, stack, slot).prevent;
+		return StrawberryLibEntityComponents.STORED_EQUIPMENT.get(entity).hasStoredStack(slot) || PreventEquipmentUsageEvent.EVENT.invoker().getPreventionResult(entity, stack, slot).prevent;
 	}
 }
