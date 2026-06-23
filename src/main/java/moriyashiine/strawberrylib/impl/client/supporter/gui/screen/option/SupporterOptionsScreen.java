@@ -4,7 +4,7 @@
 
 package moriyashiine.strawberrylib.impl.client.supporter.gui.screen.option;
 
-import moriyashiine.strawberrylib.api.supporter.objects.SupporterDataKey;
+import moriyashiine.strawberrylib.api.supporter.objects.SupporterDataType;
 import moriyashiine.strawberrylib.impl.client.supporter.ClientSupporterInit;
 import moriyashiine.strawberrylib.impl.common.StrawberryLib;
 import net.minecraft.ChatFormatting;
@@ -27,8 +27,8 @@ public class SupporterOptionsScreen extends OptionsSubScreen {
 
 	@Override
 	protected void addOptions() {
-		List<SupporterDataKey<?>> sorted = new ArrayList<>(ClientSupporterInit.OPTIONS.keySet());
-		sorted.sort(Comparator.comparing(SupporterDataKey::id));
-		sorted.forEach(key -> list.addBig(ClientSupporterInit.OPTIONS.get(key).option()));
+		List<SupporterDataType<?>> sorted = new ArrayList<>(ClientSupporterInit.OPTIONS.keySet());
+		sorted.sort(Comparator.comparing(SupporterDataType::key));
+		sorted.forEach(type -> list.addBig(ClientSupporterInit.OPTIONS.get(type).option()));
 	}
 }

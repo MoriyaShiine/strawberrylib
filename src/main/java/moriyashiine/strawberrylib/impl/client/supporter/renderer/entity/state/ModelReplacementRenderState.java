@@ -11,4 +11,5 @@ public class ModelReplacementRenderState {
 	public static final RenderStateDataKey<ModelReplacementRenderState> KEY = RenderStateDataKey.create(() -> "model replacement");
 
 	public LivingEntityRenderState replacementRenderState = null;
+	public boolean hasId = false;
 }

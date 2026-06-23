@@ -27,7 +27,7 @@ public abstract class EntityRenderDispatcherMixin {
 	private <S extends EntityRenderState> void slib$modelReplacement(S renderState, CameraRenderState camera, double x, double y, double z, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CallbackInfo ci) {
 		if (renderState instanceof AvatarRenderState playerRenderState && !playerRenderState.isSpectator) {
 			ModelReplacementRenderState modelReplacementRenderState = playerRenderState.getData(ModelReplacementRenderState.KEY);
-			if (modelReplacementRenderState != null) {
+			if (modelReplacementRenderState != null && modelReplacementRenderState.hasId) {
 				LivingEntityRenderState replacementState = modelReplacementRenderState.replacementRenderState;
 				if (replacementState != null) {
 					submit(replacementState, camera, x, y, z, poseStack, submitNodeCollector);

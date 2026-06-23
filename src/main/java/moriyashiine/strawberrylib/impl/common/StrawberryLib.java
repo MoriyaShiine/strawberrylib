@@ -5,10 +5,9 @@
 package moriyashiine.strawberrylib.impl.common;
 
 import moriyashiine.strawberrylib.impl.client.payload.*;
-import moriyashiine.strawberrylib.impl.common.event.ModelReplacementEvent;
+import moriyashiine.strawberrylib.impl.common.event.ModelReplacementImplEvent;
 import moriyashiine.strawberrylib.impl.common.supporter.SupporterInit;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
@@ -55,6 +54,6 @@ public class StrawberryLib implements ModInitializer {
 	}
 
 	private void initEvents() {
-		EntitySleepEvents.ALLOW_SLEEPING.register(new ModelReplacementEvent());
+		ModelReplacementImplEvent.init();
 	}
 }

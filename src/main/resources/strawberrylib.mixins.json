@@ -48,7 +48,6 @@
 	"modelreplacement.client.DisableTickMixin",
 	"modelreplacement.client.EntityRenderDispatcherMixin",
 	"modelreplacement.client.InventoryScreenMixin",
-	"modelreplacement.client.LivingEntityRendererMixin",
 	"supporter.client.OptionsMixin",
 	"supporter.client.OptionsScreenMixin",
 	"supporter.glint.client.AvatarRendererMixin",

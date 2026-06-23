@@ -44,25 +44,26 @@ public class StoredEquipmentComponent implements AutoSyncedComponent, ServerTick
 	@Override
 	public void serverTick() {
 		boolean sync = false;
+		ServerLevel level = (ServerLevel) obj.level();
 		PreventEquipmentUsageEvent invoker = PreventEquipmentUsageEvent.EVENT.invoker();
 		for (EquipmentSlot slot : EquipmentSlot.values()) {
 			ItemStack equippedStack = obj.getItemBySlot(slot);
-			ItemStack storedStack = storedEquipment.get(slot);
+			ItemStack storedStack = getStoredStack(slot);
 			if (invoker.getPreventionResult(obj, equippedStack.isEmpty() ? storedStack : equippedStack, slot).prevent) {
 				if (!equippedStack.isEmpty()) {
 					if (invoker.getPreventionResult(obj, equippedStack, slot).store) {
 						sync |= tryInsert(slot);
 					} else {
-						SLibUtils.insertOrDrop((ServerLevel) obj.level(), obj, equippedStack.copyAndClear());
+						SLibUtils.insertOrDrop(level, obj, equippedStack.copyAndClear());
 					}
 				}
 			} else if (slot != EquipmentSlot.MAINHAND) {
-				sync |= extract(storedStack, slot);
+				sync |= extract(level, storedStack, slot);
 			}
 		}
-		ItemStack storedMainHandStack = storedEquipment.get(EquipmentSlot.MAINHAND);
+		ItemStack storedMainHandStack = getStoredStack(EquipmentSlot.MAINHAND);
 		if ((obj instanceof Player player && player.getInventory().getSelectedSlot() != hotbarIndex) || !invoker.getPreventionResult(obj, storedMainHandStack, EquipmentSlot.MAINHAND).prevent) {
-			sync |= extract(storedMainHandStack, EquipmentSlot.MAINHAND);
+			sync |= extract(level, storedMainHandStack, EquipmentSlot.MAINHAND);
 		}
 		if (sync) {
 			sync();
@@ -82,7 +83,7 @@ public class StoredEquipmentComponent implements AutoSyncedComponent, ServerTick
 	}
 
 	public boolean hasStoredStack(EquipmentSlot slot) {
-		return !storedEquipment.get(slot).isEmpty();
+		return !getStoredStack(slot).isEmpty();
 	}
 
 	public void dropStoredEquipment() {
@@ -90,19 +91,18 @@ public class StoredEquipmentComponent implements AutoSyncedComponent, ServerTick
 		hotbarIndex = -1;
 	}
 
-	private boolean extract(ItemStack stack, EquipmentSlot slot) {
+	private boolean extract(ServerLevel level, ItemStack stack, EquipmentSlot slot) {
 		if (!stack.isEmpty()) {
 			if (tryExtract(slot)) {
 				return true;
-			} else {
-				SLibUtils.insertOrDrop((ServerLevel) obj.level(), obj, stack.copyAndClear());
 			}
+			SLibUtils.insertOrDrop(level, obj, stack.copyAndClear());
 		}
 		return false;
 	}
 
 	private boolean tryInsert(EquipmentSlot slot) {
-		if (storedEquipment.get(slot).isEmpty()) {
+		if (!hasStoredStack(slot)) {
 			ItemStack stack = obj.getItemBySlot(slot);
 			obj.setItemSlot(slot, ItemStack.EMPTY);
 			storedEquipment.set(slot, stack);
@@ -115,7 +115,7 @@ public class StoredEquipmentComponent implements AutoSyncedComponent, ServerTick
 	}
 
 	private boolean tryExtract(EquipmentSlot slot) {
-		ItemStack stack = storedEquipment.get(slot);
+		ItemStack stack = getStoredStack(slot);
 		if (!stack.isEmpty()) {
 			storedEquipment.set(slot, ItemStack.EMPTY);
 			if (slot == EquipmentSlot.MAINHAND && obj instanceof Player player) {

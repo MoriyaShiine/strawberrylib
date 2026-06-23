@@ -6,6 +6,7 @@ package moriyashiine.strawberrylib.impl.common.component.entity;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import moriyashiine.strawberrylib.api.module.SLibUtils;
 import moriyashiine.strawberrylib.impl.common.StrawberryLib;
 import moriyashiine.strawberrylib.impl.common.init.StrawberryLibEntityComponents;
 import net.minecraft.world.InteractionHand;
@@ -24,15 +25,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ModelReplacementComponent implements AutoSyncedComponent, CommonTickingComponent {
 	public static final List<CopyFunction> COPY_FUNCTIONS = new ArrayList<>();
-	private static final AtomicInteger REPLACEMENT_ENTITY_COUNTER = new AtomicInteger();
+	public static final int AWAITING_ID = -1;
+	private static final AtomicInteger REPLACEMENT_ENTITY_COUNTER = new AtomicInteger(AWAITING_ID);
 
 	public static boolean disableAttack = false, disableTick = false;
 
 	private final Player obj;
 	private final List<ReplacementType> replacementTypes = new ArrayList<>();
+	private int ambientSoundTime = 0, replacementId = AWAITING_ID;
+
 	@Nullable
 	private LivingEntity replacement = null;
-	private int ambientSoundTime = 0;
 
 	public ModelReplacementComponent(Player obj) {
 		this.obj = obj;
@@ -43,41 +46,44 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 		replacementTypes.clear();
 		replacementTypes.addAll(input.read("ReplacementTypes", ReplacementType.CODEC.listOf()).orElse(List.of()));
 		ambientSoundTime = input.getIntOr("AmbientSoundTime", 0);
+		replacementId = input.getIntOr("ReplacementId", AWAITING_ID);
 	}
 
 	@Override
 	public void writeData(ValueOutput output) {
 		output.store("ReplacementTypes", ReplacementType.CODEC.listOf(), replacementTypes);
 		output.putInt("AmbientSoundTime", ambientSoundTime);
-	}
-
-	public void sync() {
-		StrawberryLibEntityComponents.MODEL_REPLACEMENT.sync(obj);
+		output.putInt("ReplacementId", replacementId);
 	}
 
 	@Override
 	public void tick() {
-		EntityType<?> replacementType = replacementTypes.isEmpty() ? null : replacementTypes.getFirst().type();
-		if (replacement == null && replacementType != null) {
-			if (replacementType.create(obj.level(), EntitySpawnReason.LOAD) instanceof LivingEntity living) {
-				replacement = living;
-				replacement.setId(REPLACEMENT_ENTITY_COUNTER.decrementAndGet());
-				obj.refreshDimensions();
+		if (obj.slib$exists()) {
+			EntityType<?> replacementType = replacementTypes.isEmpty() ? null : replacementTypes.getFirst().type();
+			if (replacement == null) {
+				if (replacementType != null) {
+					if (replacementType.create(obj.level(), new EntitySpawnRequest(EntitySpawnReason.LOAD, true)) instanceof LivingEntity living) {
+						if (!obj.level().isClientSide()) {
+							replacementId = REPLACEMENT_ENTITY_COUNTER.decrementAndGet();
+							sync();
+						}
+						living.setId(AWAITING_ID);
+						replacement = living;
+						obj.refreshDimensions();
+					} else {
+						StrawberryLib.LOGGER.error("Entity Type '{}' is not a living entity, cannot replace player model.", replacementType);
+					}
+				}
 			} else {
-				StrawberryLib.LOGGER.error("Entity Type '{}' is not a living entity, cannot replace player model.", replacementType);
-				replacementType = null;
-			}
-		}
-		if (replacementType == null || (replacement != null && (obj.level() != replacement.level() || replacement.getType() != replacementType))) {
-			replacement = null;
-			ambientSoundTime = 0;
-			obj.refreshDimensions();
-		}
-		if (replacement != null) {
-			copyData(replacement);
-			if (obj.slib$exists() && replacement instanceof Mob mob && mob.getAmbientSound() != null && mob.getRandom().nextInt(1000) < ambientSoundTime++) {
-				resetAmbientSoundTime(mob);
-				obj.makeSound(mob.getAmbientSound());
+				if (replacementType == null || obj.level() != replacement.level() || replacement.getType() != replacementType) {
+					replacement = null;
+					ambientSoundTime = 0;
+					replacementId = AWAITING_ID;
+					obj.refreshDimensions();
+				} else {
+					replacement.setId(replacementId);
+					copyData(replacement);
+				}
 			}
 		}
 	}
@@ -85,16 +91,26 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 	@Override
 	public void clientTick() {
 		tick();
-		if (replacement != null && obj.slib$exists()) {
+		if (obj.slib$exists() && replacement != null) {
 			disableTick = true;
 			replacement.tick();
 			disableTick = false;
 		}
 	}
 
-	@Nullable
-	public LivingEntity getReplacement() {
-		return replacement;
+	@Override
+	public void serverTick() {
+		tick();
+		if (obj.slib$exists() && replacement instanceof Mob mob && mob.getAmbientSound() != null && mob.getRandom().nextInt(1000) < ++ambientSoundTime) {
+			resetAmbientSoundTime(mob);
+			if (!obj.isSilent()) {
+				SLibUtils.playSound(obj, mob.getAmbientSound(), 1, obj.getVoicePitch());
+			}
+		}
+	}
+
+	public void sync() {
+		StrawberryLibEntityComponents.MODEL_REPLACEMENT.sync(obj);
 	}
 
 	public boolean hasReplacementType(EntityType<?> type) {
@@ -116,6 +132,11 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 
 	public void resetAmbientSoundTime(Mob mob) {
 		ambientSoundTime = -mob.getAmbientSoundInterval();
+	}
+
+	@Nullable
+	public LivingEntity getReplacement() {
+		return replacement;
 	}
 
 	private void copyData(LivingEntity replacement) {
