@@ -10,17 +10,26 @@ import moriyashiine.strawberrylib.impl.client.supporter.objects.records.GlintLay
 import moriyashiine.strawberrylib.impl.client.supporter.renderer.item.GlintLayersRenderState;
 import net.fabricmc.fabric.api.client.rendering.v1.FabricRenderState;
 import net.minecraft.client.renderer.SubmitNodeCollection;
-import net.minecraft.client.renderer.feature.ItemFeatureRenderer;
+import net.minecraft.client.renderer.SubmitNodeStorage;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(SubmitNodeCollection.class)
 public class SubmitNodeCollectionMixin {
-	@ModifyVariable(method = "submitItem", at = @At("STORE"), name = "submit")
-	private ItemFeatureRenderer.Submit slib$supporterGlint(ItemFeatureRenderer.Submit submit) {
+	@ModifyArg(method = "submitItem", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z"))
+	private <E> E slib$supporterGlint(E e) {
+		if (e instanceof GlintLayersRenderState.Submit submit) {
+			submit.slib$setGlintLayers(GlintLayers.currentLayer);
+		}
+		return e;
+	}
+
+	@ModifyArg(method = "submitModelPart", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/ModelPartFeatureRenderer$Storage;add(Lnet/minecraft/client/renderer/rendertype/RenderType;Lnet/minecraft/client/renderer/SubmitNodeStorage$ModelPartSubmit;)V"), index = 1)
+	private SubmitNodeStorage.ModelPartSubmit slib$supporterGlint(SubmitNodeStorage.ModelPartSubmit submit) {
 		((GlintLayersRenderState.Submit) (Object) submit).slib$setGlintLayers(GlintLayers.currentLayer);
 		return submit;
 	}

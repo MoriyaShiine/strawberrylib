@@ -4,15 +4,15 @@
 
 package moriyashiine.strawberrylib.api.module;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import moriyashiine.strawberrylib.api.objects.records.BlockItemId;
 import moriyashiine.strawberrylib.api.objects.records.ModifierTrio;
 import moriyashiine.strawberrylib.impl.common.StrawberryLib;
 import moriyashiine.strawberrylib.impl.common.component.entity.ModelReplacementComponent;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
-import net.minecraft.advancements.triggers.CriterionTrigger;
+import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.advancements.criterion.EntitySubPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
@@ -20,7 +20,6 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
@@ -109,7 +108,7 @@ public final class SLibRegistries {
 		return type;
 	}
 
-	public static <T extends EntitySubPredicate> Codec<T> registerEntitySubPredicateType(String name, Codec<T> codec) {
+	public static <T extends EntitySubPredicate> MapCodec<T> registerEntitySubPredicateType(String name, MapCodec<T> codec) {
 		return Registry.register(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE, StrawberryLib.cid(name), codec);
 	}
 
