@@ -1,0 +1,39 @@
+package moriyashiine.strawberrylib.api.event.client;
+
+import net.fabricmc.fabric.api.event.Event;
+import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Player;
+import org.jspecify.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
+@FunctionalInterface
+public interface ReplaceHeartTexturesEvent {
+	Event<ReplaceHeartTexturesEvent> EVENT = EventFactory.createArrayBacked(ReplaceHeartTexturesEvent.class, events -> player -> {
+		List<ReplaceHeartTexturesEvent> sortedEvents = new ArrayList<>(Arrays.asList(events));
+		sortedEvents.sort(Comparator.comparingInt(ReplaceHeartTexturesEvent::getPriority));
+		for (ReplaceHeartTexturesEvent event : sortedEvents) {
+			TextureSet textureSet = event.getTextureSet(player);
+			if (textureSet != null) {
+				return textureSet;
+			}
+		}
+		return null;
+	});
+
+	default int getPriority() {
+		return 1000;
+	}
+
+	@Nullable TextureSet getTextureSet(Player player);
+
+	record TextureSet(Identifier fullTexture, Identifier fullBlinkingTexture,
+	                  Identifier halfTexture, Identifier halfBlinkingTexture,
+	                  Identifier hardcoreFullTexture, Identifier hardcoreFullBlinkingTexture,
+	                  Identifier hardcoreHalfTexture, Identifier hardcoreHalfBlinkingTexture) {
+	}
+}

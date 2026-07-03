@@ -1,0 +1,22 @@
+package moriyashiine.strawberrylib.api.objects.enums;
+
+public enum PayloadTarget {
+	ALL(true, true),
+	SELF(true, false),
+	OTHERS(false, true);
+
+	private final boolean sendsToSelf, sendsToOthers;
+
+	PayloadTarget(boolean sendsToSelf, boolean sendsToOthers) {
+		this.sendsToSelf = sendsToSelf;
+		this.sendsToOthers = sendsToOthers;
+	}
+
+	public boolean sendsToSelf() {
+		return sendsToSelf;
+	}
+
+	public boolean sendsToOthers() {
+		return sendsToOthers;
+	}
+}

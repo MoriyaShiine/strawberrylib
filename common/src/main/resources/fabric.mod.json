@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+	"MoriyaShiine"
+  ],
+  "contact": {
+	"homepage": "https://modrinth.com/mod/${project_name}",
+	"sources": "https://github.com/MoriyaShiine/${project_name}",
+	"issues": "https://github.com/MoriyaShiine/${project_name}/issues"
+  },
+  "license": "All Rights Reserved",
+  "icon": "assets/${mod_id}/icon.png",
+  "environment": "*",
+  "entrypoints": {
+	"main": [
+	  "moriyashiine.strawberrylib.impl.common.StrawberryLib"
+	],
+	"client": [
+	  "moriyashiine.strawberrylib.impl.client.StrawberrylibClient"
+	],
+	"cardinal-components": [
+	  "moriyashiine.strawberrylib.impl.common.init.StrawberryLibEntityComponents"
+	]
+  },
+  "mixins": [
+	"${mod_id}.mixins.json",
+	"${mod_id}_fabric.mixins.json"
+  ],
+  "accessWidener": "${mod_id}.classtweaker",
+  "depends": {
+	"fabricloader": "*",
+	"minecraft": "~26.1",
+	"java": ">=25",
+	"fabric-api": "*"
+  },
+  "custom": {
+	"launchpad:compatible": true,
+	"launchpad:overrides": {
+	  "mixins": [
+		"${mod_id}.mixins.json",
+		"${mod_id}_neoforge.mixins.json"
+	  ]
+	},
+	"cardinal-components": [
+	  "${mod_id}:supporter",
+	  "${mod_id}:model_replacement",
+	  "${mod_id}:stored_equipment"
+	]
+  }
+}

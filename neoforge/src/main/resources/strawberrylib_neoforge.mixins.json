@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "package": "moriyashiine.strawberrylib.neoforge.impl.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+	"event.modifydestroyspeed.PlayerMixin",
+	"modelreplacement.EntityAccessor",
+	"modelreplacement.EntityMixin",
+	"modelreplacement.PlayerMixin"
+  ],
+  "client": [
+	"event.client.replacecontextualinfo.GuiMixin",
+	"event.preventequipmentusage.client.AbstractContainerScreenMixin"
+  ],
+  "injectors": {
+	"defaultRequire": 1
+  },
+  "overwrites": {
+	"requireAnnotations": true
+  }
+}
