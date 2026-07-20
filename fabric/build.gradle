@@ -54,7 +54,10 @@ loom {
 }
 
 repositories {
-	chenille.repositories.terraformers()
+	maven {
+		name = "TerraformersMC"
+		url = "https://maven.gnomecraft.net/releases"
+	}
 }
 
 dependencies {
@@ -67,5 +70,5 @@ dependencies {
 
 	implementation("net.fabricmc.fabric-api:fabric-api:${fabric_api_version}")
 
-	runtimeOnly("com.terraformersmc:modmenu:${mod_menu_version}")
+	localRuntime("com.terraformersmc:modmenu:${mod_menu_version}")
 }
