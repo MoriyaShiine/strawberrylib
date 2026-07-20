@@ -9,7 +9,7 @@ chenille {
 	javaVersion = 25
 	configurePublishing {
 		withLadysnakeMaven()
-//		withGithubRelease()
+		withGithubRelease()
 		withModrinthRelease()
 		withCurseforgeRelease()
 		neoforgeCompatible = true
