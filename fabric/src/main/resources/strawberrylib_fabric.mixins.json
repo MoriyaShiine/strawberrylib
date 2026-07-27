@@ -9,7 +9,7 @@
 	"modelreplacement.PlayerMixin"
   ],
   "client": [
-	"event.client.replacecontextualinfo.GuiMixin",
+	"event.client.replacecontextualinfo.HudMixin",
 	"event.preventequipmentusage.client.AbstractContainerScreenMixin"
   ],
   "injectors": {

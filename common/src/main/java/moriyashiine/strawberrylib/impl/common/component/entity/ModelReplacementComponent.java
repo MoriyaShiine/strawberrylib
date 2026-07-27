@@ -58,7 +58,7 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 			EntityType<?> replacementType = replacementTypes.isEmpty() ? null : replacementTypes.getFirst().type();
 			if (replacement == null) {
 				if (replacementType != null) {
-					if (replacementType.create(obj.level(), EntitySpawnReason.LOAD) instanceof LivingEntity living) {
+					if (replacementType.create(obj.level(), new EntitySpawnRequest(EntitySpawnReason.LOAD, true)) instanceof LivingEntity living) {
 						if (!obj.level().isClientSide()) {
 							replacementId = REPLACEMENT_ENTITY_COUNTER.decrementAndGet();
 							sync();
