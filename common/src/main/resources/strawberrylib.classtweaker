@@ -19,6 +19,8 @@ accessible class net/minecraft/client/gui/Hud$HeartType
 accessible class net/minecraft/client/gui/screens/inventory/CreativeModeInventoryScreen$SlotWrapper
 transitive-accessible class net/minecraft/client/OptionInstance$ValueSet
 
+accessible method net/minecraft/client/renderer/entity/EntityRenderer extractShadow (Lnet/minecraft/client/renderer/entity/state/EntityRenderState;Lnet/minecraft/client/Minecraft;Lnet/minecraft/world/level/Level;)V
+
 accessible field net/minecraft/client/gui/screens/inventory/CreativeModeInventoryScreen$SlotWrapper target Lnet/minecraft/world/inventory/Slot;
 
 transitive-inject-interface net/minecraft/world/entity/LivingEntity moriyashiine/strawberrylib/impl/common/injection/SLibLivingEntity
