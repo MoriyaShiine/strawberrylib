@@ -1,4 +1,10 @@
 ------------------------------------------------------
+Version 26.2-r3
+------------------------------------------------------
+- add new food events to modify nutrition and saturation
+- fix model replacement shadows being jumpy
+
+------------------------------------------------------
 Version 26.2-r2
 ------------------------------------------------------
 - update included cardinal components
