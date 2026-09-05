@@ -5,6 +5,7 @@ import moriyashiine.strawberrylib.impl.client.supporter.renderer.entity.state.Mo
 import moriyashiine.strawberrylib.impl.common.component.entity.ModelReplacementComponent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.ClientAvatarEntity;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
@@ -20,12 +21,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AvatarRenderer.class)
 public class AvatarRendererMixin<AvatarlikeEntity extends Avatar & ClientAvatarEntity> {
+	@Unique
+	private static final Minecraft client = Minecraft.getInstance();
+
+	@SuppressWarnings("unchecked")
 	@Inject(method = "extractRenderState(Lnet/minecraft/world/entity/Avatar;Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;F)V", at = @At("TAIL"))
 	private void slib$modelReplacement(AvatarlikeEntity entity, AvatarRenderState state, float partialTicks, CallbackInfo ci) {
 		ModelReplacementRenderState modelReplacementRenderState = new ModelReplacementRenderState();
-		if (entity instanceof Player player && SLibUtils.getModelReplacement(player) instanceof LivingEntity replacement) {
-			LivingEntityRenderState replacementRenderState = (LivingEntityRenderState) Minecraft.getInstance().getEntityRenderDispatcher().extractEntity(replacement, partialTicks);
+		if (client.level != null && entity instanceof Player player && SLibUtils.getModelReplacement(player) instanceof LivingEntity replacement) {
+			EntityRenderer<LivingEntity, LivingEntityRenderState> replacementRenderer = (EntityRenderer<LivingEntity, LivingEntityRenderState>) client.getEntityRenderDispatcher().getRenderer(replacement);
+			LivingEntityRenderState replacementRenderState = replacementRenderer.createRenderState(replacement, partialTicks);
 			replaceRenderStateData(state, replacementRenderState);
+			replacementRenderer.extractShadow(replacementRenderState, client, client.level);
 			modelReplacementRenderState.replacementRenderState = replacementRenderState;
 			modelReplacementRenderState.hasId = replacement.getId() != ModelReplacementComponent.AWAITING_ID;
 		}
