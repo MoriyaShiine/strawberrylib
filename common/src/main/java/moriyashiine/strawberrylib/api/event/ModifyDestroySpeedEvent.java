@@ -11,26 +11,26 @@ import org.jspecify.annotations.Nullable;
 
 @FunctionalInterface
 public interface ModifyDestroySpeedEvent {
-	Event<ModifyDestroySpeedEvent> MULTIPLY_BASE = EventFactory.createArrayBacked(ModifyDestroySpeedEvent.class, events -> (level, player, stack, state, pos) -> {
+	Event<ModifyDestroySpeedEvent> MULTIPLY_BASE = EventFactory.createArrayBacked(ModifyDestroySpeedEvent.class, events -> (player, stack, level, state, pos) -> {
 		float modifier = 1;
 		for (ModifyDestroySpeedEvent event : events) {
-			modifier *= event.modify(level, player, stack, state, pos);
+			modifier *= event.modify(player, stack, level, state, pos);
 		}
 		return modifier;
 	});
 
-	Event<ModifyDestroySpeedEvent> ADD_EFFICIENCY = EventFactory.createArrayBacked(ModifyDestroySpeedEvent.class, events -> (level, player, stack, state, pos) -> {
+	Event<ModifyDestroySpeedEvent> ADD_EFFICIENCY = EventFactory.createArrayBacked(ModifyDestroySpeedEvent.class, events -> (player, stack, level, state, pos) -> {
 		float modifier = 0;
 		for (ModifyDestroySpeedEvent event : events) {
-			modifier += event.modify(level, player, stack, state, pos);
+			modifier += event.modify(player, stack, level, state, pos);
 		}
 		return modifier;
 	});
 
-	Event<ModifyDestroySpeedEvent> MULTIPLY_TOTAL = EventFactory.createArrayBacked(ModifyDestroySpeedEvent.class, events -> (level, player, stack, state, pos) -> {
+	Event<ModifyDestroySpeedEvent> MULTIPLY_TOTAL = EventFactory.createArrayBacked(ModifyDestroySpeedEvent.class, events -> (player, stack, level, state, pos) -> {
 		float modifier = 1;
 		for (ModifyDestroySpeedEvent event : events) {
-			modifier *= event.modify(level, player, stack, state, pos);
+			modifier *= event.modify(player, stack, level, state, pos);
 		}
 		return modifier;
 	});
