@@ -1,5 +1,6 @@
 package moriyashiine.strawberrylib.impl.client;
 
+import moriyashiine.strawberrylib.impl.client.event.TickCountClientEvent;
 import moriyashiine.strawberrylib.impl.client.gui.hud.ReplaceContextualInfoHudElement;
 import moriyashiine.strawberrylib.impl.client.payload.*;
 import moriyashiine.strawberrylib.impl.client.supporter.ClientSupporterInit;
@@ -14,6 +15,7 @@ public class StrawberrylibClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		ClientSupporterInit.init();
 		initPayloads();
+		initEvents();
 		HudElementRegistry.attachElementAfter(VanillaHudElements.INFO_BAR, StrawberryLib.id("replace_contextual_info"), new ReplaceContextualInfoHudElement());
 	}
 
@@ -23,5 +25,9 @@ public class StrawberrylibClient implements ClientModInitializer {
 		ClientPlayNetworking.registerGlobalReceiver(AddTrackingEmitterPayload.TYPE, new AddTrackingEmitterPayload.Receiver());
 		ClientPlayNetworking.registerGlobalReceiver(PlayAnchoredSoundPayload.TYPE, new PlayAnchoredSoundPayload.Receiver());
 		ClientPlayNetworking.registerGlobalReceiver(SendModelReplacementEventPayload.TYPE, new SendModelReplacementEventPayload.Receiver());
+	}
+
+	private void initEvents() {
+		TickCountClientEvent.init();
 	}
 }

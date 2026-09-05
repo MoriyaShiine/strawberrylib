@@ -2,6 +2,7 @@ package moriyashiine.strawberrylib.api.module;
 
 import moriyashiine.strawberrylib.api.objects.enums.ParticleAnchor;
 import moriyashiine.strawberrylib.api.objects.records.ParticleVelocity;
+import moriyashiine.strawberrylib.impl.client.event.TickCountClientEvent;
 import moriyashiine.strawberrylib.impl.client.sound.AnchoredSoundInstance;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleOptions;
@@ -27,6 +28,10 @@ public final class SLibClientUtils {
 
 	public static boolean shouldAddParticles(Entity entity) {
 		return minecraft.gameRenderer.mainCamera().isDetached() || minecraft.getCameraEntity() != entity;
+	}
+
+	public static short getTickCount() {
+		return TickCountClientEvent.tickCount;
 	}
 
 	public static void addAnchoredParticle(Entity entity, ParticleType<?> particle, double yOffset, double speed, double intensity) {
