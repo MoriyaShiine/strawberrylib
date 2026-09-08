@@ -1,4 +1,10 @@
 ------------------------------------------------------
+Version 26.2-r5
+------------------------------------------------------
+- add tick count client util method
+- model replacement ambient sounds are now anchored to the entitiy that plays them
+
+------------------------------------------------------
 Version 26.2-r4
 ------------------------------------------------------
 - eat food event now runs when feeding animals
