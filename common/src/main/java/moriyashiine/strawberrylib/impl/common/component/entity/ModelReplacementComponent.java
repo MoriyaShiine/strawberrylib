@@ -100,7 +100,7 @@ public class ModelReplacementComponent implements AutoSyncedComponent, CommonTic
 		if (obj.slib$exists() && replacement instanceof Mob mob && mob.getAmbientSound() != null && mob.getRandom().nextInt(1000) < ++ambientSoundTime) {
 			resetAmbientSoundTime(mob);
 			if (!obj.isSilent()) {
-				SLibUtils.playSound(obj, mob.getAmbientSound(), 1, obj.getVoicePitch());
+				SLibUtils.playAnchoredSound(obj, mob.getAmbientSound());
 			}
 		}
 	}
