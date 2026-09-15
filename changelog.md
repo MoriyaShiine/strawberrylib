@@ -2,7 +2,7 @@
 Version 26.2-r5
 ------------------------------------------------------
 - add tick count client util method
-- model replacement ambient sounds are now anchored to the entitiy that plays them
+- model replacement ambient sounds are now anchored to the entity that plays them
 
 ------------------------------------------------------
 Version 26.2-r4
