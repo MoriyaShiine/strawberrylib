@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.ClientAvatarEntity;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
-import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.world.entity.Avatar;
@@ -50,9 +49,5 @@ public class AvatarRendererMixin<AvatarlikeEntity extends Avatar & ClientAvatarE
 		replacementRenderState.bodyRot = state.bodyRot;
 		replacementRenderState.yRot = state.yRot;
 		replacementRenderState.xRot = state.xRot;
-		// Armed
-		if (replacementRenderState instanceof ArmedEntityRenderState armedEntityRenderState) {
-			armedEntityRenderState.attackTime = state.attackTime;
-		}
 	}
 }

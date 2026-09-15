@@ -34,7 +34,7 @@ public final class SLibDataUtils {
 
 	public static void createGrassLikeBlock(BlockModelGenerators generators, Block block) {
 		MultiVariant snowy = plainVariant(ModelLocationUtils.getModelLocation(Blocks.GRASS_BLOCK, "_snow"));
-		MultiVariant plain = createRotatedVariants(plainModel(TexturedModel.CUBE_TOP_BOTTOM.get(block).updateTextures(m -> m.put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(Blocks.DIRT))).create(block, generators.modelOutput)));
+		MultiVariant plain = createRotatedVariants(plainModel(TexturedModel.CUBE_BOTTOM_TOP.get(block).updateTextures(m -> m.put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(Blocks.DIRT))).create(block, generators.modelOutput)));
 		generators.createGrassLikeBlock(block, plain, snowy);
 	}
 }

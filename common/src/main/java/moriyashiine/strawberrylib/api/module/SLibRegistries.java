@@ -1,12 +1,17 @@
 package moriyashiine.strawberrylib.api.module;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import moriyashiine.strawberrylib.api.objects.records.ModifierTrio;
 import moriyashiine.strawberrylib.impl.common.StrawberryLib;
 import moriyashiine.strawberrylib.impl.common.component.entity.ModelReplacementComponent;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
 import net.minecraft.advancements.triggers.CriterionTrigger;
 import net.minecraft.core.Holder;
@@ -17,9 +22,14 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.references.BlockItemId;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.StrictJsonParser;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -44,6 +54,10 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -61,10 +75,6 @@ public final class SLibRegistries {
 
 	public static Block registerBlock(BlockItemId id, Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties properties) {
 		return Blocks.register(id.block(), factory, properties);
-	}
-
-	public static <T extends Block> MapCodec<T> registerBlockType(String name, MapCodec<T> codec) {
-		return Registry.register(BuiltInRegistries.BLOCK_TYPE, StrawberryLib.cid(name), codec);
 	}
 
 	public static <T extends BlockEntity> BlockEntityType<T> registerBlockEntityType(String name, FabricBlockEntityTypeBuilder<T> builder) {
@@ -118,7 +128,7 @@ public final class SLibRegistries {
 	}
 
 	public static Item registerItem(ResourceKey<Item> key, Function<Item.Properties, Item> factory) {
-		return registerItem(key, factory, new Item.Properties());
+		return registerItem(key, factory, properties());
 	}
 
 	public static Item registerItem(ResourceKey<Item> key, Item.Properties properties) {
@@ -130,11 +140,11 @@ public final class SLibRegistries {
 	}
 
 	public static Item registerBlockItem(BlockItemId id, Block block, Item.Properties properties) {
-		return registerItem(id.item(), s -> new BlockItem(block, s), properties.useBlockDescriptionPrefix());
+		return registerItem(id.item(), p -> new BlockItem(block, p), properties.useBlockDescriptionPrefix());
 	}
 
 	public static Item registerBlockItem(BlockItemId id, Block block) {
-		return registerBlockItem(id, block, new Item.Properties());
+		return registerBlockItem(id, block, properties());
 	}
 
 	public static <T extends LootItemCondition> MapCodec<T> registerLootConditionType(String name, MapCodec<T> codec) {
@@ -197,15 +207,39 @@ public final class SLibRegistries {
 
 	// misc
 
+	public static Item.Properties properties() {
+		return new Item.Properties();
+	}
+
+	public static Item.Properties fireproof() {
+		return properties().fireResistant();
+	}
+
 	public static Item.Properties editModifiers(Supplier<Item.Properties> properties, ModifierTrio... modifiers) {
 		ModifierTrio.current = modifiers;
 		return properties.get();
 	}
 
-	public static void scanErrorless(String prefix, Runnable runnable) {
-		StrawberryLib.scanErrorless.add(prefix);
-		runnable.run();
-		StrawberryLib.scanErrorless.remove(prefix);
+	public static <T> Map<Identifier, T> scanDirectory(ResourceManager manager, FileToIdConverter lister, DynamicOps<JsonElement> ops, Codec<T> codec) {
+		Map<Identifier, T> result = new HashMap<>();
+		for (Map.Entry<Identifier, Resource> entry : lister.listMatchingResources(manager).entrySet()) {
+			Identifier location = entry.getKey();
+			Identifier id = lister.fileToId(location);
+			try (Reader reader = entry.getValue().openAsReader()) {
+				codec.parse(ops, StrictJsonParser.parse(reader)).ifSuccess(parsed -> {
+					if (result.putIfAbsent(id, parsed) != null) {
+						throw new IllegalStateException("Duplicate data file ignored with ID " + id);
+					}
+				});
+			} catch (IllegalArgumentException | IOException | JsonParseException e) {
+				StrawberryLib.LOGGER.error("Couldn't parse data file '{}' from '{}'", id, location, e);
+			}
+		}
+		return result;
+	}
+
+	public static <T> Map<Identifier, T> scanDirectory(PreparableReloadListener.SharedState sharedState, String directory, Codec<T> codec) {
+		return scanDirectory(sharedState.resourceManager(), FileToIdConverter.json(directory), sharedState.get(ResourceLoader.REGISTRY_LOOKUP_KEY).createSerializationContext(JsonOps.INSTANCE), codec);
 	}
 
 	public static void registerModelReplacementCopyFunction(ModelReplacementComponent.CopyFunction copyFunction) {

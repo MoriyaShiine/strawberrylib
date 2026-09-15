@@ -31,7 +31,6 @@
 	"modelreplacement.PlayerMixin",
 	"modelreplacement.ServerLevelMixin",
 	"registries.ItemPropertiesMixin",
-	"registries.SimpleJsonResourceReloadListenerMixin",
 	"utils.PlayerMixin",
 	"utils.ServerLevelMixin"
   ],

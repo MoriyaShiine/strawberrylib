@@ -11,16 +11,12 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 public class StrawberryLib implements ModInitializer {
 	public static final String MOD_ID = "strawberrylib";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	public static String currentModId = "";
 
-	public static volatile Set<String> scanErrorless = ConcurrentHashMap.newKeySet();
 	public static @Nullable BlockPos currentEventDestroyPos = null;
 	public static boolean bypassPvpAllowed = false;
 	public static float currentAttackCooldown = -1;

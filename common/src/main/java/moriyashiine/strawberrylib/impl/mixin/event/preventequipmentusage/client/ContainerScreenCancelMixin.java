@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin({AbstractContainerScreen.class, CreativeModeInventoryScreen.class})
 public class ContainerScreenCancelMixin {
-	@Inject(method = "slotClicked", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "slotClicked(Lnet/minecraft/world/inventory/Slot;IILnet/minecraft/world/inventory/ContainerInput;)V", at = @At("HEAD"), cancellable = true)
 	private void slib$preventEquipmentUsage(Slot slot, int slotId, int buttonNum, ContainerInput containerInput, CallbackInfo ci) {
 		if (slot != null && slotId >= 0 && containerInput == ContainerInput.SWAP) {
 			if (slot instanceof CreativeModeInventoryScreen.SlotWrapper wrapper) {

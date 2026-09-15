@@ -18,11 +18,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ThrownTridentRenderer.class)
 public class ThrownTridentRendererMixin {
-	@ModifyArg(method = "submit(Lnet/minecraft/client/renderer/entity/state/ThrownTridentRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/OrderedSubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;IIILnet/minecraft/client/renderer/feature/ModelFeatureRenderer$CrumblingOverlay;)V"), index = 3)
+	@ModifyArg(method = "submit(Lnet/minecraft/client/renderer/entity/state/ThrownTridentRenderState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/CameraRenderState;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/SubmitNodeCollector;submitModel(Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/rendertype/RenderType;III)V"), index = 3)
 	private RenderType slib$supporterGlint(RenderType renderType, @Local(argsOnly = true) ThrownTridentRenderState state) {
 		GlintLayersRenderState glintLayersRenderState = state.getData(GlintLayersRenderState.KEY);
 		if (glintLayersRenderState != null && glintLayersRenderState.glintLayers != null) {
-			return glintLayersRenderState.glintLayers.entityGlint();
+			return glintLayersRenderState.glintLayers.entitySolidGlint().apply(ThrownTridentRenderer.TRIDENT_LOCATION);
 		}
 		return renderType;
 	}
